@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 // // // //
 
-const <%= schema.class_name %> = new mongoose.Schema({
+const <%= schema.class_name %>Model = new mongoose.Schema({
   <%_ schema.attributes.forEach((attr) => { _%>
   <%_ if (attr.datatype === 'BOOL') { _%>
   <%= attr.identifier %>: {
@@ -57,10 +57,11 @@ const <%= schema.class_name %> = new mongoose.Schema({
   },
   // Collection options
   {
-    timestamps: {
-      createdAt: 'createdOn',
-      updatedAt: 'updatedOn'
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
   },
+  collection: '<%= schema.identifier_plural %>',
   versionKey: false
 });
 
@@ -70,7 +71,7 @@ const <%= schema.class_name %> = new mongoose.Schema({
 <%_ schema.relations.forEach((rel) => { _%>
 <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
 // Specifying a virtual with a `ref` property is how you enable virtual population
-<%= schema.class_name %>.virtual('<%= rel.alias.identifier %>', {
+<%= schema.class_name %>Model.virtual('<%= rel.alias.identifier %>', {
   ref: '<%= rel.schema.class_name %>',
   localField: '<%= rel.alias.identifier + "_id" %>',
   foreignField: '_id',
@@ -80,7 +81,7 @@ const <%= schema.class_name %> = new mongoose.Schema({
 <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
 
 // Specifying a virtual with a `ref` property is how you enable virtual population
-<%= schema.class_name %>.virtual('<%= rel.alias.identifier_plural %>', {
+<%= schema.class_name %>Model.virtual('<%= rel.alias.identifier_plural %>', {
   ref: '<%= rel.schema.class_name %>',
   localField: '_id',
   foreignField: '<%= schema.identifier + "_id" %>' // TODO - this won't work with alias, needs reverse relation
@@ -93,13 +94,13 @@ const <%= schema.class_name %> = new mongoose.Schema({
 <%_ schema.relations.forEach((rel) => { _%>
 <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
 // Same as above just as a method
-<%= schema.class_name %>.methods.get<%= rel.alias.class_name %> = function () {
+<%= schema.class_name %>Model.methods.get<%= rel.alias.class_name %> = function () {
   return mongoose.model('<%= rel.schema.class_name %>').findById(this.<%= rel.alias.identifier + '_id' %>);
 }
 
 <%_ /* TODO - HAS_MANY doesn't work like this */ _%>
 <%_ } else if (rel.type === 'HAS_MANY') { _%>
-<%= schema.class_name %>.methods.get<%= rel.alias.class_name_plural %> = function () {
+<%= schema.class_name %>Model.methods.get<%= rel.alias.class_name_plural %> = function () {
   return mongoose.model('<%= rel.schema.class_name %>').find({ _id: this.<%= rel.alias.identifier + '_ids' %> });
 }
 <%_ } _%>
@@ -107,9 +108,9 @@ const <%= schema.class_name %> = new mongoose.Schema({
 
 <%_ /* MONGOOSE TOJSON SETS */ _%>
 <%_ if (schema.relations.map(r => r.type).includes('BELONGS_TO')) { _%>
-<%= schema.class_name %>.set('toJSON', { getters: true, virtuals: true });
+<%= schema.class_name %>Model.set('toJSON', { getters: true, virtuals: true });
 <%_ } _%>
 
 // // // //
 
-module.exports = mongoose.model('<%= schema.class_name %>', <%= schema.class_name %>)
+module.exports = mongoose.model('<%= schema.class_name %>', <%= schema.class_name %>Model)

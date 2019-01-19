@@ -24,7 +24,7 @@ export default {
     } else {
       apiRoot = API_ROOT
     }
-    axios.get(API_ROOT, {
+    return axios.get(apiRoot, {
       headers: {
         authorization: rootGetters['auth/authorizationHeader']
       },
@@ -43,12 +43,12 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   },
   // GET /api/<%= schema.identifier_plural %>/:id
-  fetchModel ({ state, commit, rootGetters }, <%= schema.identifier %>Id) {
+  fetchModel ({ commit, rootGetters }, <%= schema.identifier %>Id) {
     commit('fetching', true)
     axios.get(`${API_ROOT}/${<%= schema.identifier %>Id}`, {
       headers: {
@@ -61,7 +61,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   },
@@ -69,7 +69,7 @@ export default {
   <%_ if (rel.type === 'REF_BELONGS_TO') { _%>
   // OWNS MANY
   // GET /api/<%= schema.identifier_plural %>/:id/<%= rel.alias.identifier_plural %>
-  <%= 'fetch' + rel.alias.class_name_plural %> ({ state, commit, rootGetters }, <%= schema.identifier %>Id) {
+  <%= 'fetch' + rel.alias.class_name_plural %> ({ commit, rootGetters }, <%= schema.identifier %>Id) {
     commit('fetching', true)
 
     axios.get(API_ROOT + '/' + <%= schema.identifier %>Id + '/<%= rel.alias.identifier_plural %>', {
@@ -83,12 +83,12 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   },
   <%_ } else if (rel.type === 'HAS_MANY') { _%>
-  <%= 'fetch' + rel.alias.class_name_plural %> ({ state, commit, rootGetters }, <%= schema.identifier %>Id) {
+  <%= 'fetch' + rel.alias.class_name_plural %> ({ commit, rootGetters }, <%= schema.identifier %>Id) {
     commit('fetching', true)
 
     axios.get(API_ROOT + '/' + <%= schema.identifier %>Id + '/<%= rel.alias.identifier_plural %>', {
@@ -102,7 +102,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   },
@@ -122,7 +122,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   },
@@ -142,7 +142,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   },
@@ -160,7 +160,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      commit('notification/add', { message: 'Create error', context: 'danger', dismissible: true }, { root: true })
+      // commit('notification/add', { message: 'Create error', context: 'danger', dismissible: true }, { root: true })
       throw err
     })
   },
@@ -178,7 +178,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      commit('notification/add', { message: 'Update error', context: 'danger', dismissible: true }, { root: true })
+      // commit('notification/add', { message: 'Update error', context: 'danger', dismissible: true }, { root: true })
       throw err
     })
   },
@@ -198,7 +198,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      commit('notification/add', { message: 'Destroy error', context: 'danger', dismissible: true }, { root: true })
+      // commit('notification/add', { message: 'Destroy error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   }

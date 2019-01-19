@@ -87,15 +87,15 @@ const userAttributes = {
 
 // // // //
 
-const <%= schema.class_name %> = new Schema(userAttributes, collection_options);
+const <%= schema.class_name %>Model = new Schema(userAttributes, collection_options);
 
 // // // //
 
 // Create new User document
-// TODO - add email
-User.statics.create = function ({ name, email, username, password }) {
+UserModel.statics.create = function ({ name, email, username, password }) {
 
-    // Instantiates new User model
+    // Instantiates new User model with all required attributes
+    // TODO - add required attributes here
     const user = new this({
         name,
         email,
@@ -109,21 +109,21 @@ User.statics.create = function ({ name, email, username, password }) {
 
 // findOneByUsername
 // Find one User by username
-User.statics.findOneByUsername = function (username) {
+UserModel.statics.findOneByUsername = function (username) {
     // Executes MongoDb query
     return this.findOne({ username }).exec()
 }
 
 // verify
 // Verifies the password parameter of POST /auth/login requests
-User.methods.verify = function (password) {
+UserModel.methods.verify = function (password) {
     // Verifies saved password against a request's password
     return this.password === encryptPassword(password)
 }
 
 // assignAdmin
 // Assigns admin priviledges to a user
-User.methods.assignAdmin = function () {
+UserModel.methods.assignAdmin = function () {
     // Assigns true to `admin` attribute
     this.admin = true
 
@@ -134,19 +134,19 @@ User.methods.assignAdmin = function () {
 <%_ schema.relations.forEach((rel) => { _%>
 <%_ if (rel.type === 'BELONGS_TO') { _%>
 
-<%= schema.class_name %>.methods.get<%= rel.alias.class_name %> = function () {
+<%= schema.class_name %>Model.methods.get<%= rel.alias.class_name %> = function () {
   return mongoose.model('<%= rel.schema.class_name %>').findById(this.<%= rel.alias.identifier + '_id' %>);
 }
 
 <%_ } else if (rel.type === 'HAS_MANY') { _%>
 
-<%= schema.class_name %>.methods.get<%= rel.alias.class_name_plural %> = function () {
+<%= schema.class_name %>Model.methods.get<%= rel.alias.class_name_plural %> = function () {
   return mongoose.model('<%= rel.schema.class_name %>').find({ <%= schema.identifier %>_id: this._id });
 }
 
 <%_ } else if (rel.type === 'HAS_ONE') { _%>
 
-<%= schema.class_name %>.methods.get<%= rel.alias.class_name %> = function () {
+<%= schema.class_name %>Model.methods.get<%= rel.alias.class_name %> = function () {
   return mongoose.model('<%= rel.schema.class_name %>').findById(this.<%= rel.identifier + '_id' %> });
 }
 
@@ -154,4 +154,4 @@ User.methods.assignAdmin = function () {
 <%_ }) _%>
 
 // TODO - absract schema.class_name
-module.exports = mongoose.model('<%= schema.class_name %>', <%= schema.class_name %>)
+module.exports = mongoose.model('<%= schema.class_name %>', <%= schema.class_name %>Model)
