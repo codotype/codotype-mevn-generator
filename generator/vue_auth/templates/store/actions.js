@@ -3,10 +3,10 @@ import {
   LOGIN_ROUTE,
   REGISTER_ROUTE,
   PROFILE_ROUTE,
-  LOGIN_SUCCESS_NOTIFICATION,
-  LOGIN_ERROR_NOTIFICATION,
-  REGISTER_SUCCESS_NOTIFICATION,
-  REGISTER_ERROR_NOTIFICATION
+  // LOGIN_SUCCESS_NOTIFICATION,
+  // LOGIN_ERROR_NOTIFICATION,
+  // REGISTER_SUCCESS_NOTIFICATION,
+  // REGISTER_ERROR_NOTIFICATION
 } from './constants'
 
 // Auth module actions
@@ -48,28 +48,23 @@ const actions = {
   // register
   // Handles user registration state management
   register ({ state, commit }) {
-    // state.loggin_in = true
     commit('logging_in', true)
 
     // Assembles request payload
-    let { email, username, password } = state.register_user
+    let { <%= inlineDeconstrction %>, password } = state.register_user
 
     // Sends login data to server
     axios({
       method: 'post',
       url: REGISTER_ROUTE,
-      data: {
-        email: email,
-        username: username,
-        password: password
-      }
+      data: { <%= inlineDeconstrction %>, password }
     })
     .then(() => {
       commit('clear_register_user')
       commit('logging_in', false)
 
       // Shows REGISTER_SUCCESS_NOTIFICATION message
-      commit('notification/add', REGISTER_SUCCESS_NOTIFICATION, { root: true })
+      // commit('notification/add', REGISTER_SUCCESS_NOTIFICATION, { root: true })
 
       // TODO - keep user logged in here
 
@@ -82,7 +77,7 @@ const actions = {
     .catch((err) => {
       // Shows REGISTER_ERROR_NOTIFICATION message
       commit('logging_in', false)
-      commit('notification/add', REGISTER_ERROR_NOTIFICATION, { root: true })
+      // commit('notification/add', REGISTER_ERROR_NOTIFICATION, { root: true })
       throw err
     })
   },
@@ -114,7 +109,7 @@ const actions = {
       commit('current_user', { username, email, admin, _id, roles })
 
       // Shows LOGIN_SUCCESS_NOTIFICATION message
-      commit('notification/add', LOGIN_SUCCESS_NOTIFICATION, { root: true })
+      // commit('notification/add', LOGIN_SUCCESS_NOTIFICATION, { root: true })
 
       // Clears state.login_user
       commit('clear_login_user')
@@ -126,7 +121,7 @@ const actions = {
     .catch((err) => {
       // Shows LOGIN_ERROR_NOTIFICATION message
       commit('logging_in', false)
-      commit('notification/add', LOGIN_ERROR_NOTIFICATION, { root: true })
+      // commit('notification/add', LOGIN_ERROR_NOTIFICATION, { root: true })
       throw err
     })
   },

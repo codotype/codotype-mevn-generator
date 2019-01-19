@@ -139,6 +139,64 @@ module.exports.search = (req, res) => {
 };
 
 
+<%_ schemaApiActions.forEach((action) => { _%>
+<%_ if (action.scope === 'ROOT' && generate_api_doc) { _%>
+/**
+* @api {<%= action.verb %>} /api/<%= schema.identifier_plural %>/<%= action.uri %> <%= action.label %>
+* @APIname <%= action.label %>
+* @APIgroup <%= schema.class_name %> Controller
+* @apidescription Executes the <%= action.label %> API Action
+* @apiSuccess {json} The result of the <%= action.label %> API Action
+* @apiError (Error) 500 Internal server error
+*/
+<%_ } else if (action.scope === 'MODEL' && generate_api_doc) { _%>
+/**
+* @api {<%= action.verb %>} /api/<%= schema.identifier_plural %>/:id/<%= action.uri %> :id/<%= action.label %>
+* @APIname <%= action.label %>
+* @APIgroup <%= schema.class_name %> Controller
+* @apidescription Executes the <%= action.label %> API Action
+* @apiSuccess {json} The result of the <%= action.label %> API Action
+* @apiError (Error) 500 Internal server error
+*/
+<%_ } else if (action.scope === 'ROOT') { _%>
+// <%= action.verb %> /api/<%= schema.identifier_plural %>/<%= action.uri %> <%= action.label %>
+<%_ } else if (action.scope === 'MODEL') { _%>
+// <%= action.verb %> /api/<%= schema.identifier_plural %>/:id/<%= action.uri %> <%= action.label %>
+<%_ } _%>
+<%_ if (action.scope === 'ROOT') { _%>
+module.exports.<%= action.function_name %> = (req, res, next) => {
+
+    // Dummy action
+    return res
+    .status(200)
+    .send({ api_action: '<%= action.label %>'})
+    .end();
+
+};
+<%_ } else if (action.scope === 'MODEL') { _%>
+module.exports.<%= action.function_name %> = (req, res, next) => {
+
+    // Dummy MODEL ACTION action
+    return <%= schema.class_name %>.findById(req.params.id)
+    <%_ schema.relations.forEach((rel) => { _%>
+    <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+    .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
+    <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
+    // .populate({ path: '<%= rel.alias.identifier_plural %>', select: '<%= rel.related_lead_attribute %>' })
+    <%_ } _%>
+    <%_ }) _%>
+    .then((response) => {
+        return res
+        .status(200)
+        .send(response)
+        // .send(response.toJSON({ getters: true, virtuals: true }))
+        .end();
+    })
+    .catch( err => next(boom.badImplementation(err)) );
+
+};
+<%_ } _%>
+<%_ }) _%>
 
 
 <%_ if (generate_api_doc) { _%>

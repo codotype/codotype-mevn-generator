@@ -7,4 +7,4 @@ MONGO_DB_HOST=localhost
 MONGO_DB_DATABASE=development
 MONGO_DB_USER=mongodbuser
 MONGO_DB_PASSWORD=mymongodbpassword
-MONGO_DB_URI=mongodb://localhost/<%= blueprint.identifier %>_db
+MONGO_DB_URI=mongodb://localhost/<%= blueprint.identifier %>_dev
