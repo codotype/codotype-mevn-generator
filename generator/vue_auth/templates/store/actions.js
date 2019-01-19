@@ -51,17 +51,13 @@ const actions = {
     commit('logging_in', true)
 
     // Assembles request payload
-    let { email, username, password } = state.register_user
+    let { <%= inlineDeconstrction %>, password } = state.register_user
 
     // Sends login data to server
     axios({
       method: 'post',
       url: REGISTER_ROUTE,
-      data: {
-        email: email,
-        username: username,
-        password: password
-      }
+      data: { <%= inlineDeconstrction %>, password }
     })
     .then(() => {
       commit('clear_register_user')

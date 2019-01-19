@@ -3,13 +3,13 @@
     <b-container>
       <Loading v-if="fetching" />
       <b-row class="justify-content-center">
-        <b-col md="6" sm="8">
+        <b-col md="8" sm="8">
           <b-card no-body class="mx-4">
             <b-card-body class="p-4">
               <b-form>
                 <h1>Register</h1>
                 <p class="text-muted">Create your account</p>
-                <%_ blueprint.schemas.find(s => s.identifier === 'user').attributes.filter(r => r.required).forEach((r) => { _%>
+                <%_ requiredUserAttributes.forEach((r) => { _%>
 
                 <b-form-group
                   id="<%= r.identifier.replace('_', '-') %>-fieldset"
