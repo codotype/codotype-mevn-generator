@@ -2,10 +2,10 @@
   "name": "expressjs_boilerplate",
   "version": "1.0.0",
   "scripts": {
-    "start": "node ./server/bin/www.js",
-    "dev": "nodemon -L ./server/bin/www.js",
+    "start": "node ./src/bin/www.js",
+    "dev": "nodemon -L ./src/bin/www.js",
     "test": "mocha --exit",
-    "apidoc": "apidoc -i ./server/api -o doc/"
+    "apidoc": "apidoc -i ./src/api -o doc/"
   },
   "license": "MIT",
   "dependencies": {

@@ -8,7 +8,7 @@ const User = require('../user/user.model')
 exports.register = (req, res) => {
 
     // Pulls parameters from req.body
-    const { name, username, password, email } = req.body
+    const { <%= inlineDeconstrction %>, password } = req.body
 
     // Create a new User instance if one does not exist
     const create = (user) => {
@@ -19,7 +19,7 @@ exports.register = (req, res) => {
         }
 
         // Creates a new User
-        return User.create({ name, email, username, password })
+        return User.create({ <%= inlineDeconstrction %>, password })
     }
 
     // Respond to the client
