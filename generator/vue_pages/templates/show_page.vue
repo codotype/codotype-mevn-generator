@@ -31,7 +31,7 @@ import <%= schema.class_name %>ShowWidget from '@/modules/<%= schema.identifier 
 <%_ let imported = [] _%>
 <%_ schema.relations.forEach((rel) => { _%>
 <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
-import <%= rel.alias.class_name %> from '@/modules/<%= schema.identifier %>/components/<%= rel.alias.class_name %>'
+import Related<%= rel.alias.class_name %>Detail from '@/modules/<%= schema.identifier %>/components/Related<%= rel.alias.class_name %>Detail'
 <%_ imported.push(rel.type) _%>
 <%_ } else if (rel.type === 'HAS_MANY') { _%>
 import <%= rel.alias.class_name_plural %> from '@/modules/<%= schema.identifier %>/components/<%= rel.alias.class_name_plural %>'
@@ -51,7 +51,7 @@ export default {
   components: {
     <%_ schema.relations.forEach((rel) => { _%>
     <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
-    <%= rel.alias.class_name %>,
+    Related<%= rel.alias.class_name %>Detail,
     <%_ } else if (rel.type === 'HAS_MANY') { _%>
     <%= rel.alias.class_name_plural %>,
     <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>

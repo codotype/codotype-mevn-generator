@@ -24,7 +24,7 @@
         <SearchBar module='<%= schema.identifier %>'/>
       </b-col>
       <b-col lg="12">
-        <b-pagination :total-rows="totalRows" :value="currentPage" :per-page="perPage" @change="goToPage" />
+        <b-pagination v-if="collection.length === perPage" :total-rows="totalRows" :value="currentPage" :per-page="perPage" @change="goToPage" />
       </b-col>
       <b-col lg="12">
         <ListView :collection="collection" />
