@@ -92,16 +92,11 @@ const <%= schema.class_name %>Model = new Schema(userAttributes, collection_opti
 // // // //
 
 // Create new User document
-UserModel.statics.create = function ({ name, email, username, password }) {
+UserModel.statics.create = function ({ <%= inlineDeconstrction %>, password }) {
 
     // Instantiates new User model with all required attributes
     // TODO - add required attributes here
-    const user = new this({
-        name,
-        email,
-        username,
-        password: encryptPassword(password)
-    })
+    const user = new this({ <%= inlineDeconstrction %>, password: encryptPassword(password) })
 
     // Return User.save() Promise
     return user.save()
