@@ -32,7 +32,7 @@
           <tr class='table-warning' v-if="!collection[0]">
             <%_ related_schema.attributes.forEach((attr, index) => { _%>
             <%_ if (index === 0) { _%>
-            <td>Empty</td>
+            <td>No <%= related_schema.label_plural %> Available</td>
             <%_ } else { _%>
             <td></td>
             <%_ } _%>

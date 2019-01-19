@@ -50,7 +50,7 @@ module.exports = {
         if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) {
           await this.copyTemplate(
             this.templatePath('belongs-to-component.vue'),
-            this.destinationPath(moduleComponentsDest + rel.alias.class_name + '.vue'),
+            this.destinationPath(moduleComponentsDest + 'Related' + rel.alias.class_name + 'Detail.vue'),
             { schema, related_schema, rel }
           )
         } else if (rel.type === 'HAS_MANY') {
