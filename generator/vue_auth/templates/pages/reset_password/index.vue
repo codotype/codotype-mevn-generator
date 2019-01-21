@@ -1,30 +1,14 @@
 <template>
   <div class="app d-flex flex-row align-items-center">
     <b-container>
-      <Loading v-if="fetching" />
+      <Loading v-if="loading" />
       <b-row class="justify-content-center">
         <b-col md="8" sm="8">
           <b-card no-body class="mx-4">
             <b-card-body class="p-4">
               <b-form>
-                <h1>Register</h1>
-                <p class="text-muted">Create your account</p>
-                <%_ requiredUserAttributes.forEach((r) => { _%>
-
-                <b-form-group
-                  id="<%= r.identifier.replace('_', '-') %>-fieldset"
-                  label="<%= r.label %>"
-                  label-for="<%= r.identifier.replace('_', '-') %>-input"
-                  :horizontal="true"
-                >
-                  <b-form-input
-                    id="<%= r.identifier.replace('_', '-') %>-input"
-                    autocomplete="<%= r.identifier %>"
-                    placeholder="<%= r.label %>"
-                    v-model.trim="register_user.<%= r.identifier %>"
-                  />
-                </b-form-group>
-                <%_ }) _%>
+                <h1>Reset Password</h1>
+                <p class="text-muted">Reset your password below</p>
 
                 <b-form-group
                   id="password-input"
@@ -37,7 +21,8 @@
                     id="password-input"
                     autocomplete="new-password"
                     placeholder="Password"
-                    v-model.trim="register_user.password"
+                    :value="password"
+                    @input="setPassword"
                   />
                 </b-form-group>
 
@@ -51,16 +36,17 @@
                     id="password-verify-input"
                     autocomplete="new-password"
                     placeholder="Repeat password"
-                    v-model.trim="register_user.passwordverify"
-                    @keyup.enter="register"
+                    :value="password_verify"
+                    @input="setPasswordVerify"
                   />
                 </b-form-group>
 
-                <p v-if="register_user.error" class="error">Bad registration information</p>
+                <p v-if="error" class="error">Bad EMAIL information</p>
 
-                <b-button variant="primary" block @click="register()">
-                  Create Account
+                <b-button :disabled="verified" variant="outline-primary" block @click="resetPassword()">
+                  Reset Password
                 </b-button>
+
               </b-form>
             </b-card-body>
           </b-card>
@@ -72,22 +58,41 @@
 
 <script>
 import Loading from '@/components/Loading'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
-  name: 'Register',
+  name: 'Reset',
   metaInfo: {
-    title: 'Register'
+    title: 'Reset Password'
   },
   components: {
     Loading
   },
+  mounted () {
+    const { token } = this.$route.query
+    if (token) {
+      this.$store.commit('auth/reset_password/password_reset_token', token )
+    } else {
+      this.$router.push('/auth/login')
+    }
+  },
   computed: mapGetters({
-    fetching: 'auth/logging_in',
-    register_user: 'auth/register_user'
+    loading: 'auth/reset_password/loading',
+    password: 'auth/reset_password/password',
+    password_verify: 'auth/reset_password/password_verify',
+    error: 'auth/reset_password/error',
+    verified: 'auth/reset_password/verified',
+    done: 'auth/reset_password/done'
   }),
-  methods: mapActions({
-    register: 'auth/register'
-  })
+  methods: {
+    ...mapActions({
+      resetPassword: 'auth/reset_password/post',
+      resetForm: 'auth/reset_password/resetForm'
+    }),
+    ...mapMutations({
+      setPassword: 'auth/reset_password/password',
+      setPasswordVerify: 'auth/reset_password/password_verify'
+    })
+  }
 }
 </script>

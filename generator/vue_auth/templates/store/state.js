@@ -7,7 +7,6 @@ export default {
   logged_in: false,
   current_user: {},
   login_user: {
-    username: 'johndoe',
     email: 'john@doe.com',
     password: 'abc123',
     errors: {}
@@ -15,7 +14,6 @@ export default {
   register_user: {
     name: 'John Doe',
     email: 'john@doe.com',
-    username: 'johndoe',
     password: 'abc123',
     passwordverify: 'abc123',
     errors: {}
