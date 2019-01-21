@@ -11,6 +11,10 @@ module.exports = {
       // Pulls model options from configuration object
       const schemaOptions = configuration.model_options[schema._id]
 
+      // Isolates API Actions metadata
+      let api_actions = configuration.api_actions[schema._id]
+      if (!api_actions[0]) { api_actions = false }
+
       // Destination for module / components directory
       const moduleComponentsDest = 'client/src/modules/' + schema.identifier + '/components/'
 
@@ -28,7 +32,7 @@ module.exports = {
       await this.copyTemplate(
         this.templatePath('list-component.vue'),
         this.destinationPath(moduleComponentsDest + schema.class_name + 'ListWidget.vue'),
-        { schema, schemaOptions }
+        { schema, schemaOptions, api_actions }
       );
       // client/src/modules/resource/components/ResourceShowWidget.vue
       // client/src/components/resource_ListWidget.vue
@@ -56,13 +60,13 @@ module.exports = {
         } else if (rel.type === 'HAS_MANY') {
           await this.copyTemplate(
             this.templatePath('owns-many-component.vue'),
-            this.destinationPath(moduleComponentsDest + rel.alias.class_name_plural + '.vue'),
+            this.destinationPath(moduleComponentsDest + 'Related' + rel.alias.class_name_plural + 'List.vue'), // TODO - RENAME THIS
             { schema, related_schema, rel }
           )
         } else if (rel.type === 'REF_BELONGS_TO') {
           await this.copyTemplate(
             this.templatePath('owns-many-component.vue'),
-            this.destinationPath(moduleComponentsDest + rel.alias.class_name_plural + '.vue'),
+            this.destinationPath(moduleComponentsDest + 'Related' + rel.alias.class_name_plural + 'List.vue'), // TODO - RENAME THIS
             { schema, related_schema, rel }
           )
         }

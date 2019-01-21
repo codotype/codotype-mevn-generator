@@ -54,7 +54,7 @@
         <%_ } else if (attr.datatype === 'BOOL') { _%>
         <td>
           <span>
-            <i class="fa fa-fw fa-check-square-o" v-if="m.<%=attr.identifier%>"></i>
+            <i class="fas fa-fw fa-check-square" v-if="m.<%=attr.identifier%>"></i>
             <i class="fa fa-fw fa-square-o" v-if="!m.<%=attr.identifier%>"></i>
           </span>
         </td>
@@ -83,17 +83,32 @@
       <%_ }) _%>
         <!-- Edit <%= schema.label %>-->
         <td class='text-right'>
-          <b-button size="sm" variant="outline-primary" :to=" '/<%= schema.identifier_plural %>/' + m._id">
-            <i class="fa fa-fw fa-eye"></i>
-          </b-button>
 
-          <b-button size="sm" variant="outline-warning" :to=" '/<%= schema.identifier_plural %>/' + m._id + '/edit' ">
-            <i class="fa fa-fw fa-pencil"></i>
-          </b-button>
+          <b-dropdown right size="sm">
+            <b-dropdown-item :to=" '/<%= schema.identifier_plural %>/' + m._id">
+              <i class="fa fa-fw fa-eye"></i>
+              View
+            </b-dropdown-item>
 
-          <b-button size="sm" variant="outline-danger" v-b-modal="'modal_' + m._id">
-            <i class="fa fa-fw fa-trash"></i>
-          </b-button>
+            <b-dropdown-item :to=" '/<%= schema.identifier_plural %>/' + m._id + '/edit' ">
+              <i class="far fa-fw fa-edit"></i>
+              Edit
+            </b-dropdown-item>
+
+            <b-dropdown-item v-b-modal="'modal_' + m._id">
+              <i class="far fa-fw fa-trash-alt"></i>
+              Delete
+            </b-dropdown-item>
+
+            <%_ if (api_actions.filter(a => a.scope === 'MODEL').length) { _%>
+            <b-dropdown-divider></b-dropdown-divider>
+            <%_ api_actions.filter(a => a.scope === 'MODEL').forEach((action) => { _%>
+            <b-dropdown-item @click="<%= action.function_name %>(m._id)"><%= action.label %></b-dropdown-item>
+            <%_ }) _%>
+            <%_ } _%>
+
+          </b-dropdown>
+
 
           <!-- Bootstrap Modal Component -->
           <b-modal :id="'modal_' + m._id"
@@ -121,6 +136,11 @@ import { mapActions } from 'vuex'
 export default {
   props: ['collection'],
   methods: mapActions({
+    <%_ if (api_actions) { _%>
+    <%_ api_actions.filter(a => a.scope === 'MODEL').forEach((action) => { _%>
+    <%= action.function_name %>: '<%= schema.identifier %>/<%= action.function_name %>',
+    <%_ }) _%>
+    <%_ } _%>
     onConfirmDestroy: '<%= schema.identifier %>/deleteModel'
   })
 }
