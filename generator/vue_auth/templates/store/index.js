@@ -2,7 +2,7 @@ import actions from './actions'
 import state from './state'
 import getters from './getters'
 import mutations from './mutations'
-import resetModule from './resetModule'
+import forgotPasswordModule from './forgotPasswordModule'
 import resetPasswordModule from './resetPasswordModule'
 const namespaced = true
 
@@ -13,7 +13,7 @@ export default {
   actions,
   getters,
   modules: {
-    reset: resetModule,
+    forgot_password: forgotPasswordModule,
     reset_password: resetPasswordModule
   }
 }

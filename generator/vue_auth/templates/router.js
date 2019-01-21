@@ -1,7 +1,7 @@
 // Auth Containers
 import Login from './pages/login'
 import Register from './pages/register'
-import Reset from './pages/reset'
+import ForgotPassword from './pages/forgot_password'
 import ResetPassword from './pages/reset_password'
 import Middleware from '@/routers/middleware'
 
@@ -17,9 +17,9 @@ const RegisterRoute = {
   beforeEnter: Middleware.onlyGuest
 }
 
-const ResetRoute = {
-  path: '/auth/reset',
-  component: Reset,
+const ForgotPasswordRoute = {
+  path: '/auth/forgot_password',
+  component: ForgotPassword,
   beforeEnter: Middleware.onlyGuest
 }
 
@@ -32,6 +32,6 @@ const ResetPasswordRoute = {
 export default [
   LoginRoute,
   RegisterRoute,
-  ResetRoute,
+  ForgotPasswordRoute,
   ResetPasswordRoute
 ]

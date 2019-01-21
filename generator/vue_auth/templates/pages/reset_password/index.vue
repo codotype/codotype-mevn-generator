@@ -58,7 +58,8 @@
 
 <script>
 import Loading from '@/components/Loading'
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters, mapActions, mapMutations } = createNamespacedHelpers('auth/reset_password')
 
 export default {
   name: 'Reset',
@@ -77,21 +78,21 @@ export default {
     }
   },
   computed: mapGetters({
-    loading: 'auth/reset_password/loading',
-    password: 'auth/reset_password/password',
-    password_verify: 'auth/reset_password/password_verify',
-    error: 'auth/reset_password/error',
-    verified: 'auth/reset_password/verified',
-    done: 'auth/reset_password/done'
+    loading: 'loading',
+    password: 'password',
+    password_verify: 'password_verify',
+    error: 'error',
+    verified: 'verified',
+    done: 'done'
   }),
   methods: {
     ...mapActions({
-      resetPassword: 'auth/reset_password/post',
-      resetForm: 'auth/reset_password/resetForm'
+      resetPassword: 'post',
+      resetForm: 'resetForm'
     }),
     ...mapMutations({
-      setPassword: 'auth/reset_password/password',
-      setPasswordVerify: 'auth/reset_password/password_verify'
+      setPassword: 'password',
+      setPasswordVerify: 'password_verify'
     })
   }
 }

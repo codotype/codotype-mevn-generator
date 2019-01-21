@@ -35,7 +35,7 @@
                       <b-button variant="primary" class="px-4" @click="login()">Login</b-button>
                     </b-col>
                     <b-col cols="6" class="text-right">
-                      <b-button variant="link" to="/auth/reset" class="px-0">Forgot password?</b-button>
+                      <b-button variant="link" to="/auth/forgot_password" class="px-0">Forgot password?</b-button>
                     </b-col>
                   </b-row>
                 </b-form>

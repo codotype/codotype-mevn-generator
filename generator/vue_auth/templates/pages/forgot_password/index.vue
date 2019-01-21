@@ -21,7 +21,7 @@
           <b-card no-body class="mx-4">
             <b-card-body class="p-4">
               <b-form>
-                <h1>Reset Password</h1>
+                <h1>Forgot Password</h1>
                 <p class="text-muted">We'll email a magic link to you</p>
 
                 <b-form-group
@@ -41,7 +41,7 @@
                 <p v-if="error" class="error">Bad EMAIL information</p>
 
                 <b-button variant="outline-primary" block @click="reset()">
-                  Reset Password
+                  Send Reset Email
                 </b-button>
 
               </b-form>
@@ -55,29 +55,25 @@
 
 <script>
 import Loading from '@/components/Loading'
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters, mapActions, mapMutations } = createNamespacedHelpers('auth/forgot_password/')
 
 export default {
-  name: 'Reset',
+  name: 'ForgotPassword',
   metaInfo: {
-    title: 'Reset Password'
+    title: 'Forgot Password'
   },
   components: {
     Loading
   },
-  computed: mapGetters({
-    loading: 'auth/reset/loading',
-    email: 'auth/reset/email',
-    error: 'auth/reset/error',
-    done: 'auth/reset/done'
-  }),
+  computed: mapGetters(['loading', 'email', 'error', 'done' ]),
   methods: {
     ...mapActions({
-      reset: 'auth/reset/post',
-      resetForm: 'auth/reset/resetForm'
+      reset: 'post',
+      resetForm: 'resetForm'
     }),
     ...mapMutations({
-      setEmail: 'auth/reset/email'
+      setEmail: 'email'
     })
   }
 }
