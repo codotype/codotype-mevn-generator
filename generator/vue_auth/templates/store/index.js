@@ -2,6 +2,8 @@ import actions from './actions'
 import state from './state'
 import getters from './getters'
 import mutations from './mutations'
+import forgotPasswordModule from './forgotPasswordModule'
+import resetPasswordModule from './resetPasswordModule'
 const namespaced = true
 
 export default {
@@ -9,5 +11,9 @@ export default {
   state,
   mutations,
   actions,
-  getters
+  getters,
+  modules: {
+    forgot_password: forgotPasswordModule,
+    reset_password: resetPasswordModule
+  }
 }

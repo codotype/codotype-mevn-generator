@@ -25,8 +25,8 @@
             <%_ } else if (attr.datatype === 'BOOL') { _%>
             <td>
               <span>
-                <i class="fa fa-fw fa-check-square-o" v-if="model.<%= attr.identifier%>"></i>
-                <i class="fa fa-fw fa-square-o" v-if="!model.<%= attr.identifier%>"></i>
+                <i class="fas fa-fw fa-check-square-o" v-if="model.<%= attr.identifier%>"></i>
+                <i class="fas fa-fw fa-square-o" v-if="!model.<%= attr.identifier%>"></i>
               </span>
             </td>
             <%_ } else { _%>
@@ -35,9 +35,11 @@
             <%_ }) _%>
             <%_ related_schema.relations.forEach((r) => { _%>
             <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(r.type)) { _%>
-            <td>{{model.<%= r.alias.identifier %>.<%= r.related_lead_attribute %>}}</td>
+            <td v-if="model.<%= r.alias.identifier %>_id">{{model.<%= r.alias.identifier %>.<%= r.related_lead_attribute %>}}</td>
+            <td v-else>N/A</td>
             <%_ } else if (['HAS_MANY'].includes(r.type)) { _%>
-            <td>{{model.<%= r.alias.identifier %>_ids.length }} <%= r.alias.label_plural %></td>
+            <td v-if="model.<%= r.alias.identifier %>_ids.length">{{model.<%= r.alias.identifier %>_ids.length }} <%= r.alias.label_plural %></td>
+            <td v-else>N/A</td>
             <%_ } _%>
             <%_ }) _%>
           </tr>

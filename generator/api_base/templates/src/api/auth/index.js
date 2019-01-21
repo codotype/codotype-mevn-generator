@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const controller = require('./auth.controller')
-const authorization = require('../middleware/authorization')
+const { requireAuthenticated } = require('../middleware/authorization')
+
 
 // // // //
 
@@ -10,8 +11,11 @@ router.post('/register', controller.register)
 // POST /login
 router.post('/login', controller.login)
 
+// POST /forgot_password
+router.post('/forgot_password', controller.forgot_password)
+
 // POST /reset_password
-router.post('/reset_password', authorization, controller.reset_password)
+router.post('/reset_password', controller.reset_password)
 
 // // // //
 

@@ -31,9 +31,10 @@ function getPaginationParams (req) {
 <%_ } else { _%>
 // GET /api/<%= schema.identifier_plural %> Profile
 <%_ } _%>
-exports.profile = (req, res) => {
-    return <%= schema.class_name %>.findOne({ username: req.user.username }, '-password -__v').exec()
-    .then( (user) => { res.json(user) })
+exports.profile = async (req, res) => {
+    const user = await <%= schema.class_name %>.findOne({ email: req.user.email }, '-__v').exec()
+    if (user) { return res.json(user) }
+    return res.status(401).json({ message: 'No user found' })
 }
 <%_ } _%>
 
@@ -53,6 +54,8 @@ module.exports.list = (req, res, next) => {
     // Gets pagination variables for query
     const { page, per_page, offset } = getPaginationParams(req);
 
+    // NOTES - remove
+    // .find({ user_id: req.user.id })
     return <%= schema.class_name %>
     .find({})
     <%_ schema.relations.forEach((rel) => { _%>
@@ -139,66 +142,6 @@ module.exports.search = (req, res) => {
 };
 
 
-<%_ schemaApiActions.forEach((action) => { _%>
-<%_ if (action.scope === 'ROOT' && generate_api_doc) { _%>
-/**
-* @api {<%= action.verb %>} /api/<%= schema.identifier_plural %>/<%= action.uri %> <%= action.label %>
-* @APIname <%= action.label %>
-* @APIgroup <%= schema.class_name %> Controller
-* @apidescription Executes the <%= action.label %> API Action
-* @apiSuccess {json} The result of the <%= action.label %> API Action
-* @apiError (Error) 500 Internal server error
-*/
-<%_ } else if (action.scope === 'MODEL' && generate_api_doc) { _%>
-/**
-* @api {<%= action.verb %>} /api/<%= schema.identifier_plural %>/:id/<%= action.uri %> :id/<%= action.label %>
-* @APIname <%= action.label %>
-* @APIgroup <%= schema.class_name %> Controller
-* @apidescription Executes the <%= action.label %> API Action
-* @apiSuccess {json} The result of the <%= action.label %> API Action
-* @apiError (Error) 500 Internal server error
-*/
-<%_ } else if (action.scope === 'ROOT') { _%>
-// <%= action.verb %> /api/<%= schema.identifier_plural %>/<%= action.uri %> <%= action.label %>
-<%_ } else if (action.scope === 'MODEL') { _%>
-// <%= action.verb %> /api/<%= schema.identifier_plural %>/:id/<%= action.uri %> <%= action.label %>
-<%_ } _%>
-<%_ if (action.scope === 'ROOT') { _%>
-module.exports.<%= action.function_name %> = (req, res, next) => {
-
-    // Dummy action
-    return res
-    .status(200)
-    .send({ api_action: '<%= action.label %>'})
-    .end();
-
-};
-<%_ } else if (action.scope === 'MODEL') { _%>
-module.exports.<%= action.function_name %> = (req, res, next) => {
-
-    // Dummy MODEL ACTION action
-    return <%= schema.class_name %>.findById(req.params.id)
-    <%_ schema.relations.forEach((rel) => { _%>
-    <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
-    .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
-    <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
-    // .populate({ path: '<%= rel.alias.identifier_plural %>', select: '<%= rel.related_lead_attribute %>' })
-    <%_ } _%>
-    <%_ }) _%>
-    .then((response) => {
-        return res
-        .status(200)
-        .send(response)
-        // .send(response.toJSON({ getters: true, virtuals: true }))
-        .end();
-    })
-    .catch( err => next(boom.badImplementation(err)) );
-
-};
-<%_ } _%>
-<%_ }) _%>
-
-
 <%_ if (generate_api_doc) { _%>
 /**
 * @api {POST} /api/<%= schema.identifier_plural %> Create
@@ -215,6 +158,14 @@ module.exports.create = (req, res, next) => {
     <%_ if (schema.identifier === 'user') { _%>
     return User.create(req.body)
     <%_ } else { _%>
+    // const { ... } = req.body
+    // return new <%= schema.class_name %>({
+    //   user_id: req.user.id,
+    //   ...
+    // }).save()
+
+    // const { <%= schema.attributes.map(attr => attr.identifier).join(', ') %> } = req.body
+
     return new <%= schema.class_name %>(req.body).save()
     <%_ } _%>
     .then((response) => {
@@ -256,6 +207,76 @@ module.exports.show = (req, res, next) => {
     })
     .catch( err => next(boom.badImplementation(err)) );
 };
+
+
+<%_ schemaApiActions.forEach((action) => { _%>
+<%_ if (action.scope === 'ROOT' && generate_api_doc) { _%>
+/**
+* @api {<%= action.verb %>} /api/<%= schema.identifier_plural %>/<%= action.uri %> <%= action.label %>
+* @APIname <%= action.label %>
+* @APIgroup <%= schema.class_name %> Controller
+* @apidescription Executes the <%= action.label %> API Action
+* @apiSuccess {json} The result of the <%= action.label %> API Action
+* @apiError (Error) 500 Internal server error
+*/
+<%_ } else if (action.scope === 'MODEL' && generate_api_doc) { _%>
+/**
+* @api {<%= action.verb %>} /api/<%= schema.identifier_plural %>/:id/<%= action.uri %> :id/<%= action.label %>
+* @APIname <%= action.label %>
+* @APIgroup <%= schema.class_name %> Controller
+* @apidescription Executes the <%= action.label %> API Action
+* @apiSuccess {json} The result of the <%= action.label %> API Action
+* @apiError (Error) 500 Internal server error
+*/
+<%_ } else if (action.scope === 'ROOT') { _%>
+// <%= action.verb %> /api/<%= schema.identifier_plural %>/<%= action.uri %> <%= action.label %>
+<%_ } else if (action.scope === 'MODEL') { _%>
+// <%= action.verb %> /api/<%= schema.identifier_plural %>/:id/<%= action.uri %> <%= action.label %>
+<%_ } _%>
+<%_ if (action.scope === 'ROOT') { _%>
+module.exports.<%= action.function_name %> = (req, res, next) => {
+
+    // Dummy action
+    return res
+    .status(200)
+    .send({ api_action: '<%= action.label %>'})
+    .end();
+
+};
+<%_ } else if (action.scope === 'MODEL') { _%>
+module.exports.<%= action.function_name %> = (req, res, next) => {
+
+    // Dummy MODEL ACTION action
+
+    // NOTES - remove
+    // const { ... } = req.body
+    // {
+    //   user_id: req.user.id,
+    //   ...
+    // }.save()
+
+    const payload = {  } // TODO - add attributes here that you would like to change
+    return <%= schema.class_name %>.findByIdAndUpdate(req.params.id, { $set: payload }, { new: true })
+    <%_ schema.relations.forEach((rel) => { _%>
+    <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+    .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
+    <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
+    // .populate({ path: '<%= rel.alias.identifier_plural %>', select: '<%= rel.related_lead_attribute %>' })
+    <%_ } _%>
+    <%_ }) _%>
+    .then((response) => {
+        return res
+        .status(200)
+        .send(response)
+        // .send(response.toJSON({ getters: true, virtuals: true }))
+        .end();
+    })
+    .catch( err => next(boom.badImplementation(err)) );
+
+};
+<%_ } _%>
+<%_ }) _%>
+
 
 <%_ schema.relations.forEach((rel) => { _%>
 <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>

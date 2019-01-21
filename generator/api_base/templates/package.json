@@ -1,5 +1,5 @@
 {
-  "name": "expressjs_boilerplate",
+  "name": "codotype_express_mongo",
   "version": "1.0.0",
   "scripts": {
     "start": "node ./src/bin/www.js",
@@ -14,7 +14,8 @@
     "dotenv": "^4.0.0",
     "express": "^4.14.0",
     "jsonwebtoken": "^7.1.9",
-    "mongoose": "^4.7.1",
+    "mailgun-js": "^0.22.0",
+    "mongoose": "^5.4",
     "morgan": "^1.7.0",
     "nodemon": "^1.12.1"
   },

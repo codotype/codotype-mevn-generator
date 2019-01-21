@@ -20,7 +20,7 @@
                   <i class="far fa-fw fa-edit"></i>
                 </button>
                 <button class="btn btn-sm btn-outline-danger" @click="destroyOption(element)">
-                  <i class="fa fa-fw fa-trash"></i>
+                  <i class="far fa-fw fa-trash-alt"></i>
                 </button>
               </div>
             </div>
@@ -52,11 +52,11 @@
         <div class="col-lg-6 text-right">
           <div class="btn-group">
             <button class="btn btn-sm btn-outline-secondary" @click="cancelEditing(editing)">
-              <i class="fa fa-fw fa-times"></i>
+              <i class="fas fa-fw fa-times"></i>
               Cancel
             </button>
             <button class="btn btn-outline-success" @click="submitEditing(editing)">
-              <i class="fa fa-fw fa-check"></i>
+              <i class="fas fa-fw fa-check"></i>
               Submit
             </button>
           </div>

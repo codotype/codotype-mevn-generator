@@ -1,7 +1,7 @@
 
 module.exports = {
   name: 'ModuleStore',
-  async write({ blueprint }) {
+  async write({ blueprint, configuration }) {
     // console.log('WRITING MODULE STORE')
     // Iterates over each schema in the this.options.build.blueprint.schemas array
     // return blueprint.schemas.forEach(async (schema) => {
@@ -9,6 +9,16 @@ module.exports = {
     // TODo - replace with a single call to forEachSchema
     for (var i = blueprint.schemas.length - 1; i >= 0; i--) {
       const schema = blueprint.schemas[i]
+
+      // // // //
+      // TODO - abstract this elsewhere
+      // Pulls model options from configuration object
+      const schemaOptions = configuration.model_options[schema._id]
+
+      // Isolates API Actions metadata
+      let api_actions = configuration.api_actions[schema._id]
+      if (!api_actions[0]) { api_actions = false }
+      // // // //
 
       // TODO - abstract this into @codotype/utils
       let newModel = {}
@@ -40,7 +50,7 @@ module.exports = {
       await this.copyTemplate(
         this.templatePath('actions.js'),
         this.destinationPath('client/src/modules/' + schema.identifier + '/store/actions.js'),
-        { schema }
+        { schema, api_actions }
       );
 
       // client/src/store/resource/getters.js

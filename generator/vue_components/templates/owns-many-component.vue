@@ -56,7 +56,7 @@
             <%_ } else if (attr.datatype === 'BOOL') { _%>
             <td>
               <span>
-                <i class="fa fa-fw fa-check-square-o" v-if="m.<%=attr.identifier%>"></i>
+                <i class="fas fa-fw fa-check-square" v-if="m.<%=attr.identifier%>"></i>
                 <i class="fa fa-fw fa-square-o" v-if="!m.<%=attr.identifier%>"></i>
               </span>
             </td>
@@ -67,18 +67,27 @@
             <%_ } _%>
           <%_ }) _%>
 
+
           <%_ related_schema.relations.forEach((r) => { _%>
-            <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(r.type)) { _%>
-            <td>
+          <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(r.type)) { _%>
+
+            <td v-if="m.<%= r.alias.identifier %>_id">
               <router-link :to="'/<%= r.schema.identifier_plural %>/' + m.<%= r.alias.identifier + '_id' %>">
                 {{m.<%= r.alias.identifier %>.<%= r.related_lead_attribute %>}}
               </router-link>
             </td>
-            <%_ } else if (['HAS_MANY'].includes(r.type)) { _%>
-            <td>{{m.<%= r.alias.identifier %>_ids.length }} <%= r.alias.label_plural %>
+            <td v-else>N/A</td>
+          <%_ } else if (r.type === 'HAS_MANY') { _%>
+
+            <td v-if="m.<%=r.alias.identifier %>_ids">
+              {{ m.<%=r.alias.identifier %>_ids.length }} <%=r.alias.label_plural %>
             </td>
-            <%_ } _%>
+            <td v-else>N/A</td>
+          <%_ } _%>
           <%_ }) _%>
+
+
+
             <!-- Edit <%= related_schema.label %>-->
             <td class='text-right'>
               <b-button size="sm" variant="outline-primary" :to=" '/<%= related_schema.identifier_plural %>/' + m._id">
@@ -86,11 +95,11 @@
               </b-button>
 
               <b-button size="sm" variant="outline-warning" :to=" '/<%= related_schema.identifier_plural %>/' + m._id + '/edit' ">
-                <i class="fa fa-fw fa-pencil"></i>
+                <i class="far fa-fw fa-edit"></i>
               </b-button>
 
               <b-button size="sm" variant="outline-danger" v-b-modal="'modal_' + m._id">
-                <i class="fa fa-fw fa-trash"></i>
+                <i class="far fa-fw fa-trash-alt"></i>
               </b-button>
 
               <!-- Bootstrap Modal Component -->

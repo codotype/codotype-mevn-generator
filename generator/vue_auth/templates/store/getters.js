@@ -8,7 +8,7 @@ export default {
     return state.register_user
   },
   is_authenticated: state => {
-    if (state.current_user._id) {
+    if (state.current_user && state.current_user._id) {
       return true
     } else {
       return false

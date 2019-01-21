@@ -7,7 +7,30 @@ import App from '@/App'
 import router from '@/routers'
 import store from '@/store'
 import configureModerator from '@/store/mediator'
+// import FullCalendar from 'vue-full-calendar'
+// import 'fullcalendar/dist/fullcalendar.css'
 configureModerator(store, router)
+
+// vue-full-calendar
+// https://www.npmjs.com/package/vue-full-calendar
+// Vue.use(FullCalendar)
+
+//<full-calendar
+//  defaultView="month"
+//  @event-selected="this.$router.push('/events/' + a.eventId)"
+//  :events="calendarEvents"/>
+///>
+
+// calendarEvents () {
+//   return this.collection.map((e) => {
+//     return {
+//       eventId: e._id,
+//       title: e.label,
+//       start: e.start
+//       // end: e.start + e.duration,
+//     }
+//   })
+// }
 
 // vue-meta
 // supports `meta` object returned with `module.defaults`

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from '@/routers'
 import {
   LOGIN_ROUTE,
   REGISTER_ROUTE,
@@ -17,8 +18,8 @@ const actions = {
     return new Promise((resolve, reject) => {
       // Prevents unnecssary fetch on client start
       if (!getters['token']) {
-        // commit('clear_token')
-        // commit('clear_current_user')
+        commit('clear_token')
+        commit('clear_current_user')
         commit('logging_in', false)
         return resolve()
       }
@@ -66,13 +67,13 @@ const actions = {
       // Shows REGISTER_SUCCESS_NOTIFICATION message
       // commit('notification/add', REGISTER_SUCCESS_NOTIFICATION, { root: true })
 
-      // TODO - keep user logged in here
+      // TODO - keep user logged in here?
 
       // Redirects to login route
       // TODO - emit event instead of routing in action
       // eventBus.emit('authenticated', result)
-      // Router.push('/auth/login')
-      commit('logged_in', true)
+      // commit('logged_in', true)
+      router.push('/auth/login')
     })
     .catch((err) => {
       // Shows REGISTER_ERROR_NOTIFICATION message
@@ -93,7 +94,7 @@ const actions = {
       method: 'post',
       url: LOGIN_ROUTE,
       data: {
-        username: state.login_user.username,
+        email: state.login_user.email,
         password: state.login_user.password
       }
     })
@@ -105,8 +106,8 @@ const actions = {
       commit('token', data.token)
 
       // Pulls current user data from server response
-      const { username, email, admin, _id, roles } = data
-      commit('current_user', { username, email, admin, _id, roles })
+      const { email, admin, _id, role } = data
+      commit('current_user', { email, admin, _id, role })
 
       // Shows LOGIN_SUCCESS_NOTIFICATION message
       // commit('notification/add', LOGIN_SUCCESS_NOTIFICATION, { root: true })

@@ -4,7 +4,8 @@ module.exports = {
 
     // Pulls `generate_api_doc` from configuration.options
     // Used to conditionally generate APIDoc headers
-    const { generate_api_doc } = configuration.options
+    // const { generate_api_doc } = configuration.options
+    const generate_api_doc = true
 
     // Pulls schema api_actions
     // TODO - IMPLEMENT IN META.JSON

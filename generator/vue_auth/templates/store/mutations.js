@@ -7,7 +7,6 @@ export default {
   clear_login_user (state) {
     state.login_user = {
       email: '',
-      username: '',
       password: '',
       errors: {}
     }
@@ -15,7 +14,6 @@ export default {
   clear_register_user (state) {
     state.register_user = {
       email: '',
-      username: '',
       password: '',
       passwordverify: '',
       errors: {}

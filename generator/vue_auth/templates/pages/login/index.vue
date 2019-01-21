@@ -10,18 +10,32 @@
                 <b-form>
                   <h1>Login</h1>
                   <p class="text-muted">Sign In to your account</p>
+
                   <b-input-group class="mb-3">
-                    <b-form-input type="text" class="form-control" placeholder="Username" autocomplete="username email" v-model="login_user.username" />
+                    <b-form-input
+                      placeholder="Email"
+                      autocomplete="email"
+                      v-model="login_user.email"
+                      @keyup.enter="login"
+                    />
                   </b-input-group>
+
                   <b-input-group class="mb-4">
-                    <b-form-input type="password" class="form-control" placeholder="Password" autocomplete="current-password" v-model="login_user.password" />
+                    <b-form-input
+                      type="password"
+                      placeholder="Password"
+                      autocomplete="current-password"
+                      v-model="login_user.password"
+                      @keyup.enter="login"
+                    />
                   </b-input-group>
+
                   <b-row>
                     <b-col cols="6">
                       <b-button variant="primary" class="px-4" @click="login()">Login</b-button>
                     </b-col>
                     <b-col cols="6" class="text-right">
-                      <b-button variant="link" class="px-0">Forgot password?</b-button>
+                      <b-button variant="link" to="/auth/forgot_password" class="px-0">Forgot password?</b-button>
                     </b-col>
                   </b-row>
                 </b-form>

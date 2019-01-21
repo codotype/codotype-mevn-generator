@@ -1,12 +1,17 @@
 <template>
-  <LoadingFull v-if="fetching" />
-  <div class="container" v-else>
+  <!-- <LoadingFull v-if="fetching" /> -->
+  <!-- <div class="container" v-else> -->
+  <div class="container">
 
     <b-row>
       <div class="col-md-8">
         <h2>
           <i class="<%= schemaOptions.fontawesome_icon %>"></i>
+          <%_ if (admin) { _%>
+          <%= schema.label %> Admin
+          <%_ } else { _%>
           <%= schema.label_plural %>
+          <%_ } _%>
         </h2>
       </div>
 
@@ -19,12 +24,13 @@
     </b-row>
 
     <!-- List View -->
-    <b-row>
+    <LoadingFull v-if="fetching" />
+    <b-row v-else>
       <b-col lg="12">
         <SearchBar module='<%= schema.identifier %>'/>
       </b-col>
-      <b-col lg="12">
-        <b-pagination v-if="collection.length === perPage" :total-rows="totalRows" :value="currentPage" :per-page="perPage" @change="goToPage" />
+      <b-col lg="12" v-if="collection.length >= perPage">
+        <b-pagination :total-rows="totalRows" :value="currentPage" :per-page="perPage" @change="goToPage" />
       </b-col>
       <b-col lg="12">
         <ListView :collection="collection" />

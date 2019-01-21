@@ -43,6 +43,31 @@ const requireAdmin = (to, from, next) => {
   }
 }
 
+const requireRole = (role) => {
+  return function (to, from, next) {
+    const currentUser = store.getters['auth/current_user']
+    const token = store.getters['auth/token']
+
+    // Send to destination if the user has already authenticated
+    if (currentUser._id && (currentUser.role === role || currentUser.admin)) {
+      next()
+    // Send to Login page if no token exists
+    } else if (!token) {
+      next({ path: '/auth/login' })
+    } else {
+      store.dispatch('auth/fetchUserProfile')
+      .then(() => {
+        const user = store.getters['auth/current_user']
+        if (user.role === role) return next()
+        return next({ path: from.path })
+      })
+      .catch(() => {
+        next({ path: '/auth/login' })
+      })
+    }
+  }
+}
+
 const onlyGuest = (to, from, next) => {
   if (store.getters['auth/token']) {
     next({ path: from.path })
@@ -54,5 +79,6 @@ const onlyGuest = (to, from, next) => {
 export default {
   onlyGuest,
   requireAuth,
+  requireRole,
   requireAdmin
 }

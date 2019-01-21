@@ -8,11 +8,9 @@
       <%_ schema.relations.forEach((rel) => { _%>
       <b-col lg="12">
         <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
-        <<%= rel.alias.class_name %> :model="<%= rel.alias.identifier %>" v-if="<%= rel.alias.identifier %>._id" />
-        <%_ } else if (rel.type === 'HAS_MANY') { _%>
-        <<%= rel.alias.class_name_plural %> :collection="<%= rel.alias.identifier_plural %>" />
-        <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
-        <<%= rel.alias.class_name_plural %> :collection="<%= rel.alias.identifier_plural %>" />
+        <Related<%= rel.alias.class_name %>Detail :model="<%= rel.alias.identifier %>" v-if="<%= rel.alias.identifier %>._id" />
+        <%_ } else if (['REF_BELONGS_TO', 'HAS_MANY'].includes(rel.type)) { _%>
+        <Related<%= rel.alias.class_name_plural %>List :collection="<%= rel.alias.identifier_plural %>" />
         <%_ } _%>
       </b-col>
 
@@ -28,17 +26,11 @@
 import { mapGetters, mapActions } from 'vuex'
 import LoadingFull from '@/components/LoadingFull'
 import <%= schema.class_name %>ShowWidget from '@/modules/<%= schema.identifier %>/components/<%= schema.class_name %>ShowWidget'
-<%_ let imported = [] _%>
 <%_ schema.relations.forEach((rel) => { _%>
 <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
 import Related<%= rel.alias.class_name %>Detail from '@/modules/<%= schema.identifier %>/components/Related<%= rel.alias.class_name %>Detail'
-<%_ imported.push(rel.type) _%>
-<%_ } else if (rel.type === 'HAS_MANY') { _%>
-import <%= rel.alias.class_name_plural %> from '@/modules/<%= schema.identifier %>/components/<%= rel.alias.class_name_plural %>'
-<%_ imported.push(rel.type) _%>
-<%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
-import <%= rel.alias.class_name_plural %> from '@/modules/<%= schema.identifier %>/components/<%= rel.alias.class_name_plural %>'
-<%_ imported.push(rel.type) _%>
+<%_ } else if (['HAS_MANY', 'REF_BELONGS_TO'].includes(rel.type)) { _%>
+import Related<%= rel.alias.class_name_plural %>List from '@/modules/<%= schema.identifier %>/components/Related<%= rel.alias.class_name_plural %>List'
 <%_ } _%>
 <%_ }) _%>
 
@@ -52,10 +44,8 @@ export default {
     <%_ schema.relations.forEach((rel) => { _%>
     <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
     Related<%= rel.alias.class_name %>Detail,
-    <%_ } else if (rel.type === 'HAS_MANY') { _%>
-    <%= rel.alias.class_name_plural %>,
-    <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
-    <%= rel.alias.class_name_plural %>,
+    <%_ } else if (['REF_BELONGS_TO', 'HAS_MANY'].includes(rel.type)) { _%>
+    Related<%= rel.alias.class_name_plural %>List,
     <%_ } _%>
     <%_ }) _%>
     <%= schema.class_name %>ShowWidget,

@@ -9,6 +9,10 @@ module.exports = {
     // Defines destination directory for files in this loop
     const moduleRoot =  'client/src/modules/' + schema.identifier
 
+    // Isolates API Actions metadata
+    let api_actions = configuration.api_actions[schema._id]
+    if (!api_actions[0]) { api_actions = false }
+
     // Ensures existence of pages directory
     await this.ensureDir(moduleRoot + '/pages')
 
@@ -16,7 +20,7 @@ module.exports = {
     await this.copyTemplate(
       this.templatePath('list_page.vue'),
       this.destinationPath(moduleRoot + '/pages/list.vue'),
-      { schema, schemaOptions }
+      { schema, schemaOptions, api_actions, admin: false }
     )
 
     // client/src/modules/resource/pages/new/index.vue
@@ -45,7 +49,7 @@ module.exports = {
       await this.copyTemplate(
         this.templatePath('list_page.vue'),
         this.destinationPath(moduleRoot + '/pages/admin.vue'),
-        { schema, schemaOptions }
+        { schema, schemaOptions, api_actions, admin: true }
       )
     }
 

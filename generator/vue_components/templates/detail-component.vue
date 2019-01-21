@@ -7,16 +7,11 @@
       <b-modal :id="'destroyModal'"
         :title="'Destroy <%= schema.label %>?'"
         @ok="onConfirmDestroy(model)"
-        header-bg-variant='dark'
-        header-text-variant='light'
-        body-bg-variant='dark'
-        body-text-variant='light'
         footer-bg-variant='danger'
-        footer-text-variant='light'
         ok-variant='danger'
         ok-title='DESTROY'
         cancel-title='Cancel'
-        cancel-variant='dark'
+        cancel-variant='light'
       >
         <p class="text-left">Are you sure you want to destroy this <%= schema.label %>?</p>
       </b-modal>
@@ -31,12 +26,12 @@
 
           <!-- Edit -->
           <b-button size="sm" variant="outline-warning" :to="'/<%= schema.identifier_plural %>/' + model._id + '/edit'">
-            <i class="fa fa-fw fa-pencil"></i>
+            <i class="far fa-fw fa-edit"></i>
           </b-button>
 
           <!-- Destroy -->
           <b-button size="sm" variant="outline-danger" v-b-modal="'destroyModal'">
-            <i class="fa fa-fw fa-trash"></i>
+            <i class="far fa-fw fa-trash-alt"></i>
           </b-button>
 
         </div>
@@ -54,7 +49,7 @@
             <%_ } else if (attr.datatype === 'BOOL') { _%>
             <td>
               <span>
-                <i class="fa fa-fw fa-check-square-o" v-if="model.<%= attr.identifier%>"></i>
+                <i class="fas fa-fw fa-check-square" v-if="model.<%= attr.identifier%>"></i>
                 <i class="fa fa-fw fa-square-o" v-if="!model.<%= attr.identifier%>"></i>
               </span>
             </td>

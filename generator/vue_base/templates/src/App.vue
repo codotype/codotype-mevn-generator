@@ -3,7 +3,7 @@
     <AppNavbar/>
     <router-view/>
     <AppFooter/>
-    <NotificationList/>
+    <!-- <NotificationList/> -->
   </div>
 </template>
 

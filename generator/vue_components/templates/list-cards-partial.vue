@@ -32,7 +32,7 @@
             <%_ if (attr.datatype === 'BOOL') { _%>
             <span>
               <%= attr.label %>:
-              <i class="fa fa-fw fa-check-square-o" v-if="m.<%=attr.identifier%>"></i>
+              <i class="fas fa-fw fa-check-square" v-if="m.<%=attr.identifier%>"></i>
               <i class="fa fa-fw fa-square-o" v-if="!m.<%=attr.identifier%>"></i>
             </span>
             <%_ } else if (attr.datatype === 'STRING_ARRAY') { _%>
@@ -65,11 +65,11 @@
             </b-button>
 
             <b-button size="sm" variant="outline-warning" :to=" '/<%= schema.identifier_plural %>/' + m._id + '/edit' ">
-              <i class="fa fa-fw fa-pencil"></i>
+              <i class="far fa-fw fa-edit"></i>
             </b-button>
 
             <b-button size="sm" variant="outline-danger" v-b-modal="'modal_' + m._id">
-              <i class="fa fa-fw fa-trash"></i>
+              <i class="far fa-fw fa-trash-alt"></i>
             </b-button>
 
             <!-- Bootstrap Modal Component -->

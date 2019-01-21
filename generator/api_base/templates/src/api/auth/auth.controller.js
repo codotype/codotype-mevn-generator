@@ -1,10 +1,12 @@
 const jwt = require('jsonwebtoken')
+const crypto = require('crypto')
+const Mailer = require('../../lib/mailer')
 const User = require('../user/user.model')
 
 // // // //
 
 // POST /api/auth/register
-// { username, password }
+// { <%= inlineDeconstrction %>, password }
 exports.register = (req, res) => {
 
     // Pulls parameters from req.body
@@ -14,12 +16,14 @@ exports.register = (req, res) => {
     const create = (user) => {
         // User exists - throw error and return
         if (user) {
-            throw new Error('username exists')
+            throw new Error('User exists')
             return
         }
 
         // Creates a new User
-        return User.create({ <%= inlineDeconstrction %>, password })
+        const newUser = new User({ <%= inlineDeconstrction %>, password })
+        // newUser.role = ''
+        return newUser.save()
     }
 
     // Respond to the client
@@ -29,15 +33,15 @@ exports.register = (req, res) => {
         })
     }
 
-    // Handle error (username exists)
+    // Handle error (email exists)
     const onError = (error) => {
         res.status(409).json({
             message: error.message
         })
     }
 
-    // check username duplication
-    User.findOneByUsername(username)
+    // check email duplication
+    User.findOneByEmail(email)
     .then(create)
     .then(respond)
     .catch(onError)
@@ -46,13 +50,12 @@ exports.register = (req, res) => {
 // // // //
 
 // POST /api/auth/login
-// { username, password }
+// { email, password }
 exports.login = (req, res) => {
 
-    // Gathers username, password
-    const { name, email, username, password } = req.body
+    // Gathers email, password
+    const { email, password } = req.body
 
-    // check the user info & generate the jwt
     // Ensures presence of the User in the database
     // Verifies the supplied password against the database
     const check = (user) => {
@@ -79,7 +82,6 @@ exports.login = (req, res) => {
             name: user.name,
             admin: user.admin,
             email: user.email,
-            username: user.username,
             iat: Date.now() // Issued At
         }
 
@@ -118,11 +120,9 @@ exports.login = (req, res) => {
         // Assembles response_payload
         const response_payload = {
             _id: user_id,
-            username: user.username,
-            name: user.name,
             email: user.email,
             admin: user.admin,
-            roles: user.roles,
+            role: user.role,
             token: token
         };
 
@@ -143,7 +143,8 @@ exports.login = (req, res) => {
     }
 
     // Find the user
-    User.findOneByUsername(username)
+    // TODO - replace `findOneByEmail` with Mongoose 5.x query syntax
+    User.findOneByEmail(email)
     .then(check)
     .then(respond)
     .catch(onError)
@@ -152,12 +153,94 @@ exports.login = (req, res) => {
 
 // // // //
 
-// POST /api/auth/reset_password
-exports.reset_password = (req, res) => {
-    console.log('TODO - reset password logic')
-    // Password reset workflow (option A):
-    // 1 - Fetch User -> User.findByUsername(req.user.username)
-    // 2 - Generate RandomPassword
-    // 3 - Email RandomPassword to User.email
-    // 4 - Assign User.password = RandomPassword
+// POST /api/auth/forgot_password
+exports.forgot_password = async (req, res) => {
+
+    // Isolates user's email
+    const userEmail = req.body.email;
+
+    // TODO - send error if no email is supplied
+
+    // Finds the User model associated with the email
+    const user = await User.findOne({ email: userEmail.toLowerCase() })
+    .catch(err => res.status(401).json(err) )
+
+    // Handle invalid email address
+    if (!user) return res.status(400).json({ message: 'Invalid email address' })
+
+    // Creates a random password reset token for the user
+    let buf = await crypto.randomBytes(12)
+    const passwordResetToken = buf.toString('hex');
+
+    // Calculates tomorrow's date
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    // Assigns user password reset variables
+    user.password_reset_expiration = tomorrow;
+    user.password_reset_token = passwordResetToken;
+
+    // Saves the user model
+    await user.save().catch(err => res.status(422).json(err) );
+
+    // Assembles email
+    const dispatch = {
+      sender: 'Codotype <worker@codotype.com>',
+      subject: 'Codotype Password Reset',
+      recipient: user.email,
+      text: "Your password reset token is " + [process.env.APP_ADDRESS + '#/auth/reset_password?token=' + user.password_reset_token].join('')
+    }
+
+    // Dispatches password reset token to user
+    Mailer.dispatch(dispatch)
+
+    // Sends success message to client
+    return res.status(200).json({ success: true })
 }
+
+// // // //
+
+// POST /api/auth/reset_password
+exports.reset_password = async (req, res) => {
+
+    // Isolates user password & password_reset_token
+    const password = req.body.password;
+    const password_reset_token = req.body.password_reset_token;
+
+    // TODO - send error if password or password_reset_token are missing
+
+    // Finds the User model associated with the password_reset_token
+    const user = await User.findOne({ password_reset_token: password_reset_token })
+    .select('_id email password salt password_reset_token password_reset_expiration')
+    .catch(err => res.status(401).json(err) )
+
+    // Return error if no user is found with a matching password_reset_token
+    if (!user) {
+      return res.status(401).json({ type: 'INVALID_PASSWORD_RESET_TOKEN' })
+    }
+
+    // TODO - implement this
+    if (user.validResetToken(password_reset_token)) {
+
+      // Assigns user.password
+      user.password = password
+
+      // Clears the verified value for password_reset_token and password_reset_expiration
+      user.password_reset_token = ''
+      user.password_reset_expiration = ''
+
+      // Saves the updated user & handles error
+      await user.save()
+      .catch((err) => {
+        console.log(err)
+        res.status(422).json(err)
+      })
+
+      // Sends a success message to the client
+      return res.status(200).json({ success: true })
+    }
+
+    // Sends error message to client
+    return res.status(403).json({ forbidden: true })
+}
+
