@@ -18,8 +18,8 @@ const actions = {
     return new Promise((resolve, reject) => {
       // Prevents unnecssary fetch on client start
       if (!getters['token']) {
-        // commit('clear_token')
-        // commit('clear_current_user')
+        commit('clear_token')
+        commit('clear_current_user')
         commit('logging_in', false)
         return resolve()
       }
