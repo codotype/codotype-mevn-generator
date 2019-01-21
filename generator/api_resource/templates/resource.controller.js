@@ -31,9 +31,10 @@ function getPaginationParams (req) {
 <%_ } else { _%>
 // GET /api/<%= schema.identifier_plural %> Profile
 <%_ } _%>
-exports.profile = (req, res) => {
-    return <%= schema.class_name %>.findOne({ email: req.user.email }, '-__v').exec()
-    .then( (user) => { res.json(user) })
+exports.profile = async (req, res) => {
+    const user = await <%= schema.class_name %>.findOne({ email: req.user.email }, '-__v').exec()
+    if (user) { return res.json(user) }
+    return res.status(401).json({ message: 'No user found' })
 }
 <%_ } _%>
 
