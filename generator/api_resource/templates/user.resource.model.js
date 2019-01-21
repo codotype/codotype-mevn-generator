@@ -5,10 +5,25 @@ const crypto = require('crypto')
 // // // //
 
 // Password encryption helper function
-function encryptPassword (password) {
-    return crypto.createHmac('sha1', process.env.PASSWORD_ENCRYPTION_SECRET)
-    .update(password)
-    .digest('base64')
+// function encryptPassword (password) {
+//     return crypto.createHmac('sha1', process.env.PASSWORD_ENCRYPTION_SECRET)
+//     .update(password)
+//     .digest('base64')
+// }
+
+// Crypto library variables
+const defaultIterations = 10000;
+const defaultKeyLength = 64;
+const defaultDigest = 'sha512';
+
+function encryptPassword (password, salt) {
+
+  // TOOD - throw error here?
+  if (!password || !salt) { return null; }
+
+  const saltBuf = new Buffer(salt, 'base64');
+
+  return crypto.pbkdf2Sync(password, saltBuf, defaultIterations, defaultKeyLength, defaultDigest).toString('base64');
 }
 
 const collection_options = {
@@ -20,29 +35,37 @@ const collection_options = {
 }
 
 const userAttributes = {
-  username: {
-      type: String,
-      required: true
-  },
   email: {
-      type: String,
-      required: true
-      // TODO - email validation
+    type: String, // TODO - email validation?
+    required: true,
+    unique: true,
+    lowercase: true,
+    index: true
   },
   password: {
-      type: String,
-      required: true
+    type: String,
+    required: true,
+    select: false
+  },
+  salt: {
+    type: String,
+    required: true,
+    select: false
   },
   password_reset_token: {
-      type: String
+    type: String,
+    select: false
+  },
+  password_reset_expiration: {
+    type: Date,
+    select: false
   },
   admin: {
-      type: Boolean,
-      default: false
+    type: Boolean,
+    default: false
   },
   <%_ schema.attributes.forEach((attr) => { _%>
   <%_ if (attr.datatype.identifier === 'email') { return } _%>
-  <%_ if (attr.datatype.identifier === 'username') { return } _%>
   <%_ if (attr.datatype === 'BOOL') { _%>
   <%_ return _%>
   <%_ } else if (attr.datatype === 'BOOL') { _%>
@@ -92,39 +115,134 @@ const <%= schema.class_name %>Model = new Schema(userAttributes, collection_opti
 // // // //
 
 // Create new User document
-UserModel.statics.create = function ({ <%= inlineDeconstrction %>, password }) {
+// UserModel.statics.create = function ({ <%= inlineDeconstrction %>, password }) {
 
-    // Instantiates new User model with all required attributes
-    // TODO - add required attributes here
-    const user = new this({ <%= inlineDeconstrction %>, password: encryptPassword(password) })
+//     // Instantiates new User model with all required attributes
+//     // TODO - add required attributes here
+//     const user = new this({ <%= inlineDeconstrction %>, password: encryptPassword(password) })
 
-    // Return User.save() Promise
-    return user.save()
-}
+//     // Return User.save() Promise
+//     return user.save()
+// }
 
-// findOneByUsername
-// Find one User by username
-UserModel.statics.findOneByUsername = function (username) {
-    // Executes MongoDb query
-    return this.findOne({ username }).exec()
+// findOneByEmail
+// Find one User by email
+// TODO - should be findOneByEmail
+UserModel.statics.findOneByEmail = function (email) {
+    return this.findOne({ email })
+    .select('_id email password salt password_reset_token password_reset_expiration')
+    .exec()
 }
 
 // verify
 // Verifies the password parameter of POST /auth/login requests
-UserModel.methods.verify = function (password) {
-    // Verifies saved password against a request's password
-    return this.password === encryptPassword(password)
+UserModel.method('verify', function (password) {
+  console.log('VERIFY')
+  console.log(password)
+  console.log(this.password)
+  console.log(this.salt)
+  console.log(this)
+  const encryptedPassword = encryptPassword(password, this.salt)
+  return this.password === encryptedPassword
+})
+
+// Return true if the reset token is valid for this user
+UserModel.method('validResetToken', function(token){
+  return this.password_reset_token === token && new Date() < this.password_reset_expiration
+})
+
+// TODO - document & test
+UserModel.method('makeSalt', function (byteSize) {
+  const defaultByteSize = 16;
+
+  if (!byteSize) { byteSize = defaultByteSize; }
+
+  return crypto.randomBytes(byteSize).toString('base64')
+
+  // return crypto.randomBytes(byteSize, (err, salt) => {
+  //   if (err) {
+  //     callback(err);
+  //   } else {
+  //     callback(null, salt.toString('base64'));
+  //   }
+  // });
+})
+
+
+const validatePresenceOf = (value) => {
+  return value && value.length;
 }
+
+// TODO - document & test
+// UserModel.pre('update', (next) => {
+//   console.log('PRE UPDATE')
+//   console.log('PRE UPDATE')
+//   console.log('PRE UPDATE')
+//   console.log(this)
+// })
+
+// TODO - document & test
+UserModel.pre('validate', function (next) {
+
+  console.log(this)
+  console.log(this.password)
+  console.log(this.salt)
+  console.log("PRE SAVE PRE SAVE")
+  console.log("PRE SAVE PRE SAVE")
+  console.log("PRE SAVE PRE SAVE")
+
+  // Handle new/update passwords
+  if (!this.isModified('password')) {
+    console.log('PASSWORD NOT MODIFIED')
+    console.log('PASSWORD NOT MODIFIED')
+    return next();
+  }
+
+  // TODO - DOCUMENT
+  if (!validatePresenceOf(this.password)) {
+    console.log('INVALID PASSWORD')
+    console.log('INVALID PASSWORD')
+    console.log('INVALID PASSWORD')
+    next(new Error('Invalid password'));
+  }
+
+  // TODO - DOCUMENT
+  // Make salt with a callback
+
+  // TODO - DOCUMENT
+  const salt = this.makeSalt()
+  console.log("MADE SALT")
+  this.salt = salt;
+
+  console.log(this.salt)
+  console.log(this.password)
+
+  // TODO - DOCUMENT
+  const hashedPassword = encryptPassword(this.password, this.salt)
+
+  console.log("MADE HASHED PASSWORD")
+  console.log(hashedPassword)
+
+  // TODO - DOCUMENT
+  this.password = hashedPassword;
+
+  console.log("NEXT?")
+  console.log("NEXT?")
+  console.log("NEXT?")
+  next();
+
+});
+
 
 // assignAdmin
 // Assigns admin priviledges to a user
-UserModel.methods.assignAdmin = function () {
+UserModel.method('assignAdmin', function () {
     // Assigns true to `admin` attribute
     this.admin = true
 
     // Returns `save` Promise
     return this.save()
-}
+})
 
 <%_ schema.relations.forEach((rel) => { _%>
 <%_ if (rel.type === 'BELONGS_TO') { _%>
