@@ -65,6 +65,40 @@ export default {
       throw err // TODO - better error handling
     })
   },
+
+  <%_ if (api_actions) { _%>
+  <%_ api_actions.filter(a => a.scope === 'MODEL').forEach((action) => { _%>
+  // <%= action.verb %> /api/<%= action.function_name %>/:id/<%= action.uri %>
+  <%= action.function_name %> ({ state, commit, rootGetters }, <%= schema.identifier %>Id) {
+    <%_ if (action.verb === 'POST') { _%>
+    const payload = {} // TODO - payload should be managed in Vuex?
+    axios.post(API_ROOT + '/' + <%= schema.identifier %>Id + '/<%= action.uri %>', payload, {
+      headers: {
+        authorization: rootGetters['auth/authorizationHeader']
+      }
+    })
+    <%_ } else if (action.verb === 'PUT') { _%>
+    const payload = {} // TODO - payload should be managed in Vuex?
+    axios.put(API_ROOT + '/' + <%= schema.identifier %>Id + '/<%= action.uri %>', payload, {
+      headers: {
+        authorization: rootGetters['auth/authorizationHeader']
+      }
+    })
+    <%_ } _%>
+    .then(({ data }) => {
+      let collection = state.collection.map(m => m._id === data._id ? data : m)
+      commit('collection', collection)
+      // commit('fetching', false)
+    })
+    .catch((err) => {
+      // commit('fetching', false)
+      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      throw err // TODO - better error handling
+    })
+  },
+  <%_ }) _%>
+  <%_ } _%>
+
   <%_ schema.relations.forEach((rel, index) => { _%>
   <%_ if (rel.type === 'REF_BELONGS_TO') { _%>
   // OWNS MANY
