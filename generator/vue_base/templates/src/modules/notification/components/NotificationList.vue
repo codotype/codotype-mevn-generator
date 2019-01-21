@@ -1,6 +1,6 @@
 <template>
   <transition-group name="list" tag='div' class="container notification-container" v-if="collection[0]">
-    <div class="row" v-for="each in collection" v-bind:key="each.id">
+    <div class="row" v-for="each in collection" :key="each.id">
       <NotificationChild :item="each"/>
     </div>
   </transition-group>
