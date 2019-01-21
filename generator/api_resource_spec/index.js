@@ -9,7 +9,7 @@ module.exports = {
     blueprint.schemas.forEach(async (schema) => {
 
       // Defines the schema-specific destination
-      let resourceDest = 'server/server/api/' + schema.identifier
+      let resourceDest = 'server/src/api/' + schema.identifier
 
       // Ensures the presence of the directory
       await this.ensureDir(resourceDest)
