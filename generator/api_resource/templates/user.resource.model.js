@@ -137,11 +137,6 @@ UserModel.statics.findOneByEmail = function (email) {
 // verify
 // Verifies the password parameter of POST /auth/login requests
 UserModel.method('verify', function (password) {
-  console.log('VERIFY')
-  console.log(password)
-  console.log(this.password)
-  console.log(this.salt)
-  console.log(this)
   const encryptedPassword = encryptPassword(password, this.salt)
   return this.password === encryptedPassword
 })
@@ -174,65 +169,31 @@ const validatePresenceOf = (value) => {
 }
 
 // TODO - document & test
-// UserModel.pre('update', (next) => {
-//   console.log('PRE UPDATE')
-//   console.log('PRE UPDATE')
-//   console.log('PRE UPDATE')
-//   console.log(this)
-// })
-
-// TODO - document & test
 UserModel.pre('validate', function (next) {
-
-  console.log(this)
-  console.log(this.password)
-  console.log(this.salt)
-  console.log("PRE SAVE PRE SAVE")
-  console.log("PRE SAVE PRE SAVE")
-  console.log("PRE SAVE PRE SAVE")
 
   // Handle new/update passwords
   if (!this.isModified('password')) {
-    console.log('PASSWORD NOT MODIFIED')
-    console.log('PASSWORD NOT MODIFIED')
     return next();
   }
 
   // TODO - DOCUMENT
   if (!validatePresenceOf(this.password)) {
-    console.log('INVALID PASSWORD')
-    console.log('INVALID PASSWORD')
-    console.log('INVALID PASSWORD')
     next(new Error('Invalid password'));
   }
 
   // TODO - DOCUMENT
-  // Make salt with a callback
-
-  // TODO - DOCUMENT
   const salt = this.makeSalt()
-  console.log("MADE SALT")
   this.salt = salt;
-
-  console.log(this.salt)
-  console.log(this.password)
 
   // TODO - DOCUMENT
   const hashedPassword = encryptPassword(this.password, this.salt)
 
-  console.log("MADE HASHED PASSWORD")
-  console.log(hashedPassword)
-
   // TODO - DOCUMENT
   this.password = hashedPassword;
 
-  console.log("NEXT?")
-  console.log("NEXT?")
-  console.log("NEXT?")
+  // Continues to remaining middleware
   next();
-
 });
-
 
 // assignAdmin
 // Assigns admin priviledges to a user
