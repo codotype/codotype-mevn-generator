@@ -1,4 +1,4 @@
-# ExpressJS + MongoDB API Server
+# <%= blueprint.label %> ExpressJS + MongoDB API Server
 API server with Express.js + MongoDB + JWT + Docker
 
 ## Getting Started

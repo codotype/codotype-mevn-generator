@@ -1,5 +1,5 @@
 {
-  "name": "codotype_express_mongo",
+  "name": "<%= blueprint.identifier %>_server",
   "version": "1.0.0",
   "scripts": {
     "start": "node ./src/bin/www.js",
