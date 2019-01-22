@@ -1,4 +1,5 @@
 const boom = require('boom')
+const { getPaginationParams } = require('../../lib/pagination')
 const <%= schema.class_name %> = require('./<%= schema.identifier %>.model')
 <%_ let relationImports = [] _%>
 <%_ schema.relations.forEach((relation) => { _%>
@@ -9,14 +10,6 @@ const <%= relation.schema.class_name %> = require('../<%= relation.schema.identi
 <%_ }) _%>
 
 // // // //
-
-// Default pagination options
-function getPaginationParams (req) {
-    let page = Number(req.query.page) || 0;
-    let per_page = Number(req.query.per_page) || 10;
-    let offset = per_page * page;
-    return { page, per_page, offset }
-}
 
 <%_ if (schema.identifier === 'user') { _%>
 <%_ if (generate_api_doc) { _%>
@@ -78,7 +71,6 @@ module.exports.list = (req, res, next) => {
     })
     .catch( err => next(boom.badImplementation(err)) );
 };
-
 
 
 <%_ if (generate_api_doc) { _%>
@@ -155,19 +147,14 @@ module.exports.search = (req, res) => {
 // POST /api/<%= schema.identifier_plural %>/:id Create
 <%_ } _%>
 module.exports.create = (req, res, next) => {
-    <%_ if (schema.identifier === 'user') { _%>
-    return User.create(req.body)
-    <%_ } else { _%>
-    // const { ... } = req.body
-    // return new <%= schema.class_name %>({
-    //   user_id: req.user.id,
-    //   ...
-    // }).save()
 
-    // const { <%= schema.attributes.map(attr => attr.identifier).join(', ') %> } = req.body
+    const { <%= schema.attributes.map(attr => attr.identifier).join(', ') %> } = req.body
 
-    return new <%= schema.class_name %>(req.body).save()
-    <%_ } _%>
+    return new <%= schema.class_name %>({
+      ...req.body,
+      // user_id: req.user.id,
+      <%= schema.attributes.map(attr => attr.identifier).join(',\n      ') %>
+    }).save()
     .then((response) => {
         return res
         .status(200)
@@ -236,25 +223,37 @@ module.exports.show = (req, res, next) => {
 <%_ if (action.scope === 'ROOT') { _%>
 module.exports.<%= action.function_name %> = (req, res, next) => {
 
-    // Dummy action
-    return res
-    .status(200)
-    .send({ api_action: '<%= action.label %>'})
-    .end();
+    // Gets pagination variables for query
+    const { page, per_page, offset } = getPaginationParams(req);
 
+    // NOTES - remove
+    // .find({ user_id: req.user.id })
+    return <%= schema.class_name %>
+    .find({})
+    <%_ schema.relations.forEach((rel) => { _%>
+    <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+    .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
+    <%_ } _%>
+    <%_ }) _%>
+    .limit(per_page)
+    .skip(offset)
+    .lean()
+    .exec()
+    .then((response) => {
+        return res
+        .status(200)
+        .json({
+          page: page,
+          per_page: per_page,
+          items: response
+        });
+    })
+    .catch( err => next(boom.badImplementation(err)) );
 };
 <%_ } else if (action.scope === 'MODEL') { _%>
 module.exports.<%= action.function_name %> = (req, res, next) => {
 
-    // Dummy MODEL ACTION action
-
-    // NOTES - remove
-    // const { ... } = req.body
-    // {
     //   user_id: req.user.id,
-    //   ...
-    // }.save()
-
     const payload = {  } // TODO - add attributes here that you would like to change
     return <%= schema.class_name %>.findByIdAndUpdate(req.params.id, { $set: payload }, { new: true })
     <%_ schema.relations.forEach((rel) => { _%>
@@ -339,6 +338,8 @@ module.exports.show<%= rel.alias.class_name_plural %> = (req, res, next) => {
         <%_ relatedSchema.relations.forEach((rel) => { _%>
         <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
         .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
+        <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
+        // X.populate({ path: '<%= rel.alias.identifier_plural %>', select: '<%= rel.related_lead_attribute %>' })
         <%_ } _%>
         <%_ }) _%>
         .then((<%= rel.schema.identifier_plural %>) => {
@@ -399,14 +400,20 @@ module.exports.show<%= rel.alias.class_name_plural %> = (req, res, next) => {
 // PUT /api/<%= schema.identifier_plural %>/:id Update
 <%_ } _%>
 module.exports.update = (req, res, next) => {
-    return <%= schema.class_name %>.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
-    .then((response) => {
-        return res
-        .status(200)
-        .send(response)
-        .end();
-    })
-    .catch( err => next(boom.badImplementation(err)) );
+
+  const { <%= schema.attributes.map(attr => attr.identifier).join(', ') %> } = req.body
+
+  return <%= schema.class_name %>.findByIdAndUpdate(req.params.id, { $set: {
+    ...req.body,
+    <%= schema.attributes.map(attr => attr.identifier).join(',\n    ') %>
+  }}, { new: true })
+  .then((response) => {
+    return res
+    .status(200)
+    .send(response)
+    .end();
+  })
+  .catch( err => next(boom.badImplementation(err)) );
 };
 
 <%_ if (generate_api_doc) { _%>
