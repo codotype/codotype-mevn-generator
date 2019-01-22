@@ -27,6 +27,9 @@ const requireAdmin = (to, from, next) => {
   // Send to destination if the user has already authenticated
   if (currentUser._id && currentUser.admin) {
     next()
+  // Do nothing if the user is logged in, just not an admin
+  } else if (token && currentUser._id) {
+    next({ path: from.path })
   // Send to Login page if no token exists
   } else if (!token) {
     next({ path: '/auth/login' })
@@ -51,6 +54,9 @@ const requireRole = (role) => {
     // Send to destination if the user has already authenticated
     if (currentUser._id && (currentUser.role === role || currentUser.admin)) {
       next()
+    // Do nothing if the user is logged in, just not an admin
+    } else if (token && currentUser._id) {
+      next({ path: from.path })
     // Send to Login page if no token exists
     } else if (!token) {
       next({ path: '/auth/login' })

@@ -51,16 +51,11 @@ module.exports = {
     for (var i = blueprint.schemas.length - 1; i >= 0; i--) {
       const schema = blueprint.schemas[i]
 
-      let generate_admin_page = false
-      if (configuration.model_options[schema._id].generate_admin_page) {
-        generate_admin_page = true
-      }
-
       // client/src/routers/resource.js
       await this.copyTemplate(
         this.templatePath('module-router.js'),
         this.destinationPath('client/src/modules/' + schema.identifier + '/router.js'),
-        { schema, generate_admin_page }
+        { schema }
       )
 
     }

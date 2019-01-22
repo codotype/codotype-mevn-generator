@@ -18,5 +18,8 @@ module.exports = {
       options: { inlineDeconstrction }
     })
 
+    await this.renderComponent({ src: 'LICENSE', dest: 'server/LICENSE' })
+    await this.renderComponent({ src: 'README.md', dest: 'server/README.md' })
+    await this.renderComponent({ src: 'package.json', dest: 'server/package.json' })
   }
 }

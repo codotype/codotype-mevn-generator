@@ -77,23 +77,21 @@ exports.login = (req, res) => {
         }
 
         // Assembles JWT User Payload
-        const jwt_paylod = {
+        const jwt_payload = {
             id: user._id.toString(),
-            name: user.name,
-            admin: user.admin,
             email: user.email,
+            admin: user.admin,
+            role: user.role,
             iat: Date.now() // Issued At
         }
 
         // JWT Options
+        // TODO - assign 'alg' to JWT options?
         const jwt_options = {
             expiresIn: '7d', // TODO - should these be abstracted into ENV?
             issuer: 'eb.com', // TODO - should issuer be included with Boilerplate?
             subject: 'user_info',
         }
-
-        // TODO - assign 'alg' to JWT options?
-        // alg: ''
 
         // Return a Promise to handle asynchronous JWT generation
         return new Promise((resolve, reject) => {
@@ -105,7 +103,7 @@ exports.login = (req, res) => {
             }
 
             // Signs & encrypts the JWT - generates the web token
-            jwt.sign(jwt_paylod, process.env.JWT_SECRET, jwt_options, jwtCallback)
+            jwt.sign(jwt_payload, process.env.JWT_SECRET, jwt_options, jwtCallback)
 
         })
     }
@@ -185,8 +183,8 @@ exports.forgot_password = async (req, res) => {
 
     // Assembles email
     const dispatch = {
-      sender: 'Codotype <worker@codotype.com>',
-      subject: 'Codotype Password Reset',
+      sender: '<%= blueprint.label %> <worker@<%= blueprint.identifier %>.com>',
+      subject: '<%= blueprint.label %> Password Reset',
       recipient: user.email,
       text: "Your password reset token is " + [process.env.APP_ADDRESS + '#/auth/reset_password?token=' + user.password_reset_token].join('')
     }

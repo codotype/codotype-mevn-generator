@@ -3,18 +3,13 @@
 import router from '@/routers'
 import axios from 'axios'
 import { API_ROOT } from './constants'
-
-// TODO - CODOTYPE - add model option for pagination & querying
 import { PAGINATION_ACTIONS, FILTER_ACTIONS } from '@/store/lib/mixins'
-// TODO - CODOTYPE - add model option for pagination & querying
 
 // // // //
 
 export default {
-  // TODO - CODOTYPE - add model option for pagination & querying
   ...PAGINATION_ACTIONS,
   ...FILTER_ACTIONS('<%= schema.identifier %>'),
-  // TODO - CODOTYPE - add model option for pagination & querying
   // GET /api/<%= schema.identifier_plural %>
   fetchCollection ({ state, commit, rootGetters }) {
     commit('fetching', true)
@@ -67,18 +62,44 @@ export default {
   },
 
   <%_ if (api_actions) { _%>
+  <%_ api_actions.filter(a => a.scope === 'ROOT').forEach((action) => { _%>
+  // <%= action.verb %> /api/<%= action.function_name %>/<%= action.uri %>
+  <%_ if (['POST','PUT'].includes(action.verb)) { _%>
+  <%= action.function_name %> ({ rootGetters }, payload) {
+    axios.post(API_ROOT + '/<%= action.uri %>', payload, {
+      headers: {
+        authorization: rootGetters['auth/authorizationHeader']
+      }
+    })
+  <%_ } else if ('GET' === action.verb) { _%>
+  <%= action.function_name %> ({ rootGetters }) {
+    axios.get(API_ROOT + '/<%= action.uri %>', {
+      headers: {
+        authorization: rootGetters['auth/authorizationHeader']
+      }
+    })
+  <%_ } _%>
+    .then(() => {
+      // commit('fetching', false)
+    })
+    .catch((err) => {
+      // commit('fetching', false)
+      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      throw err // TODO - better error handling
+    })
+  },
+  <%_ }) _%>
+
   <%_ api_actions.filter(a => a.scope === 'MODEL').forEach((action) => { _%>
   // <%= action.verb %> /api/<%= action.function_name %>/:id/<%= action.uri %>
-  <%= action.function_name %> ({ state, commit, rootGetters }, <%= schema.identifier %>Id) {
+  <%= action.function_name %> ({ state, commit, rootGetters }, { <%= schema.identifier %>Id, payload }) {
     <%_ if (action.verb === 'POST') { _%>
-    const payload = {} // TODO - payload should be managed in Vuex?
     axios.post(API_ROOT + '/' + <%= schema.identifier %>Id + '/<%= action.uri %>', payload, {
       headers: {
         authorization: rootGetters['auth/authorizationHeader']
       }
     })
     <%_ } else if (action.verb === 'PUT') { _%>
-    const payload = {} // TODO - payload should be managed in Vuex?
     axios.put(API_ROOT + '/' + <%= schema.identifier %>Id + '/<%= action.uri %>', payload, {
       headers: {
         authorization: rootGetters['auth/authorizationHeader']

@@ -130,7 +130,7 @@ const <%= schema.class_name %>Model = new Schema(userAttributes, collection_opti
 // TODO - should be findOneByEmail
 UserModel.statics.findOneByEmail = function (email) {
     return this.findOne({ email })
-    .select('_id email password salt password_reset_token password_reset_expiration')
+    .select('_id email admin role password salt password_reset_token password_reset_expiration')
     .exec()
 }
 

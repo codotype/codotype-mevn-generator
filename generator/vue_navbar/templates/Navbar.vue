@@ -32,6 +32,11 @@
         </b-nav-item-dropdown>
       </b-navbar-nav>
 
+      <!-- Loading -->
+      <b-navbar-nav class='ml-auto' v-else-if="loading">
+        <p class="lead">¯\_(ツ)_/¯</p>
+      </b-navbar-nav>
+
       <!-- Register / Login -->
       <b-navbar-nav class='ml-auto' v-else>
         <b-nav-item to="/auth/register">Register</b-nav-item>
@@ -51,6 +56,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'Navbar',
   computed: mapGetters({
+    loading: 'auth/logging_in',
     isAuthenticated: 'auth/is_authenticated',
     currentUser: 'auth/current_user',
     isAdmin: 'auth/isAdmin'

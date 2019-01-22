@@ -1,6 +1,5 @@
 {
-  "name": "codotype_mevn_client",
-  "author": "codotype.io",
+  "name": "<%= blueprint.identifier %>_client",
   "version": "0.1.0",
   "private": true,
   "scripts": {

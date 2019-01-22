@@ -48,6 +48,8 @@ export default {
     this.resetNewModel()
   },
   computed: mapGetters({
+    currentUser: 'auth/current_user',
+    isAdmin: 'auth/isAdmin',
     model: '<%= schema.identifier %>/newModel'
   }),
   methods: {

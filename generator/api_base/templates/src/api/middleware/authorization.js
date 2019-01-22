@@ -50,11 +50,12 @@ module.exports.requireAuthenticated = function (req, res, next) {
       const user_id = decoded.id;
       const email = decoded.email;
       const admin = decoded.admin;
+      const role = decoded.role;
       const issuedAt = decoded.iat; // NOTE - unused
 
       // Success - user is authorized
       // Attach the req.user object to be used in the application's controllers
-      req.user = { id: user_id, email: email, admin: admin  };
+      req.user = { id: user_id, email: email, admin: admin, role: role };
 
       // Continue through this middleware to the original request
       next();
@@ -66,6 +67,28 @@ module.exports.requireAuthenticated = function (req, res, next) {
 
 };
 
+// Rejects requests for non-admin users without the specified role
+module.exports.requireRole = function (requiredRole) {
+
+  // Returns middleware function to check required role
+  const func = (req, res, next) => {
+
+      // Reject requests from non-admin users
+      if (!req.user.admin && req.user.role !== requiredRole) {
+
+        // Returns 'missing token' message
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'You are not authorized for this API endpoint' }));
+        return;
+
+      }
+
+      // Continue through this middleware to the original request
+      next();
+      return;
+  }
+  return func
+};
 
 // Rejects requests for non-admin users
 module.exports.requireAdmin = function (req, res, next) {

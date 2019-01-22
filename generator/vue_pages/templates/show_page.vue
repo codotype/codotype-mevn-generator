@@ -86,6 +86,8 @@ export default {
     <%= rel.alias.identifier_plural %>: '<%= schema.identifier %>/<%= rel.alias.identifier_plural %>',
     <%_ } _%>
     <%_ }) _%>
+    currentUser: 'auth/current_user',
+    isAdmin: 'auth/isAdmin',
     model: '<%= schema.identifier %>/model',
     fetching: '<%= schema.identifier %>/fetching'
   })
