@@ -103,15 +103,14 @@
             <%_ if (api_actions.filter(a => a.scope === 'MODEL').length) { _%>
             <b-dropdown-divider></b-dropdown-divider>
             <%_ api_actions.filter(a => a.scope === 'MODEL').forEach((action) => { _%>
-            <b-dropdown-item @click="<%= action.function_name %>(m._id)"><%= action.label %></b-dropdown-item>
+            <b-dropdown-item v-if="isAdmin" @click="<%= action.function_name %>({ <%= schema.identifier %>Id: m._id, payload: {} })"><%= action.label %></b-dropdown-item>
             <%_ }) _%>
             <%_ } _%>
 
           </b-dropdown>
 
-
           <!-- Bootstrap Modal Component -->
-          <b-modal :id="'modal_' + m._id"
+          <b-modal lazy v-if="isAdmin" :id="'modal_' + m._id"
             :title="'Destroy <%= schema.label %>?'"
             @ok="onConfirmDestroy(m)"
             ok-variant='danger'
@@ -131,17 +130,22 @@
 <!-- // // // //  -->
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   props: ['collection'],
   methods: mapActions({
     <%_ if (api_actions) { _%>
-    <%_ api_actions.filter(a => a.scope === 'MODEL').forEach((action) => { _%>
+    <%_ api_actions.filter(a => ['POST','PUT'].includes(a.verb) && a.scope === 'MODEL' ).forEach((action) => { _%>
     <%= action.function_name %>: '<%= schema.identifier %>/<%= action.function_name %>',
     <%_ }) _%>
     <%_ } _%>
     onConfirmDestroy: '<%= schema.identifier %>/deleteModel'
+  }),
+  computed: mapGetters({
+    currentUser: 'auth/current_user',
+    isAuthenticated: 'auth/is_authenticated',
+    isAdmin: 'auth/isAdmin'
   })
 }
 </script>
