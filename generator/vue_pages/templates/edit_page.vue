@@ -58,6 +58,8 @@ export default {
     .then(() => { this.fetching = false })
   },
   computed: mapGetters({
+    currentUser: 'auth/current_user',
+    isAdmin: 'auth/isAdmin',
     model: '<%= schema.identifier %>/editModel'
     // fetching: '<%= schema.identifier %>/fetching'
   }),

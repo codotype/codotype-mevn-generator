@@ -44,14 +44,5 @@ module.exports = {
       { schema }
     )
 
-    // client/src/modules/resource/pages/admin.vue
-    if (configuration.model_options[schema._id].generate_admin_page) {
-      await this.copyTemplate(
-        this.templatePath('list_page.vue'),
-        this.destinationPath(moduleRoot + '/pages/admin.vue'),
-        { schema, schemaOptions, api_actions, admin: true }
-      )
-    }
-
   }
 };
