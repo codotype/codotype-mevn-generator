@@ -12,7 +12,7 @@
         </b-nav-item>
 
         <b-nav-item target="_blank" href="https://github.com/codotype">
-          <i class="fa fa-lg fa-fw fa-github text-dark mr-1"></i>
+          <i class="fab fa-lg fa-fw fa-github text-dark mr-1"></i>
           GitHub
         </b-nav-item>
 
