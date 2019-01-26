@@ -2,6 +2,12 @@ require('dotenv').config()
 const app = require('../app')
 const mongoose = require('mongoose')
 
+// Mongoose Deprecations
+// https://mongoosejs.com/docs/deprecations.html
+mongoose.set('useNewUrlParser', true)
+mongoose.set('useFindAndModify', false)
+mongoose.set('useCreateIndex', true)
+
 // // // //
 
 // TODO - is this needed?
