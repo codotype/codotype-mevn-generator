@@ -57,14 +57,14 @@ module.exports = {
       await this.copyTemplate(
         this.templatePath('getters.js'),
         this.destinationPath('client/src/modules/' + schema.identifier + '/store/getters.js'),
-        { schema }
+        { schema, api_actions }
       );
 
       // client/src/store/resource/index.js
       await this.copyTemplate(
         this.templatePath('index.js'),
         this.destinationPath('client/src/modules/' + schema.identifier + '/store/index.js'),
-        { schema }
+        { schema, api_actions }
       );
 
       // client/src/store/resource/constants.js
@@ -79,14 +79,14 @@ module.exports = {
       await this.copyTemplate(
         this.templatePath('mutations.js'),
         this.destinationPath('client/src/modules/' + schema.identifier + '/store/mutations.js'),
-        { schema }
+        { schema, api_actions }
       );
 
       // client/src/store/resource/state.js
       await this.copyTemplate(
         this.templatePath('state.js'),
         this.destinationPath('client/src/modules/' + schema.identifier + '/store/state.js'),
-        { schema }
+        { schema, api_actions }
       );
 
     // }) // FOREACH

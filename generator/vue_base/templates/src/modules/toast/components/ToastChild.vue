@@ -22,7 +22,7 @@ export default {
   props: ['item'],
   methods: {
     dismiss (id) {
-      return this.$store.commit('notification/remove', id)
+      return this.$store.commit('toast/remove', id)
     }
   }
 }
