@@ -22,6 +22,11 @@ export default {
   },
   <%_ } _%>
   <%_ })_%>
+  <%_ api_actions.filter(a => a.payload).forEach((action) => { _%>
+  <%= action.function_name %>Payload: state => {
+    return state.<%= action.function_name %>Payload
+  },
+  <%_ }) _%>
   ...COLLECTION_GETTERS,
   ...PAGINATION_GETTERS,
   ...MODEL_GETTERS,

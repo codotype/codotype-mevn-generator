@@ -38,7 +38,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   },
@@ -56,7 +56,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   },
@@ -65,14 +65,14 @@ export default {
   <%_ api_actions.filter(a => a.scope === 'ROOT').forEach((action) => { _%>
   // <%= action.verb %> /api/<%= action.function_name %>/<%= action.uri %>
   <%_ if (['POST','PUT'].includes(action.verb)) { _%>
-  <%= action.function_name %> ({ rootGetters }, payload) {
+  <%= action.function_name %> ({ commit, rootGetters }, payload) {
     axios.post(API_ROOT + '/<%= action.uri %>', payload, {
       headers: {
         authorization: rootGetters['auth/authorizationHeader']
       }
     })
   <%_ } else if ('GET' === action.verb) { _%>
-  <%= action.function_name %> ({ rootGetters }) {
+  <%= action.function_name %> ({ commit, rootGetters }) {
     axios.get(API_ROOT + '/<%= action.uri %>', {
       headers: {
         authorization: rootGetters['auth/authorizationHeader']
@@ -84,7 +84,7 @@ export default {
     })
     .catch((err) => {
       // commit('fetching', false)
-      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   },
@@ -92,15 +92,31 @@ export default {
 
   <%_ api_actions.filter(a => a.scope === 'MODEL').forEach((action) => { _%>
   // <%= action.verb %> /api/<%= action.function_name %>/:id/<%= action.uri %>
-  <%= action.function_name %> ({ state, commit, rootGetters }, { <%= schema.identifier %>Id, payload }) {
+  <%_ if (action.payload) { _%>
+  <%= action.function_name %> ({ state, commit, getters, rootGetters }) {
+    const scope = getters['<%= action.uri %>/scope']
+    const payload = getters['<%= action.uri %>/payload']
+  <%_ } else { _%>
+  <%= action.function_name %> ({ state, commit, rootGetters }, <%= schema.identifier %>Id) {
+  <%_ } _%>
     <%_ if (action.verb === 'POST') { _%>
-    axios.post(API_ROOT + '/' + <%= schema.identifier %>Id + '/<%= action.uri %>', payload, {
+    <%_ if (action.payload) { _%>
+    axios.post([API_ROOT, scope, '<%= action.uri %>'].join('/'), payload, {
+    <%_ } else { _%>
+    axios.post(API_ROOT + '/' + <%= schema.identifier %>Id + '/<%= action.uri %>', {}, {
+    <%_ } _%>
       headers: {
         authorization: rootGetters['auth/authorizationHeader']
       }
     })
     <%_ } else if (action.verb === 'PUT') { _%>
-    axios.put(API_ROOT + '/' + <%= schema.identifier %>Id + '/<%= action.uri %>', payload, {
+    <%_ if (action.payload) {} else {} _%>
+
+    <%_ if (action.payload) { _%>
+    axios.put([API_ROOT, scope, '<%= action.uri %>'].join('/'), payload, {
+    <%_ } else { _%>
+    axios.put(API_ROOT + '/' + <%= schema.identifier %>Id + '/<%= action.uri %>', {}, {
+    <%_ } _%>
       headers: {
         authorization: rootGetters['auth/authorizationHeader']
       }
@@ -113,7 +129,7 @@ export default {
     })
     .catch((err) => {
       // commit('fetching', false)
-      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   },
@@ -138,7 +154,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   },
@@ -157,7 +173,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   },
@@ -177,7 +193,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   },
@@ -197,7 +213,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      // commit('notification/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+      commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   },
@@ -215,7 +231,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      // commit('notification/add', { message: 'Create error', context: 'danger', dismissible: true }, { root: true })
+      commit('toast/add', { message: 'Create error', context: 'danger', dismissible: true }, { root: true })
       throw err
     })
   },
@@ -233,7 +249,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      // commit('notification/add', { message: 'Update error', context: 'danger', dismissible: true }, { root: true })
+      commit('toast/add', { message: 'Update error', context: 'danger', dismissible: true }, { root: true })
       throw err
     })
   },
@@ -253,7 +269,7 @@ export default {
     })
     .catch((err) => {
       commit('fetching', false)
-      // commit('notification/add', { message: 'Destroy error', context: 'danger', dismissible: true }, { root: true })
+      commit('toast/add', { message: 'Destroy error', context: 'danger', dismissible: true }, { root: true })
       throw err // TODO - better error handling
     })
   }
