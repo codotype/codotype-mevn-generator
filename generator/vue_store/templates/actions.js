@@ -71,6 +71,10 @@ export default {
         authorization: rootGetters['auth/authorizationHeader']
       }
     })
+    .then(() => {
+      // commit('fetching', false)
+      commit('toast/add', { message: '<%= action.label %> Success', context: 'success', dismissible: true }, { root: true })
+    })
   <%_ } else if ('GET' === action.verb) { _%>
   <%= action.function_name %> ({ commit, rootGetters }) {
     axios.get(API_ROOT + '/<%= action.uri %>', {
@@ -78,10 +82,10 @@ export default {
         authorization: rootGetters['auth/authorizationHeader']
       }
     })
-  <%_ } _%>
     .then(() => {
       // commit('fetching', false)
     })
+  <%_ } _%>
     .catch((err) => {
       // commit('fetching', false)
       commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
@@ -110,7 +114,6 @@ export default {
       }
     })
     <%_ } else if (action.verb === 'PUT') { _%>
-    <%_ if (action.payload) {} else {} _%>
 
     <%_ if (action.payload) { _%>
     axios.put([API_ROOT, scope, '<%= action.uri %>'].join('/'), payload, {
@@ -126,6 +129,7 @@ export default {
       let collection = state.collection.map(m => m._id === data._id ? data : m)
       commit('collection', collection)
       // commit('fetching', false)
+      commit('toast/add', { message: '<%= action.label %> Success', context: 'success', dismissible: true }, { root: true })
     })
     .catch((err) => {
       // commit('fetching', false)
@@ -227,6 +231,7 @@ export default {
     })
     .then(() => {
       commit('fetching', false)
+      commit('toast/add', { message: 'Created <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
       router.push(`/<%= schema.identifier_plural %>`)
     })
     .catch((err) => {
@@ -245,6 +250,7 @@ export default {
     })
     .then(() => {
       commit('fetching', false)
+      commit('toast/add', { message: 'Updated successfully', context: 'success', dismissible: true }, { root: true })
       router.back()
     })
     .catch((err) => {
@@ -263,6 +269,7 @@ export default {
     })
     .then(() => {
       commit('fetching', false)
+      commit('toast/add', { message: 'Deleted <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
       let collection = state.collection.filter(m => m._id !== <%= schema.identifier %>Model._id)
       commit('collection', collection)
       router.push(`/<%= schema.identifier_plural %>`)

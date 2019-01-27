@@ -3,14 +3,14 @@
     <AppNavbar/>
     <router-view/>
     <AppFooter/>
-    <!-- <NotificationList/> -->
+    <ToastList/>
   </div>
 </template>
 
 <script>
 import AppNavbar from '@/components/Navbar'
 import AppFooter from '@/components/Footer'
-import NotificationList from '@/modules/notification/components/NotificationList'
+import ToastList from '@/modules/toast/components/ToastList'
 
 export default {
   name: 'app',
@@ -19,7 +19,7 @@ export default {
   components: {
     AppNavbar,
     AppFooter,
-    NotificationList
+    ToastList
   },
 
   created () {

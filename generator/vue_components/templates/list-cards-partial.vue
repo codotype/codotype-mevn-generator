@@ -29,7 +29,7 @@
           <div class='card-body'>
 
             <%_ schema.attributes.forEach((attr, index) => { _%>
-            <%_ if (attr.datatype === 'BOOL') { _%>
+            <%_ if (attr.datatype === 'BOOLEAN') { _%>
             <span>
               <%= attr.label %>:
               <i class="fas fa-fw fa-check-square" v-if="m.<%=attr.identifier%>"></i>

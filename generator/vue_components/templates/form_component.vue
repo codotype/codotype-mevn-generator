@@ -10,7 +10,7 @@
         <%_ if (attr.help) { _%>
         <small class="form-text text-muted mb-2"><%= attr.help %></small>
         <%_ } _%>
-      <%_ if (attr.datatype === 'BOOL') { _%>
+      <%_ if (attr.datatype === 'BOOLEAN') { _%>
         <input type="checkbox" v-model="model.<%=attr.identifier%>">
       <%_ } else if (attr.datatype === 'TEXT') { _%>
         <input type="text" class="form-control" placeholder="<%= attr.label %>" v-model="model.<%=attr.identifier%>">

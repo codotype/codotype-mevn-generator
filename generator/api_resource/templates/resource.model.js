@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 
 const <%= schema.class_name %>Model = new mongoose.Schema({
   <%_ schema.attributes.forEach((attr) => { _%>
-  <%_ if (attr.datatype === 'BOOL') { _%>
+  <%_ if (attr.datatype === 'BOOLEAN') { _%>
   <%= attr.identifier %>: {
     type: Boolean
   },

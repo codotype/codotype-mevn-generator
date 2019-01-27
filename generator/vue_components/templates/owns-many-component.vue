@@ -53,7 +53,7 @@
                 {{ m.<%=attr.identifier%> }}
               </router-link>
             </td>
-            <%_ } else if (attr.datatype === 'BOOL') { _%>
+            <%_ } else if (attr.datatype === 'BOOLEAN') { _%>
             <td>
               <span>
                 <i class="fas fa-fw fa-check-square" v-if="m.<%=attr.identifier%>"></i>

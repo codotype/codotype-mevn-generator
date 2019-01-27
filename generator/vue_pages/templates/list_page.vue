@@ -3,47 +3,56 @@
   <!-- <div class="container" v-else> -->
   <div class="container">
 
-    <%_ api_actions.filter(a => a.scope === 'ROOT' && ['POST', 'PUT'].includes(a.verb)).forEach((action) => { _%>
-    <!-- Bootstrap Modal Component -->
-    <b-modal v-if="isAdmin" :id="'<%= action.function_name %>Modal'"
-      :title="'<%= action.label %>?'"
-      @ok="<%= action.function_name %>(<%= action.function_name %>Payload)"
-      ok-variant='success'
-      ok-title='Submit'
-      cancel-title='Cancel'
-      cancel-variant='light'
-    >
-      {{ <%= action.function_name %>Payload }}
-    </b-modal>
-    <%_ }) _%>
+    <%_ api_actions.filter(a => ['POST', 'PUT'].includes(a.verb) && a.payload && a.scope === 'ROOT').forEach((action) => { _%>
+    <<%=action.class_name + 'Modal' %> v-if="isAuthenticated" />
 
+    <%_ }) _%>
     <b-row>
-      <div class="col-md-8">
+      <b-col sm="12" md="8">
         <h2>
           <i class="<%= schemaOptions.fontawesome_icon %>"></i>
+          <%_ if (action) { _%>
+          <%= schema.label %> - <%= action.label %>
+          <%_ } else { _%>
           <%= schema.label_plural %>
+          <%_ } _%>
         </h2>
-      </div>
+      </b-col>
 
-      <div class="col-md-4 text-right">
+      <b-col sm="12" md="4" class="text-right">
         <%_ api_actions.filter(a => a.scope === 'ROOT').forEach((action) => { _%>
-        <%_ if (['POST', 'PUT'].includes(action.verb)) { _%>
-        <b-button v-if="isAdmin" variant="success" v-b-modal="'<%= action.function_name %>Modal'">
+        <%_ if (['POST', 'PUT'].includes(action.verb) && action.payload) { _%>
+        <b-button
+          v-if="isAdmin"
+          variant="success"
+          @click="$store.commit('<%= schema.identifier %>/<%= action.uri %>/showingModal', true)"
+        >
           <i class="fa fa-fw fa-plus"></i>
           <%= action.label %>
         </b-button>
+
         <%_ } else if (['GET'].includes(action.verb)) { _%>
-        <b-button v-if="isAdmin" variant="primary" @click="<%= action.function_name %>()">
+        <b-button
+          v-if="isAdmin"
+          variant="primary"
+          to="/<%= schema.identifier_plural %>/<%= action.uri %>"
+        >
           <i class="fa fa-fw fa-plus"></i>
           <%= action.label %>
         </b-button>
+
         <%_ } _%>
         <%_ }) _%>
-        <b-button v-if="isAdmin" variant="primary" to="/<%= schema.identifier_plural %>/new">
+        <b-button
+          v-if="isAdmin"
+          variant="primary"
+          to="/<%= schema.identifier_plural %>/new"
+        >
           <i class="fa fa-fw fa-plus"></i>
           New <%= schema.label %>
         </b-button>
-      </div>
+
+      </b-col>
     </b-row>
 
     <!-- List View -->
@@ -66,7 +75,10 @@
 
 <script>
 
-import ListView from '@/modules/<%= schema.identifier %>/components/<%= schema.class_name %>ListWidget'
+import ListView from '@/modules/<%= schema.identifier %>/components/<%= schema.class_name %>List'
+<%_ api_actions.filter(a => ['POST', 'PUT'].includes(a.verb) && a.payload && a.scope === 'ROOT').forEach((action) => { _%>
+import <%=action.class_name + 'Modal' %> from '@/modules/<%= schema.identifier %>/components/<%= action.class_name %>Modal'
+<%_ }) _%>
 import LoadingFull from '@/components/LoadingFull'
 import SearchBar from '@/components/SearchBar'
 import { mapGetters, mapActions } from 'vuex'
@@ -76,18 +88,11 @@ export default {
   components: {
     LoadingFull,
     ListView,
+    <%_ api_actions.filter(a => ['POST', 'PUT'].includes(a.verb) && a.payload && a.scope === 'ROOT').forEach((action) => { _%>
+    <%=action.class_name + 'Modal' %>,
+    <%_ }) _%>
     SearchBar
   },
-  <%_ const filteredActions = api_actions.filter(a => a.scope === 'ROOT' && ['POST', 'PUT'].includes(a.verb)) _%>
-  <%_ if (filteredActions.length) { _%>
-  data () {
-    return {
-    <%_ filteredActions.forEach((action, index) => { _%>
-      <%= action.function_name %>Payload: {}<%= helpers.trailingComma(filteredActions, index) %>
-    <%_ }) _%>
-    }
-  },
-  <%_ } _%>
   metaInfo: {
     title: '<%= schema.label_plural %>'
   },
@@ -101,14 +106,10 @@ export default {
     perPage: '<%= schema.identifier %>/pageSize',
     currentPage: '<%= schema.identifier %>/currentPage',
     currentUser: 'auth/current_user',
+    isAuthenticated: 'auth/is_authenticated',
     isAdmin: 'auth/isAdmin'
   }),
   methods: mapActions({
-    <%_ if (api_actions) { _%>
-    <%_ api_actions.filter(a => ['POST','PUT', 'GET'].includes(a.verb) && a.scope === 'ROOT' ).forEach((action) => { _%>
-    <%= action.function_name %>: '<%= schema.identifier %>/<%= action.function_name %>',
-    <%_ }) _%>
-    <%_ } _%>
     fetch: '<%= schema.identifier %>/fetchCollection',
     goToPage: '<%= schema.identifier %>/goToPage'
   })

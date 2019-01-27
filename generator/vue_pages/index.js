@@ -16,11 +16,25 @@ module.exports = {
     // Ensures existence of pages directory
     await this.ensureDir(moduleRoot + '/pages')
 
+    // Generates API actions pages
+    if (api_actions) {
+      api_actions.filter(a => a.scope === 'ROOT' && a.verb === 'GET').forEach(async (action) => {
+
+        // TODO - only handles list page at the moment
+        // Should expand to handle actions with 'MODEL' scope
+        await this.copyTemplate(
+          this.templatePath('list_page.vue'),
+          this.destinationPath(moduleRoot + '/pages/' + action.uri + '.vue'),
+          { schema, schemaOptions, api_actions, action }
+        )
+      })
+    }
+
     // client/src/modules/resource/pages/list.vue
     await this.copyTemplate(
       this.templatePath('list_page.vue'),
       this.destinationPath(moduleRoot + '/pages/list.vue'),
-      { schema, schemaOptions, api_actions, admin: false }
+      { schema, schemaOptions, api_actions, action: false }
     )
 
     // client/src/modules/resource/pages/new/index.vue
