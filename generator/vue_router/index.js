@@ -48,14 +48,19 @@ module.exports = {
 
     // Iterates over each schema in the this.options.build.blueprint.schemas array
     // TODO - encapsulate this in a call for forEachSchema
+    let api_actions
     for (var i = blueprint.schemas.length - 1; i >= 0; i--) {
       const schema = blueprint.schemas[i]
+
+      // Isolates API Actions metadata
+      api_actions = configuration.api_actions[schema._id]
+      if (!api_actions[0]) { api_actions = false }
 
       // client/src/routers/resource.js
       await this.copyTemplate(
         this.templatePath('module-router.js'),
         this.destinationPath('client/src/modules/' + schema.identifier + '/router.js'),
-        { schema }
+        { schema, api_actions }
       )
 
     }
