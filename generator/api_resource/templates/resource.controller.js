@@ -25,9 +25,9 @@ const <%= relation.schema.class_name %> = require('../<%= relation.schema.identi
 // GET /api/<%= schema.identifier_plural %> Profile
 <%_ } _%>
 exports.profile = async (req, res) => {
-    const user = await <%= schema.class_name %>.findOne({ email: req.user.email }, '-__v').exec()
-    if (user) { return res.json(user) }
-    return res.status(401).json({ message: 'No user found' })
+  const user = await <%= schema.class_name %>.findOne({ email: req.user.email }, '-__v').exec()
+  if (user) { return res.json(user) }
+  return res.status(401).json({ message: 'No user found' })
 }
 <%_ } _%>
 
@@ -43,14 +43,14 @@ exports.profile = async (req, res) => {
 <%_ } else { _%>
 // GET /api/<%= schema.identifier_plural %>/:id Index
 <%_ } _%>
-module.exports.list = (req, res, next) => {
-    // Gets pagination variables for query
-    const { page, per_page, offset } = getPaginationParams(req);
+module.exports.list = async (req, res, next) => {
+  // Gets pagination variables for query
+  const { page, per_page, offset } = getPaginationParams(req);
 
-    // NOTES - remove
-    // .find({ user_id: req.user.id })
-    return <%= schema.class_name %>
-    .find({})
+  // NOTES - remove
+  // .find({ user_id: req.user.id })
+  try {
+    const <%= schema.identifier_plural %> = await <%= schema.class_name %>.find({})
     <%_ schema.relations.forEach((rel) => { _%>
     <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
     .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
@@ -60,16 +60,17 @@ module.exports.list = (req, res, next) => {
     .skip(offset)
     .lean()
     .exec()
-    .then((response) => {
-        return res
-        .status(200)
-        .json({
-          page: page,
-          per_page: per_page,
-          items: response
-        });
-    })
-    .catch( err => next(boom.badImplementation(err)) );
+
+    return res
+    .status(200)
+    .json({
+      page: page,
+      per_page: per_page,
+      items: <%= schema.identifier_plural %>
+    });
+  } catch (err) {
+    return next(boom.badImplementation(err));
+  }
 };
 
 
@@ -86,51 +87,62 @@ module.exports.list = (req, res, next) => {
 <%_ } else { _%>
 // GET /api/<%= schema.identifier_plural %>/search Search
 <%_ } _%>
-module.exports.search = (req, res) => {
-    // Gets pagination variables for query
-    const { page, per_page, offset } = getPaginationParams(req);
+module.exports.search = async (req, res) => {
+  // Gets pagination variables for query
+  const { page, per_page, offset } = getPaginationParams(req);
 
-    // Assigns query for search
-    // let query = req.query.search || ''
+  // Assigns query for search
+  // let query = req.query.search || ''
 
-    // Ensures correct type casting for query
-    // if (query.year) {
-    //   query.year['$in'] = _.map(query.year['$in'], (yr) => { return Number(yr) })
-    // }
+  // Ensures correct type casting for query
+  // if (query.year) {
+  //   query.year['$in'] = _.map(query.year['$in'], (yr) => { return Number(yr) })
+  // }
 
-    <%_ if (schema.attributes.filter(attr => attr.datatype === 'TEXT').length) { _%>
+  <%_ if (schema.attributes.filter(attr => attr.datatype === 'TEXT').length) { _%>
 
-    let textSearch = req.query.search || ''
+  let textSearch = req.query.search || ''
 
-    const matchQuery = [
-        <%_ schema.attributes.forEach((attr) => { _%>
-        <%_ if (attr.datatype !== 'TEXT') { return } _%>
-        { <%= attr.identifier _%>: new RegExp(textSearch, 'i') },
-        <%_ }) _%>
-    ]
+  const matchQuery = [
+    <%_ schema.attributes.forEach((attr) => { _%>
+    <%_ if (attr.datatype !== 'TEXT') { return } _%>
+    { <%= attr.identifier _%>: new RegExp(textSearch, 'i') },
+    <%_ }) _%>
+  ]
 
-    // Assigns matchQuery to queryObject
-    // query = {}
-    // query['$and'] = [
-    //     { '$or': matchQuery }
-    // ]
+  // Assigns matchQuery to queryObject
+  // query = {}
+  // query['$and'] = [
+  //     { '$or': matchQuery }
+  // ]
 
-    const query = { '$or': matchQuery }
-    <%_ } else { _%>
-    const query = {}
+  const query = { '$or': matchQuery }
+  <%_ } else { _%>
+  const query = {}
+  <%_ } _%>
+
+  try {
+    const <%= schema.identifier_plural %> = await <%= schema.class_name %>.find(query)
+    <%_ schema.relations.forEach((rel) => { _%>
+    <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+    .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
     <%_ } _%>
-
-    return <%= schema.class_name %>.find(query)
+    <%_ }) _%>
     .limit(per_page)
     .skip(offset)
     .lean()
     .exec()
-    .then((items) => {
-        return res
-        .status(200)
-        .json({ page, per_page, count: 100, items })
-    })
-    .catch( err => next(boom.badImplementation(err)) );
+
+    return res
+    .status(200)
+    .json({
+      page: page,
+      per_page: per_page,
+      items: <%= schema.identifier_plural %>
+    });
+  } catch (err) {
+    return next(boom.badImplementation(err));
+  }
 };
 
 
@@ -146,22 +158,26 @@ module.exports.search = (req, res) => {
 <%_ } else { _%>
 // POST /api/<%= schema.identifier_plural %>/:id Create
 <%_ } _%>
-module.exports.create = (req, res, next) => {
+module.exports.create = async (req, res, next) => {
 
-    const { <%= schema.attributes.map(attr => attr.identifier).join(', ') %> } = req.body
+  const { <%= schema.attributes.map(attr => attr.identifier).join(', ') %> } = req.body
 
-    return new <%= schema.class_name %>({
+  try {
+    const newModel = await new <%= schema.class_name %>({
       ...req.body,
       // user_id: req.user.id,
       <%= schema.attributes.map(attr => attr.identifier).join(',\n      ') %>
-    }).save()
-    .then((response) => {
-        return res
-        .status(200)
-        .send(response)
-        .end();
     })
-    .catch( err => next(boom.badImplementation(err)) );
+    .save()
+
+    return res
+    .status(200)
+    .send(newModel)
+    .end();
+  } catch (err) {
+    return next(boom.badImplementation(err));
+  }
+
 };
 
 <%_ if (generate_api_doc) { _%>
@@ -176,23 +192,22 @@ module.exports.create = (req, res, next) => {
 <%_ } else { _%>
 // GET /api/<%= schema.identifier_plural %>/:id Show
 <%_ } _%>
-module.exports.show = (req, res, next) => {
-    return <%= schema.class_name %>.findById(req.params.id)
-    <%_ schema.relations.forEach((rel) => { _%>
-    <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
-    .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
-    <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
-    // .populate({ path: '<%= rel.alias.identifier_plural %>', select: '<%= rel.related_lead_attribute %>' })
-    <%_ } _%>
-    <%_ }) _%>
-    .then((response) => {
-        return res
-        .status(200)
-        .send(response)
-        // .send(response.toJSON({ getters: true, virtuals: true }))
-        .end();
-    })
-    .catch( err => next(boom.badImplementation(err)) );
+module.exports.show = async (req, res, next) => {
+  const model = await <%= schema.class_name %>.findById(req.params.id)
+  <%_ schema.relations.forEach((rel) => { _%>
+  <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+  .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
+  <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
+  // .populate({ path: '<%= rel.alias.identifier_plural %>', select: '<%= rel.related_lead_attribute %>' })
+  <%_ } _%>
+  <%_ }) _%>
+  .catch( err => next(boom.badImplementation(err)));
+
+  return res
+  .status(200)
+  .send(model)
+  // .send(model.toJSON({ getters: true, virtuals: true }))
+  .end();
 };
 
 
@@ -221,61 +236,55 @@ module.exports.show = (req, res, next) => {
 // <%= action.verb %> /api/<%= schema.identifier_plural %>/:id/<%= action.uri %> <%= action.label %>
 <%_ } _%>
 <%_ if (action.scope === 'ROOT') { _%>
-module.exports.<%= action.function_name %> = (req, res, next) => {
+module.exports.<%= action.function_name %> = async (req, res, next) => {
 
-    // Gets pagination variables for query
-    const { page, per_page, offset } = getPaginationParams(req);
+  // Gets pagination variables for query
+  const { page, per_page, offset } = getPaginationParams(req);
 
-    // NOTES - remove
-    // .find({ user_id: req.user.id })
-    return <%= schema.class_name %>
-    .find({})
-    <%_ schema.relations.forEach((rel) => { _%>
-    <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
-    .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
-    <%_ } _%>
-    <%_ }) _%>
-    .limit(per_page)
-    .skip(offset)
-    .lean()
-    .exec()
-    .then((response) => {
-        return res
-        .status(200)
-        .json({
-          page: page,
-          per_page: per_page,
-          items: response
-        });
-    })
-    .catch( err => next(boom.badImplementation(err)) );
+  // NOTES - remove
+  // .find({ user_id: req.user.id })
+  const items = await <%= schema.class_name %>
+  .find({})
+  <%_ schema.relations.forEach((rel) => { _%>
+  <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+  .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
+  <%_ } _%>
+  <%_ }) _%>
+  .limit(per_page)
+  .skip(offset)
+  .lean()
+  .exec()
+  .catch( err => next(boom.badImplementation(err)));
+
+  return res
+  .status(200)
+  .json({ page, per_page, items });
 };
+
 <%_ } else if (action.scope === 'MODEL') { _%>
-module.exports.<%= action.function_name %> = (req, res, next) => {
+module.exports.<%= action.function_name %> = async (req, res, next) => {
 
-    //   user_id: req.user.id,
-    const payload = {  } // TODO - add attributes here that you would like to change
-    return <%= schema.class_name %>.findByIdAndUpdate(req.params.id, { $set: payload }, { new: true })
-    <%_ schema.relations.forEach((rel) => { _%>
-    <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
-    .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
-    <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
-    // .populate({ path: '<%= rel.alias.identifier_plural %>', select: '<%= rel.related_lead_attribute %>' })
-    <%_ } _%>
-    <%_ }) _%>
-    .then((response) => {
-        return res
-        .status(200)
-        .send(response)
-        // .send(response.toJSON({ getters: true, virtuals: true }))
-        .end();
-    })
-    .catch( err => next(boom.badImplementation(err)) );
+  //   user_id: req.user.id,
+  const payload = {  } // TODO - add attributes here that you would like to change
+  const model = await  <%= schema.class_name %>.findByIdAndUpdate(req.params.id, { $set: payload }, { new: true })
+  <%_ schema.relations.forEach((rel) => { _%>
+  <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+  .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
+  <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
+  // .populate({ path: '<%= rel.alias.identifier_plural %>', select: '<%= rel.related_lead_attribute %>' })
+  <%_ } _%>
+  <%_ }) _%>
+  .catch( err => next(boom.badImplementation(err)));
 
+  return res
+  .status(200)
+  .send(model)
+  // .send(response.toJSON({ getters: true, virtuals: true }))
+  .end();
 };
+
 <%_ } _%>
 <%_ }) _%>
-
 
 <%_ schema.relations.forEach((rel) => { _%>
 <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
@@ -291,27 +300,24 @@ module.exports.<%= action.function_name %> = (req, res, next) => {
 <%_ } else { _%>
 // GET /api/<%= schema.identifier_plural %>/:id/<%= rel.alias.identifier %> show<%= rel.alias.class_name %>
 <%_ } _%>
-module.exports.show<%= rel.alias.class_name %> = (req, res, next) => {
-    return <%= schema.class_name %>.findById(req.params.id)
-    .then((<%= schema.identifier %>) => {
+module.exports.show<%= rel.alias.class_name %> = async (req, res, next) => {
+  const <%= schema.identifier %> = await <%= schema.class_name %>.findById(req.params.id)
+  .catch( err => next(boom.badImplementation(err)));
 
-        return <%= rel.schema.class_name %>.findById(<%= schema.identifier %>.<%= rel.alias.identifier + '_id' %>)
-        <%_ let relatedSchema = blueprint.schemas.find(s => s._id === rel.related_schema_id) _%>
-        <%_ relatedSchema.relations.forEach((rel) => { _%>
-        <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
-        .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
-        <%_ } _%>
-        <%_ }) _%>
-        .then((<%= rel.schema.identifier %>) => {
-            return res
-            .status(200)
-            .send(<%= rel.schema.identifier %>)
-            .end();
-        })
-        .catch( err => next(boom.badImplementation(err)) );
+  const <%= rel.schema.identifier %> = await <%= rel.schema.class_name %>.findById(<%= schema.identifier %>.<%= rel.alias.identifier + '_id' %>)
+  <%_ let relatedSchema = blueprint.schemas.find(s => s._id === rel.related_schema_id) _%>
+  <%_ relatedSchema.relations.forEach((rel) => { _%>
+  <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+  .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
+  <%_ } _%>
+  <%_ }) _%>
+  .catch( err => next(boom.badImplementation(err)));
 
-    })
-    .catch( err => next(boom.badImplementation(err)) );
+  return res
+  .status(200)
+  .send(<%= rel.schema.identifier %>)
+  .end();
+
 };
 
 <% } else if (rel.type === 'HAS_MANY') { %>
@@ -328,29 +334,27 @@ module.exports.show<%= rel.alias.class_name %> = (req, res, next) => {
 <%_ } else { _%>
 // GET /api/<%= schema.identifier_plural %>/:id/<%= rel.schema.identifier_plural %> show<%= rel.schema.class_name_plural %>
 <%_ } _%>
-module.exports.show<%= rel.alias.class_name_plural %> = (req, res, next) => {
+module.exports.show<%= rel.alias.class_name_plural %> = async (req, res, next) => {
 
-    return <%= schema.class_name %>.findById(req.params.id)
-    .then((response) => {
-        return <%= rel.schema.class_name %>
-        .find({ _id: response.<%= rel.alias.identifier %>_ids })
-        <%_ let relatedSchema = blueprint.schemas.find(s => rel.related_schema_id) _%>
-        <%_ relatedSchema.relations.forEach((rel) => { _%>
-        <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
-        .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
-        <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
-        // X.populate({ path: '<%= rel.alias.identifier_plural %>', select: '<%= rel.related_lead_attribute %>' })
-        <%_ } _%>
-        <%_ }) _%>
-        .then((<%= rel.schema.identifier_plural %>) => {
-            return res
-            .status(200)
-            .send(<%= rel.schema.identifier_plural %>)
-            .end();
-        })
-        .catch( err => next(boom.badImplementation(err)) );
-    })
-    .catch( err => next(boom.badImplementation(err)) );
+  const model = await <%= schema.class_name %>.findById(req.params.id)
+  .catch( err => next(boom.badImplementation(err)));
+
+  const <%= rel.schema.identifier_plural %> = await <%= rel.schema.class_name %>
+  .find({ _id: model.<%= rel.alias.identifier %>_ids })
+  <%_ let relatedSchema = blueprint.schemas.find(s => rel.related_schema_id) _%>
+  <%_ relatedSchema.relations.forEach((rel) => { _%>
+  <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+  .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
+  <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
+  // .populate({ path: '<%= rel.alias.identifier_plural %>', select: '<%= rel.related_lead_attribute %>' }) // CODOTYPE-NOTE - OPTIONAL
+  <%_ } _%>
+  <%_ }) _%>
+  .catch( err => next(boom.badImplementation(err)));
+
+  return res
+  .status(200)
+  .send(<%= rel.schema.identifier_plural %>)
+  .end();
 
 };
 
@@ -382,7 +386,7 @@ module.exports.show<%= rel.alias.class_name_plural %> = (req, res, next) => {
         .send(<%= rel.schema.identifier_plural %>)
         .end();
     })
-    .catch( err => next(boom.badImplementation(err)) );
+    .catch( err => next(boom.badImplementation(err)));
 };
 <%_ } _%>
 <%_ }) _%>
@@ -413,7 +417,7 @@ module.exports.update = (req, res, next) => {
     .send(response)
     .end();
   })
-  .catch( err => next(boom.badImplementation(err)) );
+  .catch( err => next(boom.badImplementation(err)));
 };
 
 <%_ if (generate_api_doc) { _%>
@@ -436,5 +440,5 @@ module.exports.delete = (req, res, next) => {
         .send(response)
         .end();
     })
-    .catch( err => next(boom.badImplementation(err)) );
+    .catch( err => next(boom.badImplementation(err)));
 };

@@ -34,13 +34,22 @@ const collection_options = {
   versionKey: false
 }
 
+// Helper function for validating emails
+function validateEmail (email) {
+    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return re.test(email)
+}
+
 const userAttributes = {
   email: {
-    type: String, // TODO - email validation?
-    required: true,
-    unique: true,
+    type: String,
+    index: true,
+    trim: true,
     lowercase: true,
-    index: true
+    unique: true,
+    required: 'Email address is required',
+    validate: [validateEmail, 'Please fill a valid email address'],
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
   },
   password: {
     type: String,
@@ -66,9 +75,9 @@ const userAttributes = {
   },
   <%_ schema.attributes.forEach((attr) => { _%>
   <%_ if (attr.datatype.identifier === 'email') { return } _%>
-  <%_ if (attr.datatype === 'BOOL') { _%>
+  <%_ if (attr.datatype === 'BOOLEAN') { _%>
   <%_ return _%>
-  <%_ } else if (attr.datatype === 'BOOL') { _%>
+  <%_ } else if (attr.datatype === 'BOOLEAN') { _%>
   <%= attr.identifier %>: {
     type: Boolean
   },
@@ -81,12 +90,14 @@ const userAttributes = {
   <%_ } else if (attr.datatype === 'STRING_ARRAY') { _%>
   <%= attr.identifier %>: [{
     type: String,
+    trim: true,
     required: <%= attr.required %>,
     unique: <%= attr.unique %>
   }],
   <%_ } else { _%>
   <%= attr.identifier %>: {
     type: String,
+    trim: true,
     required: <%= attr.required %>,
     unique: <%= attr.unique %>
   },
@@ -113,17 +124,6 @@ const userAttributes = {
 const <%= schema.class_name %>Model = new Schema(userAttributes, collection_options);
 
 // // // //
-
-// Create new User document
-// UserModel.statics.create = function ({ <%= inlineDeconstrction %>, password }) {
-
-//     // Instantiates new User model with all required attributes
-//     // TODO - add required attributes here
-//     const user = new this({ <%= inlineDeconstrction %>, password: encryptPassword(password) })
-
-//     // Return User.save() Promise
-//     return user.save()
-// }
 
 // findOneByEmail
 // Find one User by email
@@ -153,14 +153,6 @@ UserModel.method('makeSalt', function (byteSize) {
   if (!byteSize) { byteSize = defaultByteSize; }
 
   return crypto.randomBytes(byteSize).toString('base64')
-
-  // return crypto.randomBytes(byteSize, (err, salt) => {
-  //   if (err) {
-  //     callback(err);
-  //   } else {
-  //     callback(null, salt.toString('base64'));
-  //   }
-  // });
 })
 
 
