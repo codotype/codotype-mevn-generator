@@ -16,7 +16,7 @@
                       placeholder="Email"
                       autocomplete="email"
                       v-model="login_user.email"
-                      @keyup.enter="login()"
+                      @keyup.native.enter="login()"
                     />
                   </b-input-group>
 
@@ -26,7 +26,7 @@
                       placeholder="Password"
                       autocomplete="current-password"
                       v-model="login_user.password"
-                      @keyup.enter="login()"
+                      @keyup.native.enter="login()"
                     />
                   </b-input-group>
 
