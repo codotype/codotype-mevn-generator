@@ -2,7 +2,7 @@
   <LoadingFull v-if="fetching" />
   <div class="container" v-else>
 
-    <<%= schema.class_name %>ShowWidget :model="model" :fetching="fetching" />
+    <<%= schema.class_name %>Detail :model="model" :fetching="fetching" />
 
     <b-row>
       <%_ schema.relations.forEach((rel) => { _%>
@@ -25,7 +25,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import LoadingFull from '@/components/LoadingFull'
-import <%= schema.class_name %>ShowWidget from '@/modules/<%= schema.identifier %>/components/<%= schema.class_name %>ShowWidget'
+import <%= schema.class_name %>Detail from '@/modules/<%= schema.identifier %>/components/<%= schema.class_name %>Detail'
 <%_ schema.relations.forEach((rel) => { _%>
 <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
 import Related<%= rel.alias.class_name %>Detail from '@/modules/<%= schema.identifier %>/components/Related<%= rel.alias.class_name %>Detail'
@@ -48,7 +48,7 @@ export default {
     Related<%= rel.alias.class_name_plural %>List,
     <%_ } _%>
     <%_ }) _%>
-    <%= schema.class_name %>ShowWidget,
+    <%= schema.class_name %>Detail,
     LoadingFull
   },
   created () {
