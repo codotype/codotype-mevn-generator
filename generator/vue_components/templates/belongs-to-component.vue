@@ -22,7 +22,7 @@
             <%_ related_schema.attributes.forEach((attr) => { _%>
             <%_ if (attr.datatype === 'STRING_ARRAY') { _%>
             <td>{{model.<%= attr.identifier %>.join(', ')}}</td>
-            <%_ } else if (attr.datatype === 'BOOL') { _%>
+            <%_ } else if (attr.datatype === 'BOOLEAN') { _%>
             <td>
               <span>
                 <i class="fas fa-fw fa-check-square-o" v-if="model.<%= attr.identifier%>"></i>

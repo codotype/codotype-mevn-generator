@@ -31,16 +31,27 @@ module.exports = {
       // client/src/modules/resource/components/ResourceListWidget.vue
       await this.copyTemplate(
         this.templatePath('list-component.vue'),
-        this.destinationPath(moduleComponentsDest + schema.class_name + 'ListWidget.vue'),
+        this.destinationPath(moduleComponentsDest + schema.class_name + 'List.vue'),
         { schema, schemaOptions, api_actions }
       );
-      // client/src/modules/resource/components/ResourceShowWidget.vue
+      // client/src/modules/resource/components/ResourceDetail.vue
       // client/src/components/resource_ListWidget.vue
       await this.copyTemplate(
         this.templatePath('detail-component.vue'),
-        this.destinationPath(moduleComponentsDest + schema.class_name + 'ShowWidget.vue'),
+        this.destinationPath(moduleComponentsDest + schema.class_name + 'Detail.vue'),
         { schema }
       );
+
+      // Generates API Action modals
+      if (api_actions) {
+        api_actions.forEach(async (action) => {
+          await this.copyTemplate(
+            this.templatePath('action-modal.vue'),
+            this.destinationPath(moduleComponentsDest + action.class_name + 'Modal.vue'),
+            { schema, action }
+          )
+        })
+      }
 
       // Generate relational components
       // schema.relations.forEach(async (rel) => {

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import auth from '@/modules/auth/store'
-// import notification from '@/modules/notification/store'
+import toast from '@/modules/toast/store'
 <%_ blueprint.schemas.forEach((schema) => { _%>
 import <%= schema.identifier %> from '@/modules/<%= schema.identifier %>/store'
 <%_ }) _%>
@@ -13,7 +13,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   modules: {
     auth,
-    // notification,
+    toast,
     <%= blueprint.schemas.map(s => s.identifier).join(',\n    ') %>
   }
 })

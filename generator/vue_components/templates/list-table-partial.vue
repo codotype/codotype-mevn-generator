@@ -1,6 +1,11 @@
+<%_ const filteredActions = api_actions.filter(a => ['POST', 'PUT'].includes(a.verb) && a.payload && a.scope === 'MODEL') _%>
 <template>
   <table class="table table-hover">
 
+    <%_ filteredActions.forEach((action) => { _%>
+    <<%=action.class_name + 'Modal' %> v-if="isAuthenticated" />
+
+    <%_ }) _%>
     <!-- Table Header -->
     <thead>
       <%_ schema.attributes.forEach((attr) => { _%>
@@ -51,7 +56,7 @@
             {{ m.<%=attr.identifier%> }}
           </router-link>
         </td>
-        <%_ } else if (attr.datatype === 'BOOL') { _%>
+        <%_ } else if (attr.datatype === 'BOOLEAN') { _%>
         <td>
           <span>
             <i class="fas fa-fw fa-check-square" v-if="m.<%=attr.identifier%>"></i>
@@ -90,27 +95,44 @@
               View
             </b-dropdown-item>
 
-            <b-dropdown-item :to=" '/<%= schema.identifier_plural %>/' + m._id + '/edit' ">
+            <b-dropdown-item v-if="isAuthenticated" :to=" '/<%= schema.identifier_plural %>/' + m._id + '/edit' ">
               <i class="far fa-fw fa-edit"></i>
               Edit
             </b-dropdown-item>
 
-            <b-dropdown-item v-b-modal="'modal_' + m._id">
+            <b-dropdown-item v-if="isAdmin" v-b-modal="'modal_' + m._id">
               <i class="far fa-fw fa-trash-alt"></i>
               Delete
             </b-dropdown-item>
 
             <%_ if (api_actions.filter(a => a.scope === 'MODEL').length) { _%>
-            <b-dropdown-divider></b-dropdown-divider>
+            <b-dropdown-divider/>
             <%_ api_actions.filter(a => a.scope === 'MODEL').forEach((action) => { _%>
-            <b-dropdown-item v-if="isAdmin" @click="<%= action.function_name %>({ <%= schema.identifier %>Id: m._id, payload: {} })"><%= action.label %></b-dropdown-item>
+            <%_ if (action.payload) { _%>
+            <b-dropdown-item
+              v-if="isAuthenticated"
+              @click="$store.commit('<%= schema.identifier %>/<%= action.uri %>/state', { showingModal: true, scope: m._id, payload: {}})"
+            >
+              <%= action.label %>
+            </b-dropdown-item>
+
+            <%_ } else { _%>
+            <b-dropdown-item
+              v-if="isAuthenticated"
+              @click="<%= action.function_name %>(m._id)"
+            >
+              <%= action.label %>
+            </b-dropdown-item>
+
+            <%_ } _%>
             <%_ }) _%>
             <%_ } _%>
-
           </b-dropdown>
 
           <!-- Bootstrap Modal Component -->
-          <b-modal lazy v-if="isAdmin" :id="'modal_' + m._id"
+          <b-modal
+            lazy
+            v-if="isAdmin" :id="'modal_' + m._id"
             :title="'Destroy <%= schema.label %>?'"
             @ok="onConfirmDestroy(m)"
             ok-variant='danger'
@@ -131,12 +153,20 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+<%_ filteredActions.forEach((action) => { _%>
+import <%=action.class_name + 'Modal' %> from '@/modules/<%= schema.identifier %>/components/<%= action.class_name %>Modal'
+<%_ }) _%>
 
 export default {
   props: ['collection'],
+  components: {
+    <%_ filteredActions.forEach((action) => { _%>
+    <%=action.class_name + 'Modal' %>,
+    <%_ }) _%>
+  },
   methods: mapActions({
     <%_ if (api_actions) { _%>
-    <%_ api_actions.filter(a => ['POST','PUT'].includes(a.verb) && a.scope === 'MODEL' ).forEach((action) => { _%>
+    <%_ api_actions.filter(a => ['POST', 'PUT', 'DELETE'].includes(a.verb) && a.scope === 'MODEL' && !a.payload).forEach((action) => { _%>
     <%= action.function_name %>: '<%= schema.identifier %>/<%= action.function_name %>',
     <%_ }) _%>
     <%_ } _%>

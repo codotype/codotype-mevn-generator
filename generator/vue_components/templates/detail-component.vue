@@ -46,7 +46,7 @@
             <td><%= attr.label %></td>
             <%_ if (attr.datatype === 'STRING_ARRAY') { _%>
             <td>{{model.<%= attr.identifier %>.join(', ')}}</td>
-            <%_ } else if (attr.datatype === 'BOOL') { _%>
+            <%_ } else if (attr.datatype === 'BOOLEAN') { _%>
             <td>
               <span>
                 <i class="fas fa-fw fa-check-square" v-if="model.<%= attr.identifier%>"></i>
@@ -93,7 +93,7 @@ import Loading from '@/components/Loading'
 
 export default {
   props: ['id', 'model', 'fetching', 'header'],
-  name: '<%= schema.class_name %>ShowWidget',
+  name: '<%= schema.class_name %>Detail',
   components: {
     Loading
   },
