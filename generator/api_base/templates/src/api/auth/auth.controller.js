@@ -205,7 +205,8 @@ exports.reset_password = async (req, res) => {
     const password = req.body.password;
     const password_reset_token = req.body.password_reset_token;
 
-    // TODO - send error if password or password_reset_token are missing
+    // Ensures presence of password & password_reset_token
+    if (!password || !password_reset_token) return res.status(401).json({ type: 'MISSING_PASSWORD_RESET_TOKEN' })
 
     // Finds the User model associated with the password_reset_token
     const user = await User.findOne({ password_reset_token: password_reset_token })
@@ -213,11 +214,9 @@ exports.reset_password = async (req, res) => {
     .catch(err => res.status(401).json(err) )
 
     // Return error if no user is found with a matching password_reset_token
-    if (!user) {
-      return res.status(401).json({ type: 'INVALID_PASSWORD_RESET_TOKEN' })
-    }
+    if (!user) return res.status(401).json({ type: 'INVALID_PASSWORD_RESET_TOKEN' })
 
-    // TODO - implement this
+    // Ensures the validity of the reset token
     if (user.validResetToken(password_reset_token)) {
 
       // Assigns user.password
@@ -230,7 +229,7 @@ exports.reset_password = async (req, res) => {
       // Saves the updated user & handles error
       await user.save()
       .catch((err) => {
-        console.log(err)
+        console.log(err) // TODO - HANDLE ERROR
         res.status(422).json(err)
       })
 
