@@ -1,15 +1,12 @@
 # <%= blueprint.label %> ExpressJS + MongoDB API Server
 API server with Express.js + MongoDB + JWT + Docker
 
+
 ## Getting Started
 Express.js, Mongoose, ES6 Syntax is used in this project.
 
-### Prerequisites
-- [Docker](https://www.docker.com/)
-- [Node.js](https://nodejs.org/)
-- [npm](https://www.npmjs.com/)
 
-### Install and Develop
+### Install and Deploy
 1. Install dependencies with NPM:
 
 ```
@@ -28,12 +25,18 @@ docker-compose up
 npm run dev
 ```
 
+
+### Development
+A [Postman](https://www.getpostman.com/) collection and environments (`dev` and `production`) are included in this repository to support API development - they are located in the `.postman` directory. Read the Postman [documentation](https://www.getpostman.com/docs/postman/collections/data_formats) about importing collections and environments.
+
+
 ### Documentation
 Documentation is auto-generated from [APIDoc.JS](http://apidocjs.com). Build the documentation with the following command:
 
 ```
 npm run apidoc
 ```
+
 
 ### Technologies used
 
@@ -45,6 +48,9 @@ npm run apidoc
 
 - [APIDoc.JS](http://apidocjs.com)
 
+- [JSON Web Token](https://jwt.io)
+
+
 ## License
 [MIT License](http://opensource.org/licenses/MIT).
-Built with [codotype](https://www.codotype.io/).
+Built with [Codotype.io](https://www.codotype.io/).

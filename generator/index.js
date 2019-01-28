@@ -20,7 +20,8 @@ module.exports = {
     await this.composeWith('./api_resource_spec')
     await this.composeWith('./api_routes')
 
-    // TODO - add generator for README, documentation, etc.
+    // Docs
+    await this.composeWith('./readmes')
 
   }
 }
