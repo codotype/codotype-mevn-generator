@@ -13,7 +13,6 @@ module.exports = {
 
       // Isolates API Actions metadata
       let api_actions = configuration.api_actions[schema._id]
-      if (!api_actions[0]) { api_actions = false }
 
       // Destination for module / components directory
       const moduleComponentsDest = 'client/src/modules/' + schema.identifier + '/components/'
@@ -39,11 +38,11 @@ module.exports = {
       await this.copyTemplate(
         this.templatePath('detail-component.vue'),
         this.destinationPath(moduleComponentsDest + schema.class_name + 'Detail.vue'),
-        { schema }
+        { schema, api_actions }
       );
 
       // Generates API Action modals
-      if (api_actions) {
+      if (api_actions[0]) {
         api_actions.forEach(async (action) => {
           await this.copyTemplate(
             this.templatePath('action-modal.vue'),
