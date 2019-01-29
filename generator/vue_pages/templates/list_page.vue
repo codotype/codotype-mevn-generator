@@ -61,8 +61,8 @@
       <b-col lg="12">
         <SearchBar module='<%= schema.identifier %>'/>
       </b-col>
-      <b-col lg="12" v-if="collection.length >= perPage">
-        <b-pagination :total-rows="totalRows" :value="currentPage" :per-page="perPage" @change="goToPage" />
+      <b-col lg="12" v-if="count >= perPage">
+        <b-pagination :total-rows="count" :value="currentPage" :per-page="perPage" @change="goToPage" />
       </b-col>
       <b-col lg="12">
         <ListView :collection="collection" />
@@ -102,7 +102,7 @@ export default {
   computed: mapGetters({
     fetching: '<%= schema.identifier %>/fetching',
     collection: '<%= schema.identifier %>/collection',
-    totalRows: '<%= schema.identifier %>/count',
+    count: '<%= schema.identifier %>/count',
     perPage: '<%= schema.identifier %>/pageSize',
     currentPage: '<%= schema.identifier %>/currentPage',
     currentUser: 'auth/current_user',

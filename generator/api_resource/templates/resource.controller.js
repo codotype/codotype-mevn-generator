@@ -46,6 +46,7 @@ exports.profile = async (req, res) => {
 module.exports.list = async (req, res, next) => {
   // Gets pagination variables for query
   const { page, per_page, offset } = getPaginationParams(req);
+  const count = await <%= schema.class_name %>.countDocuments({})
 
   // NOTES - remove
   // .find({ user_id: req.user.id })
@@ -66,7 +67,8 @@ module.exports.list = async (req, res, next) => {
     .json({
       page: page,
       per_page: per_page,
-      items: <%= schema.identifier_plural %>
+      items: <%= schema.identifier_plural %>,
+      count: count
     });
   } catch (err) {
     return next(boom.badImplementation(err));
@@ -88,8 +90,6 @@ module.exports.list = async (req, res, next) => {
 // GET /api/<%= schema.identifier_plural %>/search Search
 <%_ } _%>
 module.exports.search = async (req, res) => {
-  // Gets pagination variables for query
-  const { page, per_page, offset } = getPaginationParams(req);
 
   // Assigns query for search
   // let query = req.query.search || ''
@@ -121,6 +121,10 @@ module.exports.search = async (req, res) => {
   const query = {}
   <%_ } _%>
 
+  // Gets pagination variables for query
+  const { page, per_page, offset } = getPaginationParams(req);
+  const count = await <%= schema.class_name %>.countDocuments(query)
+
   try {
     const <%= schema.identifier_plural %> = await <%= schema.class_name %>.find(query)
     <%_ schema.relations.forEach((rel) => { _%>
@@ -138,7 +142,8 @@ module.exports.search = async (req, res) => {
     .json({
       page: page,
       per_page: per_page,
-      items: <%= schema.identifier_plural %>
+      items: <%= schema.identifier_plural %>,
+      count: count
     });
   } catch (err) {
     return next(boom.badImplementation(err));
