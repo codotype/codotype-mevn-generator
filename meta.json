@@ -44,6 +44,43 @@
       ]
     },
     {
+      "id": "DEPLOYMENT_OPTION_GROUP",
+      "label": "Deploy",
+      "identifier": "deployment",
+      "description": "Configure the deployment options for your app",
+      "type": "OPTION_GROUP_TYPE_GLOBAL_OPTION",
+      "more_info_url": null,
+      "attributes": [
+        {
+          "label": "Deploy with Netlify",
+          "identifier": "netlify",
+          "type": "BOOLEAN",
+          "help": "Whether or not generate configuration files required for deployment on Netlify.",
+          "icon": "https://www.netlify.com/img/press/logos/logomark.png",
+          "default_value": false,
+          "more_info_url": "https://netlify.com/"
+        },
+        {
+          "label": "Heroku",
+          "identifier": "heroku",
+          "type": "BOOLEAN",
+          "help": "Whether or not generate configuration files required for deployment on Netlify.",
+          "icon": "https://cdn.iconscout.com/icon/free/png-256/heroku-225989.png",
+          "default_value": true,
+          "more_info_url": "http://heroku.com"
+        },
+        {
+          "label": "AWS",
+          "identifier": "AWS",
+          "type": "BOOLEAN",
+          "help": "Whether or not generate configuration files required for deployment with the AWS CLI.",
+          "icon": "http://aux.iconspalace.com/uploads/aws-icon-256.png",
+          "default_value": true,
+          "more_info_url": "http://heroku.com"
+        }
+      ]
+    },
+    {
       "id": "API_ACTION_OPTION_GROUP",
       "label": "API Action",
       "label_plural": "API Actions",
