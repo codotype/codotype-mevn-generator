@@ -29,6 +29,10 @@
           "label": "Generate Docker Compose files",
           "identifier": "generate_docker_compose",
           "type": "BOOLEAN",
+          "icon": {
+            "type": "ICON_TYPE_FONT_AWESOME",
+            "value": "fab fa-docker"
+          },
           "help": "Whether or not generate Docker Compose files for the API server.",
           "default_value": true,
           "more_info_url": "https://docs.docker.com/compose/"
@@ -37,6 +41,10 @@
           "label": "Generate APIDoc Documentation Headers",
           "identifier": "generate_api_doc",
           "type": "BOOLEAN",
+          "icon": {
+            "type": "ICON_TYPE_URL",
+            "value": "https://avatars3.githubusercontent.com/u/4103663?s=280&v=4"
+          },
           "help": "Whether or not generate APIDoc-compatible comment headers in the API controllers",
           "default_value": true,
           "more_info_url": "http://apidocjs.com"
@@ -56,27 +64,36 @@
           "identifier": "netlify",
           "type": "BOOLEAN",
           "help": "Whether or not generate configuration files required for deployment on Netlify.",
-          "icon": "https://www.netlify.com/img/press/logos/logomark.png",
+          "icon": {
+            "type": "ICON_TYPE_URL",
+            "value": "https://www.netlify.com/img/press/logos/logomark.png"
+          },
           "default_value": false,
           "more_info_url": "https://netlify.com/"
         },
         {
-          "label": "Heroku",
+          "label": "Deploy With Heroku",
           "identifier": "heroku",
           "type": "BOOLEAN",
           "help": "Whether or not generate configuration files required for deployment on Netlify.",
-          "icon": "https://cdn.iconscout.com/icon/free/png-256/heroku-225989.png",
+          "icon": {
+            "type": "ICON_TYPE_URL",
+            "value": "https://cdn.iconscout.com/icon/free/png-256/heroku-225989.png"
+          },
           "default_value": true,
           "more_info_url": "http://heroku.com"
         },
         {
-          "label": "AWS",
+          "label": "Deploy With AWS",
           "identifier": "AWS",
           "type": "BOOLEAN",
           "help": "Whether or not generate configuration files required for deployment with the AWS CLI.",
-          "icon": "http://aux.iconspalace.com/uploads/aws-icon-256.png",
+          "icon": {
+            "type": "ICON_TYPE_URL",
+            "value": "http://aux.iconspalace.com/uploads/aws-icon-256.png"
+          },
           "default_value": true,
-          "more_info_url": "http://heroku.com"
+          "more_info_url": "http://aws.com"
         }
       ]
     },
