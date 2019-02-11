@@ -18,10 +18,10 @@
   "model_options": [],
   "option_groups": [
     {
-      "id": "DOCUMENTATION_OPTION_GROUP",
-      "label": "Documentation",
-      "identifier": "documentation",
-      "description": "Configure the documentation options for your code",
+      "id": "DEPLOYMENT_OPTION_GROUP",
+      "label": "Deployment",
+      "identifier": "deployment",
+      "description": "Configure the deployment options for your app",
       "type": "OPTION_GROUP_TYPE_GLOBAL_OPTION",
       "more_info_url": null,
       "attributes": [
@@ -33,32 +33,10 @@
             "type": "ICON_TYPE_FONT_AWESOME",
             "value": "fab fa-docker"
           },
-          "help": "Whether or not generate Docker Compose files for the API server.",
+          "help": "Generate a <code>Dockerfile</code> in both the <code>client</code> and <code>server</code> directories - deploy the whole stack with a single <code>docker-compose up</code> command.",
           "default_value": true,
           "more_info_url": "https://docs.docker.com/compose/"
         },
-        {
-          "label": "Generate APIDoc Documentation Headers",
-          "identifier": "generate_api_doc",
-          "type": "BOOLEAN",
-          "icon": {
-            "type": "ICON_TYPE_URL",
-            "value": "https://avatars3.githubusercontent.com/u/4103663?s=280&v=4"
-          },
-          "help": "Whether or not generate APIDoc-compatible comment headers in the API controllers",
-          "default_value": true,
-          "more_info_url": "http://apidocjs.com"
-        }
-      ]
-    },
-    {
-      "id": "DEPLOYMENT_OPTION_GROUP",
-      "label": "Deploy",
-      "identifier": "deployment",
-      "description": "Configure the deployment options for your app",
-      "type": "OPTION_GROUP_TYPE_GLOBAL_OPTION",
-      "more_info_url": null,
-      "attributes": [
         {
           "label": "Deploy with Netlify",
           "identifier": "netlify",
@@ -94,6 +72,44 @@
           },
           "default_value": true,
           "more_info_url": "http://aws.com"
+        }
+      ]
+    },
+    {
+      "id": "DOCUMENTATION_OPTION_GROUP",
+      "label": "Documentation",
+      "identifier": "documentation",
+      "description": "Configure the documentation options for your code",
+      "type": "OPTION_GROUP_TYPE_GLOBAL_OPTION",
+      "more_info_url": null,
+      "attributes": [
+        {
+          "label": "Generate APIDoc Documentation Headers",
+          "identifier": "generate_api_doc",
+          "type": "BOOLEAN",
+          "icon": {
+            "type": "ICON_TYPE_URL",
+            "value": "https://avatars3.githubusercontent.com/u/4103663?s=280&v=4"
+          },
+          "help": "Whether or not generate APIDoc-compatible comment headers in your Express.js controllers",
+          "default_value": true,
+          "more_info_url": "http://apidocjs.com"
+        },
+        {
+          "label": "Code Comments",
+          "identifier": "code_comments",
+          "type": "STRING_SELECT",
+          "icon": {
+            "type": "ICON_TYPE_FONT_AWESOME",
+            "value": "far fa-comment"
+          },
+          "options": [
+            { "id": 1, "value": "CODE_COMMENTS_LIGHT", "label": "Light" },
+            { "id": 2, "value": "CODE_COMMENTS_VERBOSE", "label": "Verbose" }
+          ],
+          "help": "Dictate the level of code commenting in the generated code - great if you're just getting started!",
+          "default_value": "CODE_COMMENTS_LIGHT",
+          "more_info_url": ""
         }
       ]
     },
