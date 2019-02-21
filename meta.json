@@ -184,6 +184,63 @@
       ]
     },
     {
+      "id": "STATIC_PAGE_OPTION_GROUP",
+      "label": "Static Page",
+      "label_plural": "Static Pages",
+      "identifier": "static_page",
+      "identifier_plural": "static_pages",
+      "class_name": "StaticPage",
+      "class_name_plural": "StaticPages",
+      "description": "Add individual static pages to your Vue.js App",
+      "type": "OPTION_GROUP_TYPE_GLOBAL_ADDON",
+      "previewTemplate": "<span><pre class='bg-dark text-light mb-0'>/{{ model.uri }} - {{ model.label }}</pre></span>",
+      "more_info_url": null,
+      "attributes": [
+        {
+          "label": "URI",
+          "identifier": "uri",
+          "type": "STRING",
+          "help": "The URL of this action (don't prefix with /)",
+          "default_value": "verify",
+          "required": true,
+          "unique": false
+        },
+        {
+          "label": "Label",
+          "identifier": "label",
+          "type": "STRING",
+          "help": "The label of this API Action",
+          "default_value": "Verify",
+          "required": true,
+          "unique": false
+        }
+      ]
+    },
+    {
+      "id": "AUTHORS_OPTION_GROUP",
+      "label": "Author",
+      "label_plural": "Authors",
+      "identifier": "author",
+      "identifier_plural": "authors",
+      "class_name": "Author",
+      "class_name_plural": "Authors",
+      "description": "Add Authors to README.md",
+      "type": "OPTION_GROUP_TYPE_GLOBAL_ADDON",
+      "previewTemplate": "<span><pre class='mb-0'>{{ model.label }}</pre></span>",
+      "more_info_url": null,
+      "attributes": [
+        {
+          "label": "Label",
+          "identifier": "label",
+          "type": "STRING",
+          "help": "The label of this API Action",
+          "default_value": "Al Schwaa",
+          "required": true,
+          "unique": false
+        }
+      ]
+    },
+    {
       "id": "UI_CONFIG_OPTION_GROUP",
       "label": "UI Option",
       "label_plural": "UI Options",
@@ -202,7 +259,7 @@
         "help": "Specify a FontAwesome 4.7 icon to be used in the UI for this model.",
         "default_value": "fa fa-user",
         "more_info_url": "https://fontawesome.com/v4.7.0/icons/",
-        "previewTemplate": "<span><i :class='model.value'></i>{{ schema.label_plural }}</span>"
+        "previewTemplate": "<span><i :class='\"ml-2 mr-1 \" + model.value'></i>{{ schema.label_plural }}</span>"
         },
         {
         "label": "List Style",

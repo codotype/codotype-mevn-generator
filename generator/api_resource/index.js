@@ -10,8 +10,8 @@ module.exports = {
     // Pulls schema api_actions
     // TODO - IMPLEMENT IN META.JSON
     let schemaApiActions = []
-    if (configuration.api_actions[schema._id]) {
-      schemaApiActions = configuration.api_actions[schema._id]
+    if (configuration.api_actions[schema.identifier]) {
+      schemaApiActions = configuration.api_actions[schema.identifier]
     }
 
     // Defines the schema-specific destination
