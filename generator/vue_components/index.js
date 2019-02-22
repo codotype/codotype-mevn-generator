@@ -9,10 +9,11 @@ module.exports = {
       const schema = blueprint.schemas[i]
 
       // Pulls model options from configuration object
-      const schemaOptions = configuration.model_options[schema._id]
+      // const schemaOptions = configuration.model_options[schema._id]
+      const schemaOptions = {} // TODO - fix this!
 
       // Isolates API Actions metadata
-      let api_actions = configuration.api_actions[schema._id]
+      let api_actions = configuration.api_actions[schema.identifier]
 
       // Destination for module / components directory
       const moduleComponentsDest = 'client/src/modules/' + schema.identifier + '/components/'
@@ -59,7 +60,7 @@ module.exports = {
       for (var j = schema.relations.length - 1; j >= 0; j--) {
         rel = schema.relations[j]
 
-        related_schema = blueprint.schemas.find(s => s._id === rel.related_schema_id)
+        related_schema = blueprint.schemas.find(s => s.id === rel.related_schema_id)
         // TODO - add HAS_MANY UI
         if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) {
           await this.copyTemplate(

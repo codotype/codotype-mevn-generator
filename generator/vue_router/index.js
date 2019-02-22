@@ -53,8 +53,8 @@ module.exports = {
       const schema = blueprint.schemas[i]
 
       // Isolates API Actions metadata
-      api_actions = configuration.api_actions[schema._id]
-      if (!api_actions[0]) { api_actions = false }
+      api_actions = configuration.api_actions[schema.identifier]
+      if (!api_actions[0]) { api_actions = [] }
 
       // client/src/routers/resource.js
       await this.copyTemplate(

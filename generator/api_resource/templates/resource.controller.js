@@ -310,7 +310,7 @@ module.exports.show<%= rel.alias.class_name %> = async (req, res, next) => {
   .catch( err => next(boom.badImplementation(err)));
 
   const <%= rel.schema.identifier %> = await <%= rel.schema.class_name %>.findById(<%= schema.identifier %>.<%= rel.alias.identifier + '_id' %>)
-  <%_ let relatedSchema = blueprint.schemas.find(s => s._id === rel.related_schema_id) _%>
+  <%_ let relatedSchema = blueprint.schemas.find(s => s.id === rel.related_schema_id) _%>
   <%_ relatedSchema.relations.forEach((rel) => { _%>
   <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
   .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
@@ -379,7 +379,7 @@ module.exports.show<%= rel.alias.class_name_plural %> = async (req, res, next) =
 module.exports.show<%= rel.alias.class_name_plural %> = (req, res, next) => {
     return <%= rel.schema.class_name %>
     .find({ <%= rel.reverse_alias.identifier %>_id: req.params.id })
-    <%_ let relatedSchema = blueprint.schemas.find(s => s._id === rel.related_schema_id) _%>
+    <%_ let relatedSchema = blueprint.schemas.find(s => s.id === rel.related_schema_id) _%>
     <%_ relatedSchema.relations.forEach((rel) => { _%>
     <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
     .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })

@@ -18,6 +18,64 @@
   "model_options": [],
   "option_groups": [
     {
+      "id": "DEPLOYMENT_OPTION_GROUP",
+      "label": "Deployment",
+      "identifier": "deployment",
+      "description": "Configure the deployment options for your app",
+      "type": "OPTION_GROUP_TYPE_GLOBAL_OPTION",
+      "more_info_url": null,
+      "attributes": [
+        {
+          "label": "Generate Docker Compose files",
+          "identifier": "generate_docker_compose",
+          "type": "BOOLEAN",
+          "icon": {
+            "type": "ICON_TYPE_FONT_AWESOME",
+            "value": "fab fa-docker"
+          },
+          "help": "Generate a <code>Dockerfile</code> in both the <code>client</code> and <code>server</code> directories - deploy the whole stack with a single <code>docker-compose up</code> command.",
+          "default_value": true,
+          "more_info_url": "https://docs.docker.com/compose/"
+        },
+        {
+          "label": "Deploy with Netlify",
+          "identifier": "netlify",
+          "type": "BOOLEAN",
+          "help": "Whether or not generate configuration files required for deployment on Netlify.",
+          "icon": {
+            "type": "ICON_TYPE_URL",
+            "value": "https://www.netlify.com/img/press/logos/logomark.png"
+          },
+          "default_value": false,
+          "more_info_url": "https://netlify.com/"
+        },
+        {
+          "label": "Deploy With Heroku",
+          "identifier": "heroku",
+          "type": "BOOLEAN",
+          "help": "Whether or not generate configuration files required for deployment on Netlify.",
+          "icon": {
+            "type": "ICON_TYPE_URL",
+            "value": "https://cdn.iconscout.com/icon/free/png-256/heroku-225989.png"
+          },
+          "default_value": true,
+          "more_info_url": "http://heroku.com"
+        },
+        {
+          "label": "Deploy With AWS",
+          "identifier": "AWS",
+          "type": "BOOLEAN",
+          "help": "Whether or not generate configuration files required for deployment with the AWS CLI.",
+          "icon": {
+            "type": "ICON_TYPE_URL",
+            "value": "http://aux.iconspalace.com/uploads/aws-icon-256.png"
+          },
+          "default_value": true,
+          "more_info_url": "http://aws.com"
+        }
+      ]
+    },
+    {
       "id": "DOCUMENTATION_OPTION_GROUP",
       "label": "Documentation",
       "identifier": "documentation",
@@ -26,20 +84,32 @@
       "more_info_url": null,
       "attributes": [
         {
-          "label": "Generate Docker Compose files",
-          "identifier": "generate_docker_compose",
-          "type": "BOOLEAN",
-          "help": "Whether or not generate Docker Compose files for the API server.",
-          "default_value": true,
-          "more_info_url": "https://docs.docker.com/compose/"
-        },
-        {
           "label": "Generate APIDoc Documentation Headers",
           "identifier": "generate_api_doc",
           "type": "BOOLEAN",
-          "help": "Whether or not generate APIDoc-compatible comment headers in the API controllers",
+          "icon": {
+            "type": "ICON_TYPE_URL",
+            "value": "https://avatars3.githubusercontent.com/u/4103663?s=280&v=4"
+          },
+          "help": "Whether or not generate APIDoc-compatible comment headers in your Express.js controllers",
           "default_value": true,
           "more_info_url": "http://apidocjs.com"
+        },
+        {
+          "label": "Code Comments",
+          "identifier": "code_comments",
+          "type": "STRING_SELECT",
+          "icon": {
+            "type": "ICON_TYPE_FONT_AWESOME",
+            "value": "far fa-comment"
+          },
+          "options": [
+            { "id": 1, "value": "CODE_COMMENTS_LIGHT", "label": "Light" },
+            { "id": 2, "value": "CODE_COMMENTS_VERBOSE", "label": "Verbose" }
+          ],
+          "help": "Dictate the level of code commenting in the generated code - great if you're just getting started!",
+          "default_value": "CODE_COMMENTS_LIGHT",
+          "more_info_url": ""
         }
       ]
     },
@@ -114,6 +184,63 @@
       ]
     },
     {
+      "id": "STATIC_PAGE_OPTION_GROUP",
+      "label": "Static Page",
+      "label_plural": "Static Pages",
+      "identifier": "static_page",
+      "identifier_plural": "static_pages",
+      "class_name": "StaticPage",
+      "class_name_plural": "StaticPages",
+      "description": "Add individual static pages to your Vue.js App",
+      "type": "OPTION_GROUP_TYPE_GLOBAL_ADDON",
+      "previewTemplate": "<span><pre class='bg-dark text-light mb-0'>/{{ model.uri }} - {{ model.label }}</pre></span>",
+      "more_info_url": null,
+      "attributes": [
+        {
+          "label": "URI",
+          "identifier": "uri",
+          "type": "STRING",
+          "help": "The URL of this action (don't prefix with /)",
+          "default_value": "verify",
+          "required": true,
+          "unique": false
+        },
+        {
+          "label": "Label",
+          "identifier": "label",
+          "type": "STRING",
+          "help": "The label of this API Action",
+          "default_value": "Verify",
+          "required": true,
+          "unique": false
+        }
+      ]
+    },
+    {
+      "id": "AUTHORS_OPTION_GROUP",
+      "label": "Author",
+      "label_plural": "Authors",
+      "identifier": "author",
+      "identifier_plural": "authors",
+      "class_name": "Author",
+      "class_name_plural": "Authors",
+      "description": "Add Authors to README.md",
+      "type": "OPTION_GROUP_TYPE_GLOBAL_ADDON",
+      "previewTemplate": "<span><pre class='mb-0'>{{ model.label }}</pre></span>",
+      "more_info_url": null,
+      "attributes": [
+        {
+          "label": "Label",
+          "identifier": "label",
+          "type": "STRING",
+          "help": "The label of this API Action",
+          "default_value": "Al Schwaa",
+          "required": true,
+          "unique": false
+        }
+      ]
+    },
+    {
       "id": "UI_CONFIG_OPTION_GROUP",
       "label": "UI Option",
       "label_plural": "UI Options",
@@ -132,7 +259,7 @@
         "help": "Specify a FontAwesome 4.7 icon to be used in the UI for this model.",
         "default_value": "fa fa-user",
         "more_info_url": "https://fontawesome.com/v4.7.0/icons/",
-        "previewTemplate": "<span><i :class='model.value'></i>{{ schema.label_plural }}</span>"
+        "previewTemplate": "<span><i :class='\"ml-2 mr-1 \" + model.value'></i>{{ schema.label_plural }}</span>"
         },
         {
         "label": "List Style",

@@ -10,14 +10,9 @@ module.exports = {
     for (var i = blueprint.schemas.length - 1; i >= 0; i--) {
       const schema = blueprint.schemas[i]
 
-      // // // //
-      // TODO - abstract this elsewhere
-      // Pulls model options from configuration object
-      const schemaOptions = configuration.model_options[schema._id]
-
       // Isolates API Actions metadata
-      let api_actions = configuration.api_actions[schema._id]
-      if (!api_actions[0]) { api_actions = false }
+      let api_actions = configuration.api_actions[schema.identifier]
+      if (!api_actions[0]) { api_actions = [] }
       // // // //
 
       // TODO - abstract this into @codotype/utils

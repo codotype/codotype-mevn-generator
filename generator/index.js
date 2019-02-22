@@ -17,7 +17,7 @@ module.exports = {
     await this.composeWith('./api_base')
     await this.composeWith('./api_environment')
     await this.composeWith('./api_resource')
-    await this.composeWith('./api_resource_spec')
+    // await this.composeWith('./api_resource_spec')
     await this.composeWith('./api_routes')
 
     // Docs
