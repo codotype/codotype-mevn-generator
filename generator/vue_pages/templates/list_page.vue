@@ -56,8 +56,7 @@
     </b-row>
 
     <!-- List View -->
-    <LoadingFull v-if="fetching" />
-    <b-row v-else>
+    <b-row>
       <b-col lg="12">
         <SearchBar module='<%= schema.identifier %>'/>
       </b-col>
@@ -65,7 +64,8 @@
         <b-pagination :total-rows="count" :value="currentPage" :per-page="perPage" @change="goToPage" />
       </b-col>
       <b-col lg="12">
-        <ListView :collection="collection" />
+        <LoadingFull v-if="fetching" />
+        <ListView v-else :collection="collection" />
       </b-col>
     </b-row>
   </div>
@@ -100,18 +100,18 @@ export default {
     return this.fetch()
   },
   computed: mapGetters({
-    fetching: '<%= schema.identifier %>/fetching',
-    collection: '<%= schema.identifier %>/collection',
-    count: '<%= schema.identifier %>/count',
-    perPage: '<%= schema.identifier %>/pageSize',
-    currentPage: '<%= schema.identifier %>/currentPage',
+    fetching: '<%= schema.identifier %>/paginatedCollection/loading',
+    collection: '<%= schema.identifier %>/paginatedCollection/collection',
+    count: '<%= schema.identifier %>/paginatedCollection/count',
+    perPage: '<%= schema.identifier %>/paginatedCollection/pageSize',
+    currentPage: '<%= schema.identifier %>/paginatedCollection/currentPage',
     currentUser: 'auth/current_user',
     isAuthenticated: 'auth/is_authenticated',
     isAdmin: 'auth/isAdmin'
   }),
   methods: mapActions({
-    fetch: '<%= schema.identifier %>/fetchCollection',
-    goToPage: '<%= schema.identifier %>/goToPage'
+    fetch: '<%= schema.identifier %>/paginatedCollection/fetch',
+    goToPage: '<%= schema.identifier %>/paginatedCollection/goToPage'
   })
 }
 </script>

@@ -6,16 +6,22 @@ import mutations from './mutations'
 <%_ if (filteredActions.length) { _%>
 import { API_ACTION_MODULE } from '@/store/lib/mixins'
 <%_ } _%>
+import { COLLECTION_MODULE } from '@/store/lib/mixins'
+import { PAGINATED_COLLECTION_MODULE } from '@/store/lib/mixins'
 const namespaced = true
 
 // <%= schema.identifier %> Vuex module definition
-<%_ if (!api_actions) { _%>
+<%_ if (!api_actions[0]) { _%>
 export default {
   namespaced,
   state,
   mutations,
   actions,
-  getters
+  getters,
+  modules: {
+    collection: COLLECTION_MODULE({ API_ROOT: '/api/<%= schema.identifier_plural %>' }),
+    paginatedCollection: PAGINATED_COLLECTION_MODULE({ API_ROOT: '/api/<%= schema.identifier_plural %>' })
+  }
 }
 <%_ } else { _%>
 export default {
@@ -26,7 +32,7 @@ export default {
   getters,
   modules: {
   <%_ filteredActions.forEach((action, index) => { _%>
-    <%= action.uri %>: { ...API_ACTION_MODULE() }<%= helpers.trailingComma(filteredActions, index) %>
+    <%= action.uri %>: API_ACTION_MODULE()<%= helpers.trailingComma(filteredActions, index) %>
   <%_ }) _%>
   }
 }

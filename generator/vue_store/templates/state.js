@@ -1,8 +1,5 @@
 import {
-  COLLECTION_STATE,
-  PAGINATION_STATE,
   MODEL_STATE,
-  FILTER_STATE
 } from '@/store/lib/mixins'
 
 // <%= schema.label %> Module State
@@ -19,10 +16,7 @@ export default {
   <%_ api_actions.filter(a => a.payload).forEach((action) => { _%>
   <%= action.function_name %>Payload: {},
   <%_ }) _%>
-  ...COLLECTION_STATE,
-  ...PAGINATION_STATE,
   ...MODEL_STATE,
-  ...FILTER_STATE,
   newModel: {},
   editModel: {}
 }

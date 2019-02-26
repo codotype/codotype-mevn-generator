@@ -3,45 +3,12 @@
 import router from '@/routers'
 import axios from 'axios'
 import { API_ROOT } from './constants'
-import { PAGINATION_ACTIONS, FILTER_ACTIONS } from '@/store/lib/mixins'
 
 // // // //
 
 export default {
-  ...PAGINATION_ACTIONS,
-  ...FILTER_ACTIONS('<%= schema.identifier %>'),
+  // ...FILTER_ACTIONS('<%= schema.identifier %>'), // TODO - retire this
   // GET /api/<%= schema.identifier_plural %>
-  fetchCollection ({ state, commit, rootGetters }) {
-    commit('fetching', true)
-    let apiRoot
-    if (state.filter) {
-      apiRoot = API_ROOT + '/search'
-    } else {
-      apiRoot = API_ROOT
-    }
-    return axios.get(apiRoot, {
-      headers: {
-        authorization: rootGetters['auth/authorizationHeader']
-      },
-      params: {
-        search: state.filter,
-        page: state.currentPage,
-        per_page: state.pageSize
-      }
-    })
-    .then(({ data }) => {
-      commit('collection', data.items)
-      commit('pageSize', data.per_page)
-      commit('currentPage', data.page)
-      commit('count', data.count)
-      commit('fetching', false)
-    })
-    .catch((err) => {
-      commit('fetching', false)
-      commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
-      throw err // TODO - better error handling
-    })
-  },
   // GET /api/<%= schema.identifier_plural %>/:id
   fetchModel ({ commit, rootGetters }, <%= schema.identifier %>Id) {
     commit('fetching', true)

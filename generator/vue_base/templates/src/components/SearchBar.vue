@@ -9,7 +9,7 @@
         <i class="fa fa-search mr-2"></i>
         Clear Search
       </button>
-      <i class="fa fa-spin fa-spinner" v-if="fetching"></i>
+      <i class="fa fa-spin fa-spinner" v-if="loading"></i>
     </div>
   </div>
 </template>
@@ -27,14 +27,14 @@ export default {
 
     // Defines Vue.component.computed
     this.$options.computed = mapGetters({
-      filter: `${module}/filter`,
-      fetching: `${module}/fetching`
+      filter: `${module}/paginatedCollection/filter`,
+      loading: `${module}/paginatedCollection/loading`
     })
 
     // Defines Vue.component.methods
     this.$options.methods = mapActions({
-      clearFilter: `${module}/clearFilter`,
-      setFilter: `${module}/setFilter`
+      clearFilter: `${module}/paginatedCollection/clearFilter`,
+      setFilter: `${module}/paginatedCollection/setFilter`
     })
   }
 }

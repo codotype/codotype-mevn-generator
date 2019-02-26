@@ -76,7 +76,7 @@ export default {
   created () {
     <%_ schema.relations.forEach((rel) => { _%>
     <%_ if (rel.type !== 'REF_BELONGS_TO') { _%>
-    this.$store.dispatch('<%= rel.schema.identifier %>/fetchCollection')
+    this.$store.dispatch('<%= rel.schema.identifier %>/collection/fetch')
     <%_ } _%>
     <%_ }) _%>
   },
@@ -84,7 +84,7 @@ export default {
     <%_ let filteredRelations = schema.relations.filter(r => r.type !== 'REF_BELONGS_TO') _%>
     <%_ filteredRelations.forEach((rel, index) => { _%>
     <%= rel.alias.identifier_plural %> () {
-      return this.$store.getters['<%= rel.schema.identifier %>/collection']
+      return this.$store.getters['<%= rel.schema.identifier %>/collection/collection']
     }<%= helpers.trailingComma(filteredRelations, index) %>
     <%_ }) _%>
   }
