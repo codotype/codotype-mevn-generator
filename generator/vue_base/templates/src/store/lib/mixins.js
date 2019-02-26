@@ -157,6 +157,8 @@ export const PAGINATED_COLLECTION_MODULE = ({ API_ROOT }) => {
 
 
 // FORM MODULE Action Vuex Module
+// TODO - ABSTRACT INTO A SEPARATE FILE
+// TODO - how much should this be simplified?
 export const FORM_MODULE = ({ API_ROOT, NEW_MODEL }) => {
   return Object.assign({}, {
     namespaced: true,
@@ -242,6 +244,51 @@ export const FORM_MODULE = ({ API_ROOT, NEW_MODEL }) => {
           throw err
         })
       },
+    }
+  })
+}
+
+// MODEL MODULE Action Vuex Module
+// TODO - ABSTRACT INTO A SEPARATE FILE
+export const MODEL_MODULE = ({ API_ROOT }) => {
+  return Object.assign({}, {
+    namespaced: true,
+    state: {
+      model: {},
+      loading: false
+    },
+    mutations: {
+      model (state, model) {
+        state.model = Object.assign({}, model)
+      },
+      loading (state, loading) {
+        state.loading = loading
+      }
+    },
+    getters: {
+      model (state) { return state.model },
+      loading (state) { return state.loading }
+    },
+    actions: {
+      fetch ({ commit, rootGetters }, modelId) {
+        commit('loading', true)
+        axios.get(`${API_ROOT}/${modelId}`, {
+          headers: {
+            authorization: rootGetters['auth/authorizationHeader']
+          }
+        })
+        .then(({ data }) => {
+          commit('model', data)
+          commit('loading', false)
+          // commit('toast/add', { message: 'Created <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
+          // router.push(`/<%= schema.identifier_plural %>`)
+        })
+        .catch((err) => {
+          commit('loading', false)
+          commit('toast/add', { message: 'Fetch Error', context: 'danger', dismissible: true }, { root: true })
+          throw err
+        })
+      }
     }
   })
 }

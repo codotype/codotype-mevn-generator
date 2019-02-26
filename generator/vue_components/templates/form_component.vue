@@ -5,7 +5,9 @@
       <div class="form-group">
         <label class='mb-0'>
           <%= attr.label %>
-          <%_ if (attr.required) { %><span class='text-danger'>*</span><% } _%>
+          <%_ if (attr.required) { _%>
+          <span class='text-danger'>*</span>
+          <%_ } _%>
         </label>
         <%_ if (attr.help) { _%>
         <small class="form-text text-muted mb-2"><%= attr.help %></small>
@@ -29,8 +31,8 @@
       <%_ } _%>
       </div>
     </div>
-    <%_ }) _%>
 
+    <%_ }) _%>
     <%_ schema.relations.forEach((rel) => { _%>
     <%_ if (['BELONGS_TO', 'HAS_ONE', 'HAS_MANY'].includes(rel.type)) { _%>
     <div class="col-lg-6">
@@ -56,20 +58,20 @@
       <%_ } _%>
       </div>
     </div>
+
     <%_ } _%>
     <%_ }) _%>
-
   </div>
 </template>
 
 <!-- // // // //  -->
 
 <script>
+import { mapGetters } from 'vuex'
 import InputTag from 'vue-input-tag'
 
 export default {
-  name: '<%= schema.identifier %>_form',
-  props: ['model'],
+  name: '<%= schema.class_name %>Form',
   components: {
     InputTag
   },
@@ -81,6 +83,9 @@ export default {
     <%_ }) _%>
   },
   computed: {
+    ...mapGetters({
+      model: '<%= schema.identifier %>/form/model'
+    }),
     <%_ let filteredRelations = schema.relations.filter(r => r.type !== 'REF_BELONGS_TO') _%>
     <%_ filteredRelations.forEach((rel, index) => { _%>
     <%= rel.alias.identifier_plural %> () {

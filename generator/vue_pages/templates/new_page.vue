@@ -9,7 +9,7 @@
 
     <hr>
 
-    <<%= schema.class_name %>Form :model="model" />
+    <<%= schema.class_name %>Form />
 
     <b-row>
       <b-col sm="12" class="text-right">
@@ -19,7 +19,7 @@
           Cancel
         </b-button>
 
-        <b-button variant="primary" @click="formSubmit(model)">
+        <b-button variant="primary" @click="formSubmit()">
           <i class="fa fa-fw fa-plus"></i>
           Create <%= schema.label %>
         </b-button>
@@ -37,7 +37,7 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 import <%= schema.class_name %>Form from '@/modules/<%= schema.identifier %>/components/<%= schema.class_name %>Form'
 
 export default {
-  name: '<%= schema.class_name %>New',
+  name: '<%= schema.class_name %>NewPage',
   metaInfo: {
     title: '<%= schema.label %> - New'
   },
@@ -45,19 +45,18 @@ export default {
     <%= schema.class_name %>Form
   },
   created () {
-    this.resetNewModel()
+    this.resetForm()
   },
   computed: mapGetters({
     currentUser: 'auth/current_user',
-    isAdmin: 'auth/isAdmin',
-    model: '<%= schema.identifier %>/newModel'
+    isAdmin: 'auth/isAdmin'
   }),
   methods: {
     ...mapActions({
-      formSubmit: '<%= schema.identifier %>/createModel'
+      formSubmit: '<%= schema.identifier %>/form/createModel'
     }),
     ...mapMutations({
-      resetNewModel: '<%= schema.identifier %>/resetNewModel'
+      resetForm: '<%= schema.identifier %>/form/reset'
     })
   }
 }
