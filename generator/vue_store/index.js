@@ -3,6 +3,9 @@ module.exports = {
   name: 'ModuleStore',
   async write({ blueprint, configuration }) {
     // TODO - replace with a single call to forEachSchema
+    // TODO - replace with a single call to forEachSchema
+    // TODO - replace with a single call to forEachSchema
+
     // Iterates over each schema in the this.options.build.blueprint.schemas array
     // return blueprint.schemas.forEach(async (schema) => {
     // } blueprint.schemas.forEach(async (schema) => {

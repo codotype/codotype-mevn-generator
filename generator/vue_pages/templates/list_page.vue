@@ -1,6 +1,4 @@
 <template>
-  <!-- <LoadingFull v-if="fetching" /> -->
-  <!-- <div class="container" v-else> -->
   <div class="container">
 
     <%_ api_actions.filter(a => ['POST', 'PUT'].includes(a.verb) && a.payload && a.scope === 'ROOT').forEach((action) => { _%>

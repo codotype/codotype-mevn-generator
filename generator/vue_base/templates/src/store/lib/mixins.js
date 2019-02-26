@@ -104,22 +104,7 @@ export const COLLECTION_MODULE = ({ API_ROOT }) => {
 
 // // // //
 
-// TODO - add filtering to this module?
-// import store from '@/store'
-// import debounce from 'lodash/debounce'
 export const PAGINATED_COLLECTION_MODULE = ({ API_ROOT }) => {
-
-  // function fetchCollection () {
-  //   store.commit('currentPage', 0) // Sets query to search from page 0
-  //   store.dispatch('fetch') // Fetches collection
-  // }
-
-  // Defines a function that sets the pagination's page to 0
-  // And dispatches an api call to GET /api/module/search
-  // after a 1000 delay from the last time the function was called
-  // TLDR this throttles expensive search API calls
-  // const debouncedFetch = debounce(fetchCollection, 1000)
-
   return Object.assign({}, {
     namespaced: true,
     state: {
@@ -149,13 +134,8 @@ export const PAGINATED_COLLECTION_MODULE = ({ API_ROOT }) => {
     actions: {
       setFilter ({ commit, dispatch }, filter) {
         commit('filter', filter)
-        // debouncedFetch()
-        dispatch('fetch') // TODO - how do we debounce this action?
-      },
-      clearFilter ({ commit, dispatch }) {
-        commit('filter', '')
-        // debouncedFetch()
-        dispatch('fetch') // TODO - how do we debounce this action?
+        commit('currentPage', 0)
+        dispatch('fetch')
       },
       goToPage ({ commit, dispatch }, page) {
         commit('currentPage', page)
