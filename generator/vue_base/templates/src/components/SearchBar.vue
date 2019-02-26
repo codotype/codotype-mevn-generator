@@ -10,11 +10,10 @@
     </div>
 
     <div class="col-lg-3">
-      <button class="btn btn-warning btn-block mr-2" @click='setFilter("")'>
+      <button class="btn btn-warning btn-block mr-2" @click="fetchFiltered('')">
         <i class="fa fa-search mr-2"></i>
         Clear Search
       </button>
-      <i class="fa fa-spin fa-spinner" v-if="loading"></i>
     </div>
   </div>
 </template>
@@ -38,8 +37,7 @@ export default {
 
     // Defines Vue.component.computed
     this.$options.computed = mapGetters({
-      filter: `${module}/paginatedCollection/filter`,
-      loading: `${module}/paginatedCollection/loading`
+      filter: `${module}/paginatedCollection/filter`
     })
     // Defines Vue.component.methods
     this.$options.methods = {

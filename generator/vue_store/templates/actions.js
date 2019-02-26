@@ -188,44 +188,6 @@ export default {
       throw err // TODO - better error handling
     })
   },
-  // POST /api/<%= schema.identifier_plural %>
-  createModel ({ commit, rootGetters }, <%= schema.identifier %>Model) {
-    commit('fetching', true)
-    axios.post(API_ROOT, <%= schema.identifier %>Model, {
-      headers: {
-        authorization: rootGetters['auth/authorizationHeader']
-      }
-    })
-    .then(() => {
-      commit('fetching', false)
-      commit('toast/add', { message: 'Created <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
-      router.push(`/<%= schema.identifier_plural %>`)
-    })
-    .catch((err) => {
-      commit('fetching', false)
-      commit('toast/add', { message: 'Create error', context: 'danger', dismissible: true }, { root: true })
-      throw err
-    })
-  },
-  // PUT /api/<%= schema.identifier_plural %>/:id
-  updateModel ({ commit, rootGetters }, <%= schema.identifier %>Model) {
-    commit('fetching', true)
-    axios.put(`${API_ROOT}/${<%= schema.identifier %>Model._id}`, <%= schema.identifier %>Model, {
-      headers: {
-        authorization: rootGetters['auth/authorizationHeader']
-      }
-    })
-    .then(() => {
-      commit('fetching', false)
-      commit('toast/add', { message: 'Updated successfully', context: 'success', dismissible: true }, { root: true })
-      router.back()
-    })
-    .catch((err) => {
-      commit('fetching', false)
-      commit('toast/add', { message: 'Update error', context: 'danger', dismissible: true }, { root: true })
-      throw err
-    })
-  },
   // DELETE /api/<%= schema.identifier_plural %>/:id
   deleteModel ({ state, commit, rootGetters }, <%= schema.identifier %>Model) {
     commit('fetching', true)

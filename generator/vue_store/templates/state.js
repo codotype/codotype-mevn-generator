@@ -1,6 +1,3 @@
-import {
-  MODEL_STATE,
-} from '@/store/lib/mixins'
 
 // <%= schema.label %> Module State
 export default {
@@ -16,7 +13,6 @@ export default {
   <%_ api_actions.filter(a => a.payload).forEach((action) => { _%>
   <%= action.function_name %>Payload: {},
   <%_ }) _%>
-  ...MODEL_STATE,
   newModel: {},
   editModel: {}
 }

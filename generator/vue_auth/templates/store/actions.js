@@ -11,6 +11,7 @@ import {
 } from './constants'
 
 // Auth module actions
+// TODO - split this up into a series of smaller modules
 const actions = {
   // fetchUserProfile
   // Fetches a user's profiles form the server

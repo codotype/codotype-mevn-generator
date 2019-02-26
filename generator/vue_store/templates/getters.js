@@ -1,6 +1,3 @@
-import {
-  MODEL_GETTERS,
-} from '@/store/lib/mixins'
 
 // <%= schema.label %> Module Getters
 export default {
@@ -24,7 +21,6 @@ export default {
     return state.<%= action.function_name %>Payload
   },
   <%_ }) _%>
-  ...MODEL_GETTERS,
   newModel: state => {
     return state.newModel
   },

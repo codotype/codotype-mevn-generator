@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import { NEW_<%= schema.identifier.toUpperCase() %> } from './constants'
 import {
-  MODEL_MUTATIONS,
 } from '@/store/lib/mixins'
 
 // <%= schema.label %> Module Mutations
@@ -26,7 +25,6 @@ export default {
     state.<%= action.function_name %>Payload = <%= action.function_name %>Payload
   },
   <%_ }) _%>
-  ...MODEL_MUTATIONS,
   resetNewModel (state) {
     state.newModel = _.cloneDeep(NEW_<%= schema.identifier.toUpperCase() %>)
   },
