@@ -2,19 +2,24 @@
 module.exports = {
   name: 'ModuleStore',
   async write({ blueprint, configuration }) {
-    // console.log('WRITING MODULE STORE')
+    // TODO - replace with a single call to forEachSchema
+    // TODO - replace with a single call to forEachSchema
+    // TODO - replace with a single call to forEachSchema
+
     // Iterates over each schema in the this.options.build.blueprint.schemas array
     // return blueprint.schemas.forEach(async (schema) => {
     // } blueprint.schemas.forEach(async (schema) => {
-    // TODo - replace with a single call to forEachSchema
     for (var i = blueprint.schemas.length - 1; i >= 0; i--) {
       const schema = blueprint.schemas[i]
 
       // Isolates API Actions metadata
       let api_actions = configuration.api_actions[schema.identifier]
-      if (!api_actions[0]) { api_actions = [] }
+      // if (!api_actions[0]) { api_actions = [] }
+
       // // // //
 
+      // TODO - abstract this into @codotype/utils
+      // TODO - abstract this into @codotype/utils
       // TODO - abstract this into @codotype/utils
       let newModel = {}
       schema.attributes.forEach((attr) => {

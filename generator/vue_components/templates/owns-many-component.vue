@@ -125,12 +125,36 @@
 <!-- // // // //  -->
 
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  props: ['collection'],
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
+  mounted () {
+    this.fetch(this.id)
+  },
   methods: mapActions({
+    <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+    fetch: '<%= schema.identifier %>/<%= 'fetch' + rel.alias.class_name %>',
+    <%_ } else if (rel.type === 'HAS_MANY') { _%>
+    fetch: '<%= schema.identifier %>/<%= 'fetch' + rel.alias.class_name_plural %>',
+    <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
+    fetch: '<%= schema.identifier %>/<%= 'fetch' + rel.alias.class_name_plural %>',
+    <%_ } _%>
     onConfirmDestroy: '<%= related_schema.identifier %>/deleteModel'
+  }),
+  computed: mapGetters({
+    <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+    model: '<%= schema.identifier %>/<%= rel.alias.identifier %>',
+    <%_ } else if (rel.type === 'HAS_MANY') { _%>
+    collection: '<%= schema.identifier %>/<%= rel.alias.identifier_plural %>',
+    <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
+    collection: '<%= schema.identifier %>/<%= rel.alias.identifier_plural %>',
+    <%_ } _%>
   })
 }
 </script>

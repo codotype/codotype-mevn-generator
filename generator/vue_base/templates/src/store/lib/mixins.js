@@ -1,137 +1,9 @@
-import store from '@/store'
-import debounce from 'lodash/debounce'
-
-// // // //
-// Adds a Collection to a Vuex module
-
-export const COLLECTION_GETTERS = {
-  collection: state => {
-    return state.collection
-  },
-  fetching: state => {
-    return state.fetching
-  }
-}
-
-export const COLLECTION_MUTATIONS = {
-  collection (state, collection) {
-    state.collection = collection
-  },
-  fetching (state, isFetching) {
-    state.fetching = isFetching
-  }
-}
-
-export const COLLECTION_STATE = {
-  collection: [],
-  fetching: false
-}
-
-// // // //
-// Adds a Model definition to a Vuex module
-export const MODEL_GETTERS = {
-  model: state => {
-    return state.model
-  }
-}
-
-export const MODEL_MUTATIONS = {
-  model (state, model) {
-    state.model = model
-  }
-}
-
-export const MODEL_STATE = {
-  model: {}
-}
-
-// // // //
-// Adds Collection filtering to a Vuex module
-
-export const FILTER_GETTERS = {
-  filter: state => {
-    return state.filter
-  }
-}
-
-export const FILTER_MUTATIONS = {
-  filter: (state, filter) => {
-    state.filter = filter
-  }
-}
-
-export const FILTER_STATE = {
-  filter: ''
-}
-
-export const FILTER_ACTIONS = (module) => {
-  function fetchCollection () {
-    store.commit(`${module}/currentPage`, 0) // Sets query to search from page 0
-    store.dispatch(`${module}/fetchCollection`) // Fetches collection
-  }
-
-  // Defines a function that sets the pagination's page to 0
-  // And dispatches an api call to GET /api/module/search
-  // after a 1000 delay from the last time the function was called
-  // TLDR this throttles expensive search API calls
-  const debouncedFetch = debounce(fetchCollection, 1000)
-
-  return {
-    setFilter ({ commit }, filter) {
-      commit('filter', filter)
-      debouncedFetch()
-    },
-    clearFilter ({ commit }) {
-      commit('filter', '')
-      debouncedFetch()
-    }
-  }
-}
-
-// // // //
-// Pagination Mixins
-
-export const PAGINATION_STATE = {
-  count: 0,
-  pageSize: 10,
-  currentPage: 0
-}
-
-export const PAGINATION_ACTIONS = {
-  goToPage ({ dispatch, commit }, page) {
-    commit('currentPage', page)
-    dispatch('fetchCollection')
-  }
-}
-
-export const PAGINATION_MUTATIONS = {
-  currentPage (state, page) {
-    state.currentPage = page
-  },
-  pageSize (state, newSize) {
-    state.pageSize = newSize
-  },
-  count (state, count) {
-    state.count = count
-  }
-}
-
-export const PAGINATION_GETTERS = {
-  currentPage: state => {
-    return state.currentPage
-  },
-  pageSize: state => {
-    return state.pageSize
-  },
-  count: state => {
-    return state.count - state.pageSize
-  }
-}
 
 // API Action Vuex Module
 // TODO - annotate the purpose and usage of this mixin
+// TODO - ABSTRACT ELSEWHERE??
 export const API_ACTION_MODULE = () => {
-  return {
+  return Object.assign({}, {
     namespaced: true,
     state: {
       scope: '',
@@ -160,5 +32,263 @@ export const API_ACTION_MODULE = () => {
       }
     },
     actions: {}
-  }
+  })
+}
+
+// // // //
+// // // //
+// TODO - abstract into a different file / directory
+
+import axios from 'axios'
+export const COLLECTION_MODULE = ({ API_ROOT }) => {
+  return Object.assign({}, {
+    namespaced: true,
+    state: {
+      collection: [],
+      loading: false
+    },
+    getters: {
+      collection: state => state.collection,
+      loading: state => state.loading
+    },
+    mutations: {
+      collection (state, collection) {
+        state.collection = collection
+      },
+      loading (state, loading) {
+        state.loading = loading
+      }
+    },
+    actions: {
+      fetch ({ commit, rootGetters }) {
+        commit('loading', true)
+        return axios.get(API_ROOT, {
+          headers: {
+            authorization: rootGetters['auth/authorizationHeader']
+          }
+        })
+        .then(({ data }) => {
+          commit('collection', data.items)
+          commit('loading', false)
+        })
+        .catch((err) => {
+          commit('loading', false)
+          commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+          throw err // TODO - better error handling
+        })
+      }
+    }
+  })
+}
+
+// // // //
+
+export const PAGINATED_COLLECTION_MODULE = ({ API_ROOT }) => {
+  return Object.assign({}, {
+    namespaced: true,
+    state: {
+      collection: [],
+      loading: false,
+      currentPage: 0,
+      pageSize: 10,
+      count: 0,
+      filter: ''
+    },
+    getters: {
+      collection: state => state.collection,
+      loading: state => state.loading,
+      currentPage: state => state.currentPage,
+      pageSize: state => state.pageSize,
+      count: state => state.count,
+      filter: state => state.filter
+    },
+    mutations: {
+      collection (state, collection) { state.collection = collection },
+      loading (state, loading) { state.loading = loading },
+      currentPage (state, page) { state.currentPage = page },
+      pageSize (state, newSize) { state.pageSize = newSize },
+      count (state, count) { state.count = count },
+      filter (state, filter) { state.filter = filter }
+    },
+    actions: {
+      setFilter ({ commit, dispatch }, filter) {
+        commit('filter', filter)
+        commit('currentPage', 0)
+        dispatch('fetch')
+      },
+      goToPage ({ commit, dispatch }, page) {
+        commit('currentPage', page)
+        dispatch('fetch')
+      },
+      fetch ({ state, commit, rootGetters }) {
+        commit('loading', true)
+        let apiRoot
+        if (state.filter) {
+          apiRoot = API_ROOT + '/search'
+        } else {
+          apiRoot = API_ROOT
+        }
+        return axios.get(apiRoot, {
+          headers: {
+            authorization: rootGetters['auth/authorizationHeader']
+          },
+          params: {
+            search: state.filter,
+            page: state.currentPage,
+            per_page: state.pageSize
+          }
+        })
+        .then(({ data }) => {
+          commit('collection', data.items)
+          commit('pageSize', data.per_page)
+          commit('currentPage', data.page)
+          commit('count', data.count)
+          commit('loading', false)
+        })
+        .catch((err) => {
+          commit('loading', false)
+          commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+          throw err // TODO - better error handling
+        })
+      }
+    }
+  })
+}
+
+
+// FORM MODULE Action Vuex Module
+// TODO - ABSTRACT INTO A SEPARATE FILE
+// TODO - how much should this be simplified?
+export const FORM_MODULE = ({ API_ROOT, NEW_MODEL }) => {
+  return Object.assign({}, {
+    namespaced: true,
+    state: {
+      defaultModel: Object.assign({}, NEW_MODEL),
+      model: Object.assign({}, NEW_MODEL),
+      errors: [],
+      loading: false
+    },
+    mutations: {
+      defaultModel (state, defaultModel) {
+        state.defaultModel = Object.assign({}, defaultModel)
+      },
+      reset (state) {
+        state.model = Object.assign({}, state.defaultModel)
+        state.errors = []
+      },
+      modelAttr (state, { attribute, value }) {
+        state.model[attribute.identifier] = value
+      },
+      model (state, model) {
+        state.model = Object.assign({}, model)
+      },
+      loading (state, loading) {
+        state.loading = loading
+      }
+    },
+    getters: {
+      model (state) {
+        return state.model
+      },
+      errors (state) {
+        return state.errors
+      },
+      loading (state) {
+        return state.loading
+      },
+      modelAttr: state => ({ attribute }) => {
+        return state.model[attribute.identifier]
+      }
+    },
+    actions: {
+      persist ({ state, dispatch }) {
+        if (!state.model._id) {
+          dispatch('createModel')
+        } else {
+          dispatch('updateModel')
+        }
+      },
+      createModel ({ state, commit, rootGetters }) {
+        commit('loading', true)
+        axios.post(API_ROOT, state.model, {
+          headers: {
+            authorization: rootGetters['auth/authorizationHeader']
+          }
+        })
+        .then(() => {
+          commit('loading', false)
+          commit('toast/add', { message: 'Created <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
+          // router.push(`/<%= schema.identifier_plural %>`)
+        })
+        .catch((err) => {
+          commit('loading', false)
+          commit('toast/add', { message: 'Create error', context: 'danger', dismissible: true }, { root: true })
+          throw err
+        })
+      },
+      updateModel ({ state, commit, rootGetters }) {
+        commit('loading', true)
+        axios.put(`${API_ROOT}/${state.model._id}`, state.model, {
+          headers: {
+            authorization: rootGetters['auth/authorizationHeader']
+          }
+        })
+        .then(() => {
+          commit('loading', false)
+          commit('toast/add', { message: 'Updated successfully', context: 'success', dismissible: true }, { root: true })
+          // router.back()
+        })
+        .catch((err) => {
+          commit('loading', false)
+          commit('toast/add', { message: 'Update error', context: 'danger', dismissible: true }, { root: true })
+          throw err
+        })
+      },
+    }
+  })
+}
+
+// MODEL MODULE Action Vuex Module
+// TODO - ABSTRACT INTO A SEPARATE FILE
+export const MODEL_MODULE = ({ API_ROOT }) => {
+  return Object.assign({}, {
+    namespaced: true,
+    state: {
+      model: {},
+      loading: false
+    },
+    mutations: {
+      model (state, model) {
+        state.model = Object.assign({}, model)
+      },
+      loading (state, loading) {
+        state.loading = loading
+      }
+    },
+    getters: {
+      model (state) { return state.model },
+      loading (state) { return state.loading }
+    },
+    actions: {
+      fetch ({ commit, rootGetters }, modelId) {
+        commit('loading', true)
+        axios.get(`${API_ROOT}/${modelId}`, {
+          headers: {
+            authorization: rootGetters['auth/authorizationHeader']
+          }
+        })
+        .then(({ data }) => {
+          commit('model', data)
+          commit('loading', false)
+          // commit('toast/add', { message: 'Created <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
+          // router.push(`/<%= schema.identifier_plural %>`)
+        })
+        .catch((err) => {
+          commit('loading', false)
+          commit('toast/add', { message: 'Fetch Error', context: 'danger', dismissible: true }, { root: true })
+          throw err
+        })
+      }
+    }
+  })
 }

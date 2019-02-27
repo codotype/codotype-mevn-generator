@@ -1,14 +1,11 @@
 import _ from 'lodash'
-import { NEW_<%= schema.identifier.toUpperCase() %> } from './constants'
-import {
-  COLLECTION_MUTATIONS,
-  PAGINATION_MUTATIONS,
-  MODEL_MUTATIONS,
-  FILTER_MUTATIONS
-} from '@/store/lib/mixins'
+// import { NEW_<%= schema.identifier.toUpperCase() %> } from './constants'
 
 // <%= schema.label %> Module Mutations
 export default {
+  fetching (state, fetching) {
+    state.fetching = fetching
+  },
   <%_ schema.relations.forEach((rel) => { _%>
   <%_ if (rel.type === 'REF_BELONGS_TO') { _%>
   <%= rel.alias.identifier_plural %> (state, <%= rel.alias.identifier_plural %>) {
@@ -29,13 +26,6 @@ export default {
     state.<%= action.function_name %>Payload = <%= action.function_name %>Payload
   },
   <%_ }) _%>
-  ...COLLECTION_MUTATIONS,
-  ...PAGINATION_MUTATIONS,
-  ...MODEL_MUTATIONS,
-  ...FILTER_MUTATIONS,
-  resetNewModel (state) {
-    state.newModel = _.cloneDeep(NEW_<%= schema.identifier.toUpperCase() %>)
-  },
   editModel (state, model) {
     state.editModel = _.cloneDeep(model)
   }

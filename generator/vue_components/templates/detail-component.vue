@@ -7,6 +7,7 @@
 
       <%_ }) _%>
       <!-- Bootstrap Modal Component -->
+      <!-- TODO - abstract into a separate component -->
       <b-modal :id="'destroyModal'"
         :title="'Destroy <%= schema.label %>?'"
         @ok="onConfirmDestroy(model)"

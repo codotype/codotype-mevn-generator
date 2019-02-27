@@ -1,6 +1,7 @@
 <template>
   <LoadingFull v-if="fetching" />
-  <div class="container" v-else>
+  <b-container v-else>
+
     <b-row>
       <b-col sm="12">
         <h2><%= schema.label %> - Edit</h2>
@@ -9,7 +10,7 @@
 
     <hr>
 
-    <<%= schema.class_name %>Form :model="model" />
+    <<%= schema.class_name %>Form />
 
     <b-row>
       <b-col sm="12" class="text-right">
@@ -27,7 +28,7 @@
       </b-col>
     </b-row>
 
-  </div>
+  </b-container>
 </template>
 
 <!-- // // // //  -->
@@ -38,8 +39,13 @@ import LoadingFull from '@/components/LoadingFull'
 import <%= schema.class_name %>Form from '@/modules/<%= schema.identifier %>/components/<%= schema.class_name %>Form'
 
 export default {
-  props: ['id'],
-  name: '<%= schema.identifier %>_edit',
+  name: '<%= schema.class_name %>EditPage',
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
   metaInfo: {
     title: '<%= schema.label %> - Edit'
   },
@@ -47,25 +53,18 @@ export default {
     LoadingFull,
     <%= schema.class_name %>Form
   },
-  data () {
-    return {
-      fetching: false
-    }
-  },
   created () {
-    this.fetching = true
-    this.fetchEditModel(this.id)
-    .then(() => { this.fetching = false })
+    // this.fetchEditModel(this.id)
   },
   computed: mapGetters({
     currentUser: 'auth/current_user',
     isAdmin: 'auth/isAdmin',
-    model: '<%= schema.identifier %>/editModel'
-    // fetching: '<%= schema.identifier %>/fetching'
+    model: '<%= schema.identifier %>/editModel',
+    fetching: '<%= schema.identifier %>/model/loading'
   }),
   methods: mapActions({
     fetchEditModel: '<%= schema.identifier %>/fetchEditModel',
-    formSubmit: '<%= schema.identifier %>/updateModel'
+    formSubmit: '<%= schema.identifier %>/form/updateModel'
   })
 }
 </script>

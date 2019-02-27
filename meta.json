@@ -1,7 +1,7 @@
 {
   "id": "codotype-mevn-generator",
   "label": "MEVN Generator",
-  "icon": "https://raw.githubusercontent.com/codotype/codotype-vuejs-vuex-bootstrap-generator/master/vue.png",
+  "icon": "https://res.cloudinary.com/codotype/image/upload/v1551192656/tech-logos/vue.png",
   "description": "Generates MEVN full-stack apps",
   "tech_tags": ["Vue", "Vuex", "Node.js", "Express.js", "MongoDB", "Axios", "Bootstrap", "JavaScript", "ES6"],
   "type_tags": ["Full-Stack"],

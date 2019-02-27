@@ -1,9 +1,3 @@
-import {
-  COLLECTION_GETTERS,
-  PAGINATION_GETTERS,
-  MODEL_GETTERS,
-  FILTER_GETTERS
-} from '@/store/lib/mixins'
 
 // <%= schema.label %> Module Getters
 export default {
@@ -27,10 +21,6 @@ export default {
     return state.<%= action.function_name %>Payload
   },
   <%_ }) _%>
-  ...COLLECTION_GETTERS,
-  ...PAGINATION_GETTERS,
-  ...MODEL_GETTERS,
-  ...FILTER_GETTERS,
   newModel: state => {
     return state.newModel
   },
