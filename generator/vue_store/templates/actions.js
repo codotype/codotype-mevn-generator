@@ -10,24 +10,6 @@ export default {
   // ...FILTER_ACTIONS('<%= schema.identifier %>'), // TODO - retire this
   // GET /api/<%= schema.identifier_plural %>
   // GET /api/<%= schema.identifier_plural %>/:id
-  fetchModel ({ commit, rootGetters }, <%= schema.identifier %>Id) {
-    commit('fetching', true)
-    axios.get(`${API_ROOT}/${<%= schema.identifier %>Id}`, {
-      headers: {
-        authorization: rootGetters['auth/authorizationHeader']
-      }
-    })
-    .then(({ data }) => {
-      commit('model', data)
-      commit('fetching', false)
-    })
-    .catch((err) => {
-      commit('fetching', false)
-      commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
-      throw err // TODO - better error handling
-    })
-  },
-
   <%_ if (api_actions) { _%>
   <%_ api_actions.filter(a => a.scope === 'ROOT').forEach((action) => { _%>
   // <%= action.verb %> /api/<%= action.function_name %>/<%= action.uri %>
@@ -170,43 +152,4 @@ export default {
   },
   <%_ } _%>
   <%_ }) _%>
-  // GET /api/<%= schema.identifier_plural %>/:id
-  fetchEditModel ({ commit, rootGetters }, <%= schema.identifier %>Id) {
-    commit('fetching', true)
-    axios.get(`${API_ROOT}/${<%= schema.identifier %>Id}`, {
-      headers: {
-        authorization: rootGetters['auth/authorizationHeader']
-      }
-    })
-    .then(({ data }) => {
-      commit('editModel', data)
-      commit('fetching', false)
-    })
-    .catch((err) => {
-      commit('fetching', false)
-      commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
-      throw err // TODO - better error handling
-    })
-  },
-  // DELETE /api/<%= schema.identifier_plural %>/:id
-  deleteModel ({ state, commit, rootGetters }, <%= schema.identifier %>Model) {
-    commit('fetching', true)
-    axios.delete(`${API_ROOT}/${<%= schema.identifier %>Model._id}`, {
-      headers: {
-        authorization: rootGetters['auth/authorizationHeader']
-      }
-    })
-    .then(() => {
-      commit('fetching', false)
-      commit('toast/add', { message: 'Deleted <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
-      let collection = state.collection.filter(m => m._id !== <%= schema.identifier %>Model._id)
-      commit('collection', collection)
-      router.push(`/<%= schema.identifier_plural %>`)
-    })
-    .catch((err) => {
-      commit('fetching', false)
-      commit('toast/add', { message: 'Destroy error', context: 'danger', dismissible: true }, { root: true })
-      throw err // TODO - better error handling
-    })
-  }
 }

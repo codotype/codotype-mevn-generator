@@ -67,11 +67,15 @@
 <!-- // // // //  -->
 
 <script>
-import { mapGetters } from 'vuex'
 import InputTag from 'vue-input-tag'
 
 export default {
   name: '<%= schema.class_name %>Form',
+  props: {
+    model: {
+      required: true
+    }
+  },
   components: {
     InputTag
   },
@@ -83,9 +87,6 @@ export default {
     <%_ }) _%>
   },
   computed: {
-    ...mapGetters({
-      model: '<%= schema.identifier %>/form/model'
-    }),
     <%_ let filteredRelations = schema.relations.filter(r => r.type !== 'REF_BELONGS_TO') _%>
     <%_ filteredRelations.forEach((rel, index) => { _%>
     <%= rel.alias.identifier_plural %> () {

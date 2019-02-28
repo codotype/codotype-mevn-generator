@@ -9,7 +9,7 @@
 
     <hr>
 
-    <<%= schema.class_name %>Form />
+    <<%= schema.class_name %>Form :model="model" />
 
     <b-row>
       <b-col sm="12" class="text-right">
@@ -48,6 +48,7 @@ export default {
     this.resetForm()
   },
   computed: mapGetters({
+    model: '<%= schema.identifier %>/form/model',
     currentUser: 'auth/current_user',
     isAdmin: 'auth/isAdmin'
   }),
