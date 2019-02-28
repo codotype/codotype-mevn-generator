@@ -63,14 +63,14 @@ export default {
     this.fetch(this.id)
   },
   methods: mapActions({
-    fetch: '<%= schema.identifier %>/model/fetch',
+    fetch: '<%= schema.identifier %>/show/fetch',
     onConfirmDestroy: '<%= schema.identifier %>/deleteModel'
   }),
   computed: mapGetters({
     currentUser: 'auth/current_user',
     isAdmin: 'auth/isAdmin',
-    model: '<%= schema.identifier %>/model/model',
-    fetching: '<%= schema.identifier %>/model/loading'
+    model: '<%= schema.identifier %>/show/model',
+    fetching: '<%= schema.identifier %>/show/loading'
   })
 }
 </script>

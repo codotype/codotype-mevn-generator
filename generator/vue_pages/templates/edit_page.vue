@@ -10,7 +10,7 @@
 
     <hr>
 
-    <<%= schema.class_name %>Form />
+    <<%= schema.class_name %>Form :model="model" />
 
     <b-row>
       <b-col sm="12" class="text-right">
@@ -54,17 +54,17 @@ export default {
     <%= schema.class_name %>Form
   },
   created () {
-    // this.fetchEditModel(this.id)
+    this.fetch(this.id)
   },
   computed: mapGetters({
     currentUser: 'auth/current_user',
     isAdmin: 'auth/isAdmin',
-    model: '<%= schema.identifier %>/editModel',
-    fetching: '<%= schema.identifier %>/model/loading'
+    model: '<%= schema.identifier %>/edit/model',
+    fetching: '<%= schema.identifier %>/edit/loading'
   }),
   methods: mapActions({
-    fetchEditModel: '<%= schema.identifier %>/fetchEditModel',
-    formSubmit: '<%= schema.identifier %>/form/updateModel'
+    fetch: '<%= schema.identifier %>/edit/fetch',
+    formSubmit: '<%= schema.identifier %>/edit/update'
   })
 }
 </script>

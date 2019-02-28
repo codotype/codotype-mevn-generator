@@ -98,18 +98,18 @@ export default {
     return this.fetch()
   },
   computed: mapGetters({
-    fetching: '<%= schema.identifier %>/paginatedCollection/loading',
-    collection: '<%= schema.identifier %>/paginatedCollection/collection',
-    count: '<%= schema.identifier %>/paginatedCollection/count',
-    perPage: '<%= schema.identifier %>/paginatedCollection/pageSize',
-    currentPage: '<%= schema.identifier %>/paginatedCollection/currentPage',
+    fetching: '<%= schema.identifier %>/list/loading',
+    collection: '<%= schema.identifier %>/list/collection',
+    count: '<%= schema.identifier %>/list/count',
+    perPage: '<%= schema.identifier %>/list/pageSize',
+    currentPage: '<%= schema.identifier %>/list/currentPage',
     currentUser: 'auth/current_user',
     isAuthenticated: 'auth/is_authenticated',
     isAdmin: 'auth/isAdmin'
   }),
   methods: mapActions({
-    fetch: '<%= schema.identifier %>/paginatedCollection/fetch',
-    goToPage: '<%= schema.identifier %>/paginatedCollection/goToPage'
+    fetch: '<%= schema.identifier %>/list/fetch',
+    goToPage: '<%= schema.identifier %>/list/goToPage'
   })
 }
 </script>

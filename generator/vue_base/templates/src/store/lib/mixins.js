@@ -83,7 +83,7 @@ export const COLLECTION_MODULE = ({ API_ROOT }) => {
 
 // // // //
 
-export const PAGINATED_COLLECTION_MODULE = ({ API_ROOT }) => {
+export const LIST_MODULE = ({ API_ROOT }) => {
   return Object.assign({}, {
     namespaced: true,
     state: {
@@ -248,9 +248,53 @@ export const FORM_MODULE = ({ API_ROOT, NEW_MODEL }) => {
   })
 }
 
+// TODO - ABSTRACT INTO A SEPARATE FILE
+// TODO - DOCUMENT
+export const NEW_MODULE = ({ API_ROOT }) => {
+  return Object.assign({}, {
+    namespaced: true,
+    state: {
+      model: {},
+      loading: false
+    },
+    mutations: {
+      model (state, model) {
+        state.model = Object.assign({}, model)
+      },
+      loading (state, loading) {
+        state.loading = loading
+      }
+    },
+    getters: {
+      model (state) { return state.model },
+      loading (state) { return state.loading }
+    },
+    actions: {
+      create ({ state, commit, rootGetters }) {
+        commit('loading', true)
+        axios.post(API_ROOT, state.model, {
+          headers: {
+            authorization: rootGetters['auth/authorizationHeader']
+          }
+        })
+        .then(() => {
+          commit('loading', false)
+          commit('toast/add', { message: 'Created <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
+          // router.push(`/<%= schema.identifier_plural %>`)
+        })
+        .catch((err) => {
+          commit('loading', false)
+          commit('toast/add', { message: 'Create error', context: 'danger', dismissible: true }, { root: true })
+          throw err
+        })
+      },
+    }
+  })
+}
+
 // MODEL MODULE Action Vuex Module
 // TODO - ABSTRACT INTO A SEPARATE FILE
-export const MODEL_MODULE = ({ API_ROOT }) => {
+export const SHOW_MODULE = ({ API_ROOT }) => {
   return Object.assign({}, {
     namespaced: true,
     state: {
@@ -287,6 +331,114 @@ export const MODEL_MODULE = ({ API_ROOT }) => {
           commit('loading', false)
           commit('toast/add', { message: 'Fetch Error', context: 'danger', dismissible: true }, { root: true })
           throw err
+        })
+      }
+    }
+  })
+}
+
+// EDIT MODULE Action Vuex Module
+export const EDIT_MODULE = ({ API_ROOT }) => {
+  return Object.assign({}, {
+    namespaced: true,
+    state: {
+      model: {},
+      loading: false
+    },
+    mutations: {
+      model (state, model) {
+        state.model = Object.assign({}, model)
+      },
+      loading (state, loading) {
+        state.loading = loading
+      }
+    },
+    getters: {
+      model (state) {
+        return state.model
+      },
+      loading (state) {
+        return state.loading
+      }
+    },
+    actions: {
+      fetch ({ commit, rootGetters }, modelId) {
+        commit('loading', true)
+        axios.get(`${API_ROOT}/${modelId}`, {
+          headers: {
+            authorization: rootGetters['auth/authorizationHeader']
+          }
+        })
+        .then(({ data }) => {
+          commit('model', data)
+          commit('loading', false)
+          // commit('toast/add', { message: 'Created <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
+          // router.push(`/<%= schema.identifier_plural %>`)
+        })
+        .catch((err) => {
+          commit('loading', false)
+          commit('toast/add', { message: 'Fetch Error', context: 'danger', dismissible: true }, { root: true })
+          throw err
+        })
+      },
+      update ({ state, commit, rootGetters }) {
+        commit('loading', true)
+        axios.put(`${API_ROOT}/${state.model._id}`, state.model, {
+          headers: {
+            authorization: rootGetters['auth/authorizationHeader']
+          }
+        })
+        .then(() => {
+          commit('loading', false)
+          commit('toast/add', { message: 'Updated successfully', context: 'success', dismissible: true }, { root: true })
+          // router.back()
+        })
+        .catch((err) => {
+          commit('loading', false)
+          commit('toast/add', { message: 'Update error', context: 'danger', dismissible: true }, { root: true })
+          throw err
+        })
+      },
+    }
+  })
+}
+
+// EDIT MODULE Action Vuex Module
+export const DESTROY_MODULE = ({ API_ROOT }) => {
+  return Object.assign({}, {
+    namespaced: true,
+    state: {
+      loading: false
+    },
+    mutations: {
+      loading (state, loading) {
+        state.loading = loading
+      }
+    },
+    getters: {
+      loading (state) {
+        return state.loading
+      }
+    },
+    actions: {
+      destroy ({ commit, rootGetters }, modelId) {
+        commit('fetching', true)
+        axios.delete(`${API_ROOT}/${modelId}`, {
+          headers: {
+            authorization: rootGetters['auth/authorizationHeader']
+          }
+        })
+        .then(() => {
+          commit('fetching', false)
+          commit('toast/add', { message: 'Deleted <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
+          // let collection = state.collection.filter(m => m._id !== modelId)
+          // commit('collection', collection)
+          // router.push(`/<%= schema.identifier_plural %>`)
+        })
+        .catch((err) => {
+          commit('fetching', false)
+          commit('toast/add', { message: 'Destroy error', context: 'danger', dismissible: true }, { root: true })
+          throw err // TODO - better error handling
         })
       }
     }
