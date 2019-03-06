@@ -2,8 +2,8 @@
   "name": "<%= blueprint.identifier %>_server",
   "version": "1.0.0",
   "scripts": {
-    "start": "node ./src/bin/www.js",
-    "dev": "nodemon -L ./src/bin/www.js",
+    "start": "cross-env NODE_ENV=production node src/bin/www.js",
+    "dev": "nodemon --watch src src/bin/www.js",
     "test": "mocha --exit",
     "apidoc": "apidoc -i ./src/api -o doc/"
   },

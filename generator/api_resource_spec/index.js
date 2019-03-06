@@ -9,7 +9,7 @@ module.exports = {
     blueprint.schemas.forEach(async (schema) => {
 
       // Defines the schema-specific destination
-      let resourceDest = 'server/src/api/' + schema.identifier
+      let resourceDest = 'backend/src/api/' + schema.identifier
 
       // Ensures the presence of the directory
       await this.ensureDir(resourceDest)
@@ -20,7 +20,7 @@ module.exports = {
       // Stores the spec path
       specPaths.push(specFilePath)
 
-      // server/api/resource/resource.spec.js
+      // backend/api/resource/resource.spec.js
       if (schema.identifier === 'user') {
         await this.copyTemplate(
           this.templatePath('user.spec.js'),
@@ -38,7 +38,7 @@ module.exports = {
     })
 
     // Ensures the presence of the web_api/test directory
-    await this.ensureDir('/server/test')
+    await this.ensureDir('/backend/test')
 
     // Writes the entrypoint in web_api/test/index.js
     specPaths = specPaths.map((p) => {
@@ -48,7 +48,7 @@ module.exports = {
     // Writes the template
     await this.copyTemplate(
       this.templatePath('test.js'),
-      this.destinationPath('/server/test/index.js'),
+      this.destinationPath('/backend/test/index.js'),
       { specPaths }
     );
 

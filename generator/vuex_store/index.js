@@ -3,7 +3,7 @@ module.exports = {
   name: 'VuexStore',
   async write({ blueprint }) {
 
-    // client/src/store/index.js
+    // frontend/src/store/index.js
     // TODO - move into separate generator class definition
     let storeModules = []
     blueprint.schemas.forEach((s) => {
@@ -13,7 +13,7 @@ module.exports = {
     // TODO - this should be moved into base generator, methinks
     await this.copyTemplate(
       this.templatePath('index.js'),
-      this.destinationPath('client/src/store/index.js'),
+      this.destinationPath('frontend/src/store/index.js'),
       { storeModules: storeModules.join(",\n    ") }
     );
 
