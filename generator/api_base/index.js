@@ -5,7 +5,7 @@ module.exports = {
     // Copies server base code
     await this.copyDir(
       this.templatePath(),
-      this.destinationPath('server')
+      this.destinationPath('backend')
     )
 
     const userSchema = blueprint.schemas.find(s => s.identifier === 'user')
@@ -14,11 +14,11 @@ module.exports = {
     const inlineDeconstrction = requiredUserAttributes.map(r => r.identifier).join(', ')
     await this.renderComponent({
       src: 'src/api/auth/auth.controller.js',
-      dest: 'server/src/api/auth/auth.controller.js',
+      dest: 'backend/src/api/auth/auth.controller.js',
       options: { inlineDeconstrction }
     })
 
-    await this.renderComponent({ src: 'LICENSE', dest: 'server/LICENSE' })
-    await this.renderComponent({ src: 'package.json', dest: 'server/package.json' })
+    await this.renderComponent({ src: 'LICENSE', dest: 'backend/LICENSE' })
+    await this.renderComponent({ src: 'package.json', dest: 'backend/package.json' })
   }
 }

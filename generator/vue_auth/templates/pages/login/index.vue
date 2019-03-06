@@ -58,7 +58,6 @@
 </template>
 
 <script>
-import FormInput from '@/components/FormInput'
 import Loading from '@/components/Loading'
 import { mapGetters, mapActions } from 'vuex'
 
@@ -68,7 +67,6 @@ export default {
     title: 'Login'
   },
   components: {
-    FormInput,
     Loading
   },
   computed: mapGetters({

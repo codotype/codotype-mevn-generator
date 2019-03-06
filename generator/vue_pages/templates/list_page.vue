@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <b-container>
 
     <%_ api_actions.filter(a => ['POST', 'PUT'].includes(a.verb) && a.payload && a.scope === 'ROOT').forEach((action) => { _%>
     <<%=action.class_name + 'Modal' %> v-if="isAuthenticated" />
@@ -66,7 +66,8 @@
         <ListView v-else :collection="collection" />
       </b-col>
     </b-row>
-  </div>
+
+  </b-container>
 </template>
 
 <!-- // // // //  -->

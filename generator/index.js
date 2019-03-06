@@ -3,7 +3,7 @@ module.exports = {
   name: 'MEVN_APP',
   async write () {
 
-    // Client
+    // Frontend
     await this.composeWith('./vue_base')
     await this.composeWith('./vue_auth')
     await this.composeWith('./vuex_store')
@@ -13,7 +13,7 @@ module.exports = {
     await this.composeWith('./vue_pages')
     await this.composeWith('./vue_components')
 
-    // Server
+    // Backend
     await this.composeWith('./api_base')
     await this.composeWith('./api_environment')
     await this.composeWith('./api_resource')

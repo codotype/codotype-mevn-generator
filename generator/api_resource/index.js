@@ -15,7 +15,7 @@ module.exports = {
     }
 
     // Defines the schema-specific destination
-    let resourceDest = 'server/src/api/' + schema.identifier
+    let resourceDest = 'backend/src/api/' + schema.identifier
 
     // Ensures the presence of the directory
     await this.ensureDir(resourceDest)

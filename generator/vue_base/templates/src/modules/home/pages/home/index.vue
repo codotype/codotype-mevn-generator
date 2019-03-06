@@ -1,38 +1,38 @@
 <template>
-
   <b-row class="h-100 align-items-center">
     <b-col lg="12">
 
       <b-row>
         <b-col lg="12" class="text-center">
-          <p class="welcome-text mb-0">Built with</p>
+          <p class="lead text-muted">This app was built with</p>
+        </b-col>
+      </b-row>
+
+      <b-row>
+        <b-col lg="12" class="text-center">
+          <img style="max-width: 4rem !important;" src="<%= meta.icon %>"/>
+          <h3 class='display-4'><%= meta.label %></h3>
+          <p class="lead text-muted">powered by <a target="_blank" href="https://codotype.org">Codotype</a></p>
         </b-col>
       </b-row>
 
       <b-row class="my-2">
         <b-col lg="12" class="text-center">
-          <!-- <img src="@/assets/logo.png"> -->
-          <h1 class='display-1' style="font-family: monospace;">codotype</h1>
+          <p class="lead"><%= meta.description %></p>
         </b-col>
       </b-row>
 
       <b-row class="my-4">
         <b-col lg="12" class="text-center">
-          <a class="btn btn-lg btn-outline-dark mx-2" href="https://codotype.io" target="_blank">
-            <i class="fa fa-desktop"></i>
-            codotype.io
-          </a>
-
-          <a class="btn btn-lg btn-outline-dark mx-2" href="https://codotype.github.io" target="_blank">
+          <a class="btn btn-lg btn-outline-dark mx-2" href="https://codotype.org" target="_blank">
             <i class="fa fa-book"></i>
-            Documentation
+            codotype.org
           </a>
         </b-col>
       </b-row>
 
     </b-col>
   </b-row>
-
 </template>
 
 <script>
@@ -43,14 +43,3 @@
     }
   }
 </script>
-
-<style lang="sass">
-  img.welcome-logo
-    height: 4rem
-    width: 4rem
-
-  .welcome-text
-    letter-spacing: .6rem
-    font-weight: 300
-    font-size: 2rem
-</style>

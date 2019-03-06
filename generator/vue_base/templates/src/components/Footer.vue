@@ -37,14 +37,15 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style scoped>
 
-  .footer-bottom
+  .footer-bottom {
     position: fixed
     width: 100%
     bottom: 0
+  }
 
-  nav.navbar
+  nav.navbar {
     padding-top: .25rem
     padding-bottom: .25rem
     border-top: 1px solid #d3d3d3
@@ -66,7 +67,5 @@ export default {
         margin-right: 0.4rem
         height: 2rem
         display: flex
-
-    // .nav-item
-      // font-size: 1.1rem
+  }
 </style>

@@ -6,11 +6,8 @@
   </transition-group>
 </template>
 
-<!-- // // // //  -->
-
 <script>
 import ToastChild from './ToastChild'
-
 export default {
   computed: {
     collection () {
@@ -23,21 +20,18 @@ export default {
 }
 </script>
 
-<!-- // // // //  -->
+<style>
+  .container.notification-container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
 
-<!-- QUESTION - SCOPED? -->
-<style lang='sass'>
-  // @import '../../../sass/app.sass'
+  .list-enter-active, .list-leave-active {
+    transition: opacity .5s;
+  }
 
-  .container.notification-container
-    position: absolute
-    bottom: 0
-    right: 0
-
-  .list-enter-active, .list-leave-active
-    transition: opacity .5s
-
-  .list-enter, .list-leave-to
-     opacity: 0
-
+  .list-enter, .list-leave-to {
+    opacity: 0;
+  }
 </style>

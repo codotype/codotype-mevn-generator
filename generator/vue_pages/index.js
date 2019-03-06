@@ -8,7 +8,7 @@ module.exports = {
     const schemaOptions = {} // TODO - fix this!
 
     // Defines destination directory for files in this loop
-    const moduleRoot =  'client/src/modules/' + schema.identifier
+    const moduleRoot =  'frontend/src/modules/' + schema.identifier
 
     // Isolates API Actions metadata
     let api_actions = configuration.api_actions[schema.identifier]
@@ -31,28 +31,28 @@ module.exports = {
       })
     }
 
-    // client/src/modules/resource/pages/list.vue
+    // frontend/src/modules/resource/pages/list.vue
     await this.copyTemplate(
       this.templatePath('list_page.vue'),
       this.destinationPath(moduleRoot + '/pages/list.vue'),
       { schema, schemaOptions, api_actions, action: false }
     )
 
-    // client/src/modules/resource/pages/new/index.vue
+    // frontend/src/modules/resource/pages/new/index.vue
     await this.copyTemplate(
       this.templatePath('new_page.vue'),
       this.destinationPath(moduleRoot + '/pages/new.vue'),
       { schema }
     )
 
-    // client/src/modules/resource/pages/edit.vue
+    // frontend/src/modules/resource/pages/edit.vue
     await this.copyTemplate(
       this.templatePath('edit_page.vue'),
       this.destinationPath(moduleRoot + '/pages/edit.vue'),
       { schema }
     )
 
-    // client/src/modules/resource/pages/show.vue
+    // frontend/src/modules/resource/pages/show.vue
     await this.copyTemplate(
       this.templatePath('show_page.vue'),
       this.destinationPath(moduleRoot + '/pages/show.vue'),

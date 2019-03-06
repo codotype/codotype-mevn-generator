@@ -1,6 +1,6 @@
 module.exports = {
   name: 'NodeExpressRouter',
   async write () {
-    await this.renderComponent({ src: 'routes.js', dest: 'server/src/routes.js' })
+    await this.renderComponent({ src: 'routes.js', dest: 'backend/src/routes.js' })
   }
 }
