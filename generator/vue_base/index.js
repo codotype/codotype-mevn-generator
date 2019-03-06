@@ -11,6 +11,6 @@ module.exports = {
     await this.renderComponent({ src: 'LICENSE', dest: 'frontend/LICENSE' })
     await this.renderComponent({ src: 'public/index.html', dest: 'frontend/public/index.html' })
     await this.renderComponent({ src: 'src/App.vue', dest: 'frontend/src/App.vue' })
-
+    await this.renderComponent({ src: 'src/modules/home/pages/home/index.vue', dest: 'frontend/src/modules/home/pages/home/index.vue' })
   }
 }
