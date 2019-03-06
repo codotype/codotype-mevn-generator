@@ -14,7 +14,7 @@
         <%_ } _%>
       <%_ if (attr.datatype === 'BOOLEAN') { _%>
         <input type="checkbox" v-model="model.<%=attr.identifier%>">
-      <%_ } else if (attr.datatype === 'TEXT') { _%>
+      <%_ } else if (attr.datatype === 'STRING') { _%>
         <input type="text" class="form-control" placeholder="<%= attr.label %>" v-model="model.<%=attr.identifier%>">
       <%_ } else if (attr.datatype === 'STRING_ARRAY') { _%>
         <InputTag placeholder="<%= attr.label %>" :tags.sync="model.<%=attr.identifier%>"/>

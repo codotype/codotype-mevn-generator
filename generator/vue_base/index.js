@@ -4,13 +4,13 @@ module.exports = {
 
     await this.copyDir(
       this.templatePath(),
-      this.destinationPath('client')
+      this.destinationPath('frontend')
     )
 
-    await this.renderComponent({ src: 'package.json', dest: 'client/package.json' })
-    await this.renderComponent({ src: 'LICENSE', dest: 'client/LICENSE' })
-    await this.renderComponent({ src: 'public/index.html', dest: 'client/public/index.html' })
-    await this.renderComponent({ src: 'src/App.vue', dest: 'client/src/App.vue' })
+    await this.renderComponent({ src: 'package.json', dest: 'frontend/package.json' })
+    await this.renderComponent({ src: 'LICENSE', dest: 'frontend/LICENSE' })
+    await this.renderComponent({ src: 'public/index.html', dest: 'frontend/public/index.html' })
+    await this.renderComponent({ src: 'src/App.vue', dest: 'frontend/src/App.vue' })
 
   }
 }

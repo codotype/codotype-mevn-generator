@@ -28,7 +28,7 @@ module.exports = {
       buildModule(m)
     })
 
-    // client/src/store/index.js
+    // frontend/src/store/index.js
     // TODO - abstract into separate generator class definition
     blueprint.schemas.forEach((s) => {
       if (s.identifier !== 'user') {
@@ -39,7 +39,7 @@ module.exports = {
 
     await this.copyTemplate(
       this.templatePath('router.js'),
-      this.destinationPath('client/src/routers/index.js'),
+      this.destinationPath('frontend/src/routers/index.js'),
       {
         routeImports: routeImports.join("\n"),
         routeModules: routeModules.join(",\n    ")
@@ -56,10 +56,10 @@ module.exports = {
       api_actions = configuration.api_actions[schema.identifier]
       if (!api_actions[0]) { api_actions = [] }
 
-      // client/src/routers/resource.js
+      // frontend/src/routers/resource.js
       await this.copyTemplate(
         this.templatePath('module-router.js'),
-        this.destinationPath('client/src/modules/' + schema.identifier + '/router.js'),
+        this.destinationPath('frontend/src/modules/' + schema.identifier + '/router.js'),
         { schema, api_actions }
       )
 

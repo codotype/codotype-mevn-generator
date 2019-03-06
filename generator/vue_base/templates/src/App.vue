@@ -2,14 +2,13 @@
   <div id="app">
     <AppNavbar/>
     <router-view/>
-    <AppFooter/>
     <ToastList/>
   </div>
 </template>
 
 <script>
 import AppNavbar from '@/components/Navbar'
-import AppFooter from '@/components/Footer'
+// import AppFooter from '@/components/Footer'
 import ToastList from '@/modules/toast/components/ToastList'
 
 export default {
@@ -18,7 +17,7 @@ export default {
   // Top-Level Application Components
   components: {
     AppNavbar,
-    AppFooter,
+    // AppFooter,
     ToastList
   },
 
@@ -38,23 +37,25 @@ export default {
 }
 </script>
 
-<style lang="sass">
-  @import "./sass/vendor.sass"
+<style>
+  html {
+    height: 100%;
+  }
 
-  html
-    height: 100%
+  body {
+    height: 100%;
+  }
 
-  body
-    height: 100%
+  .container-fluid, .container {
+    height: 100%;
+    padding-top: 4.5rem;
+  }
 
-  .container-fluid, .container
-    // height: 100%
-    padding-top: 4.5rem
+  #app {
+    height: 100%;
+  }
 
-  #app
-    height: 100%
-
-  .app
-    height: 100%
-
+  .app {
+    height: 100%;
+  }
 </style>

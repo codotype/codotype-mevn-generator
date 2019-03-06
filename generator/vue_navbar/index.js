@@ -13,7 +13,7 @@ module.exports = {
 
     await this.copyTemplate(
       this.templatePath('Navbar.vue'),
-      this.destinationPath('client/src/components/Navbar.vue'),
+      this.destinationPath('frontend/src/components/Navbar.vue'),
       { headerLinks: headerLinks }
     );
   }

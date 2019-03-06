@@ -1,55 +1,25 @@
 {
-  "name": "<%= blueprint.identifier %>_client",
-  "version": "0.1.0",
+  "name": "<%= blueprint.identifier %>_frontend",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --open",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "dev": "vue-cli-service serve --open",
+    "build": "vue-cli-service build --modern"
   },
   "dependencies": {
-    "@babel/core": "^7.2.0",
     "axios": "^0.18.0",
-    "bootstrap": "^4.0.0-beta.2",
-    "bootstrap-vue": "^1.0.2",
+    "bootstrap": "^4.3.1",
+    "bootstrap-vue": "^2.0.0-rc.13",
     "lodash": "^4.17.4",
-    "vue": "^2.5.2",
+    "vue": "2.5.17",
     "vue-input-tag": "^1.0.6",
     "vue-meta": "^1.2.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-beta.6",
-    "@vue/cli-plugin-eslint": "^3.0.0-beta.6",
-    "@vue/cli-service": "^3.0.0-beta.6",
-    "axios": "^0.18.0",
-    "netlify-lambda": "^1.1.0",
-    "node-sass": "^4.11.0",
-    "sass-loader": "^7.1.0",
-    "vue-cli-plugin-netlify-lambda": "^0.0.1",
-    "vue-template-compiler": "^2.5.13"
-  },
-  "babel": {
-    "presets": [
-      "@vue/app"
-    ]
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ]
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+    "@vue/cli-plugin-babel": "3.1.x",
+    "@vue/cli-service": "3.1.x",
+    "vue-template-compiler": "2.5.17"
+  }
 }

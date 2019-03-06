@@ -1,11 +1,10 @@
 <template>
-
   <b-row class="h-100 align-items-center">
     <b-col lg="12">
 
       <b-row>
         <b-col lg="12" class="text-center">
-          <p class="welcome-text mb-0">Built with</p>
+          <p class="mb-0">Built with</p>
         </b-col>
       </b-row>
 
@@ -32,7 +31,6 @@
 
     </b-col>
   </b-row>
-
 </template>
 
 <script>
@@ -43,14 +41,3 @@
     }
   }
 </script>
-
-<style lang="sass">
-  img.welcome-logo
-    height: 4rem
-    width: 4rem
-
-  .welcome-text
-    letter-spacing: .6rem
-    font-weight: 300
-    font-size: 2rem
-</style>

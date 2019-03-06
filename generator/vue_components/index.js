@@ -16,26 +16,26 @@ module.exports = {
       let api_actions = configuration.api_actions[schema.identifier]
 
       // Destination for module / components directory
-      const moduleComponentsDest = 'client/src/modules/' + schema.identifier + '/components/'
+      const moduleComponentsDest = 'frontend/src/modules/' + schema.identifier + '/components/'
 
       // Ensures module components directory
       this.ensureDir(moduleComponentsDest)
 
-      // client/src/modules/resource/components/ResourceForm.vue
+      // frontend/src/modules/resource/components/ResourceForm.vue
       await this.copyTemplate(
         this.templatePath('form_component.vue'),
         this.destinationPath(moduleComponentsDest + schema.class_name + 'Form.vue'),
         { schema }
       )
 
-      // client/src/modules/resource/components/ResourceListWidget.vue
+      // frontend/src/modules/resource/components/ResourceListWidget.vue
       await this.copyTemplate(
         this.templatePath('list-component.vue'),
         this.destinationPath(moduleComponentsDest + schema.class_name + 'List.vue'),
         { schema, schemaOptions, api_actions }
       );
-      // client/src/modules/resource/components/ResourceDetail.vue
-      // client/src/components/resource_ListWidget.vue
+      // frontend/src/modules/resource/components/ResourceDetail.vue
+      // frontend/src/components/resource_ListWidget.vue
       await this.copyTemplate(
         this.templatePath('detail-component.vue'),
         this.destinationPath(moduleComponentsDest + schema.class_name + 'Detail.vue'),
