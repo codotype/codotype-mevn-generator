@@ -73,21 +73,18 @@ const userAttributes = {
     type: Boolean,
     default: false
   },
-  <%_ schema.attributes.forEach((attr) => { _%>
-  <%_ if (attr.datatype.identifier === 'email') { return } _%>
-  <%_ if (attr.datatype === 'BOOLEAN') { _%>
-  <%_ return _%>
-  <%_ } else if (attr.datatype === 'BOOLEAN') { _%>
+  <%_ schema.attributes.filter(a => a.identifier !== 'email').forEach((attr) => { _%>
+  <%_ if (attr.datatype === DATATYPE_BOOLEAN) { _%>
   <%= attr.identifier %>: {
     type: Boolean
   },
-  <%_ } else if (attr.datatype === 'NUMBER') { _%>
+  <%_ } else if (attr.datatype === DATATYPE_NUMBER) { _%>
   <%= attr.identifier %>: {
     type: Number,
     required: <%= attr.required %>,
     unique: <%= attr.unique %>
   },
-  <%_ } else if (attr.datatype === 'STRING_ARRAY') { _%>
+  <%_ } else if (attr.datatype === DATATYPE_STRING_ARRAY) { _%>
   <%= attr.identifier %>: [{
     type: String,
     trim: true,

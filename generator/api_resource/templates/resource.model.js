@@ -4,29 +4,29 @@ const mongoose = require('mongoose')
 
 const <%= schema.class_name %>Model = new mongoose.Schema({
   <%_ schema.attributes.forEach((attr) => { _%>
-  <%_ if (attr.datatype === 'BOOLEAN') { _%>
+  <%_ if (attr.datatype === DATATYPE_BOOLEAN) { _%>
   <%= attr.identifier %>: {
     type: Boolean
   },
-  <%_ } else if (attr.datatype === 'NUMBER') { _%>
+  <%_ } else if (attr.datatype === DATATYPE_NUMBER) { _%>
   <%= attr.identifier %>: {
     type: Number,
     required: <%= attr.required %>,
     unique: <%= attr.unique %>
   },
-  <%_ } else if (attr.datatype === 'DATETIME') { _%>
+  <%_ } else if (attr.datatype === DATATYPE_DATETIME) { _%>
   <%= attr.identifier %>: {
     type: Date,
     required: <%= attr.required %>,
     unique: <%= attr.unique %>
   },
-  <%_ } else if (attr.datatype === 'JSON') { _%>
+  <%_ } else if (attr.datatype === DATATYPE_JSON) { _%>
   <%= attr.identifier %>: {
     type: mongoose.Schema.Types.Mixed,
     required: <%= attr.required %>,
     default: {}
   },
-  <%_ } else if (attr.datatype === 'STRING_ARRAY'){ _%>
+  <%_ } else if (attr.datatype === DATATYPE_STRING_ARRAY){ _%>
   <%= attr.identifier %>: {
     type: [String],
     required: <%= attr.required %>,
