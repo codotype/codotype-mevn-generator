@@ -188,33 +188,32 @@ module.exports.create = async (req, res, next) => {
 
     // Create a new User instance if one does not exist
     const create = (user) => {
-        // User exists - throw error and return
-        if (user) {
-            throw new Error('User exists')
-            return
-        }
+      // User exists - throw error and return
+      if (user) {
+        throw new Error('User exists')
+        return
+      }
 
-        // Defines a default password
-        const password = Math.random.toString()
+      // Defines a default password
+      const password = Math.random.toString()
 
-        // Creates a new User
-        const newUser = new User({ <%= inlineDeconstrction %>, password })
-        // newUser.role = ''
-        return newUser.save()
+      // Creates a new User
+      const newUser = new User({ <%= inlineDeconstrction %>, password })
+      return newUser.save()
     }
 
     // Respond to the client
     const respond = (user) => {
-        res.json({
-            message: 'Registered Successfully.'
-        })
+      res.json({
+        message: 'Registered Successfully.'
+      })
     }
 
     // Handle error (email exists)
     const onError = (error) => {
-        res.status(409).json({
-            message: error.message
-        })
+      res.status(409).json({
+        message: error.message
+      })
     }
 
     // check email duplication

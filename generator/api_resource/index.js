@@ -21,15 +21,11 @@ module.exports = {
     await this.ensureDir(resourceDest)
 
     // Deconstructs schema attributes
+    // TODO - might be helpful to abstract into util, or parent generator
     const inlineDeconstrction = schema.attributes.map(r => r.identifier).join(', ')
 
     // src/api/resource/resource.model.js
     if (schema.identifier === 'user') {
-
-      // const requiredUserAttributes = schema.attributes.filter(r => r.required)
-      // const requiredUserAttributes = schema.attributes
-      // const inlineDeconstrction = requiredUserAttributes.map(r => r.identifier).join(', ')
-
       await this.copyTemplate(
         this.templatePath('user.resource.model.js'),
         this.destinationPath(resourceDest + '/' + schema.identifier + '.model.js'),
