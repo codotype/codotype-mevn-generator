@@ -43,9 +43,9 @@
 
                 <p v-if="error" class="error">Bad EMAIL information</p>
 
-                <b-button :disabled="verified" variant="outline-primary" block @click="resetPassword()">
+                <b-btn :disabled="verified" variant="outline-primary" block @click="resetPassword()">
                   Reset Password
-                </b-button>
+                </b-btn>
 
               </b-form>
             </b-card-body>
