@@ -14,15 +14,15 @@
     <b-row>
       <b-col sm="12" class="text-right">
 
-        <b-button class="mr-2" variant="light" to="/<%= schema.identifier_plural %>">
+        <b-btn class="mr-2" variant="light" @click="$router.go(-1)">
           <i class="fa fa-fw fa-times"></i>
           Cancel
-        </b-button>
+        </b-btn>
 
-        <b-button variant="primary" @click="formSubmit()">
+        <b-btn variant="primary" @click="formSubmit()">
           <i class="fa fa-fw fa-plus"></i>
           Create <%= schema.label %>
-        </b-button>
+        </b-btn>
 
       </b-col>
     </b-row>
