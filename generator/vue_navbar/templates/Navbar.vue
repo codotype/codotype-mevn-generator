@@ -1,7 +1,7 @@
 <template>
-  <b-navbar toggleable="md" fixed="top" type="light" class="bg-body">
+  <b-navbar toggleable="md" fixed="top" type="light" variant="light">
     <b-navbar-brand to="/">
-      <%= blueprint.label %>
+      <strong><%= blueprint.label %></strong>
     </b-navbar-brand>
 
     <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>

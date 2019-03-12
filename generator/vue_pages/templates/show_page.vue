@@ -4,21 +4,25 @@
 
     <<%= schema.class_name %>Detail :model="model" :fetching="fetching" />
 
-    <b-tabs lazy>
-      <%_ schema.relations.forEach((rel) => { _%>
-      <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
-      <b-tab title="<%= rel.alias.label %>" >
-        <Related<%= rel.alias.class_name %>Detail :id="id" />
-      </b-tab>
+    <%_ if (schema.relations.length) { _%>
+    <b-card no-body>
+      <b-tabs lazy card>
+        <%_ schema.relations.forEach((rel) => { _%>
+        <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+        <b-tab title="<%= rel.alias.label %>" >
+          <Related<%= rel.alias.class_name %>Detail :id="id" />
+        </b-tab>
 
-      <%_ } else if (['REF_BELONGS_TO', 'HAS_MANY'].includes(rel.type)) { _%>
-      <b-tab title="<%= rel.alias.label_plural %>" >
-        <Related<%= rel.alias.class_name_plural %>List :id="id" />
-      </b-tab>
+        <%_ } else if (['REF_BELONGS_TO', 'HAS_MANY'].includes(rel.type)) { _%>
+        <b-tab title="<%= rel.alias.label_plural %>" >
+          <Related<%= rel.alias.class_name_plural %>List :id="id" />
+        </b-tab>
 
-      <%_ } _%>
-      <%_ }) _%>
-    </b-tabs>
+        <%_ } _%>
+        <%_ }) _%>
+      </b-tabs>
+    </b-card>
+    <%_ } _%>
 
   </b-container>
 </template>
