@@ -71,7 +71,7 @@ const userAttributes = {
   },
   admin: {
     type: Boolean,
-    default: false
+    default: true
   },
   <%_ schema.attributes.filter(a => a.identifier !== 'email').forEach((attr) => { _%>
   <%_ if (attr.datatype === DATATYPE_BOOLEAN) { _%>
