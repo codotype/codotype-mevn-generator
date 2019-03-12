@@ -1,14 +1,14 @@
-// import actions from './actions'
-// import state from './state'
-// import getters from './getters'
-// import mutations from './mutations'
+import actions from './actions'
+import state from './state'
+import getters from './getters'
+import mutations from './mutations'
 <%_ let filteredActions = api_actions.filter(a => ['POST', 'PUT'].includes(a.verb) && a.payload) _%>
 <%_ if (filteredActions.length) { _%>
 import { API_ACTION_MODULE } from '@/store/lib/mixins'
 <%_ } _%>
 
-// TODO - split these up into smaller modules in @/store/lib/modules
-import { API_ROOT } from './constants'
+// CRUD Modules
+import { API_ROOT, NEW_<%= schema.identifier.toUpperCase() %> } from './constants'
 import { COLLECTION_MODULE } from '@/store/lib/collectionModule'
 import { LIST_MODULE } from '@/store/lib/listModule'
 import { NEW_MODULE } from '@/store/lib/newModule'
@@ -17,23 +17,43 @@ import { EDIT_MODULE } from '@/store/lib/editModule'
 import { DESTROY_MODULE } from '@/store/lib/destroyModule'
 import { FORM_MODULE } from '@/store/lib/formModule' // TODO - retire this?
 
+// Relation modules
+<%_ schema.relations.forEach((rel, index) => { _%>
+<%_ if (rel.type === 'REF_BELONGS_TO') { _%>
+// import { related<%= rel.alias.class_name_plural %>Module } from './related<%= rel.alias.class_name_plural %>Module'
+<%_ } else if (rel.type === 'HAS_MANY') { _%>
+// import { related<%= rel.alias.class_name_plural %>Module } from './related<%= rel.alias.class_name_plural %>Module'
+<%_ } else if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+// import { related<%= rel.alias.class_name %>Module } from './related<%= rel.alias.class_name %>Module'
+<%_ } _%>
+<%_ }) _%>
+
 // <%= schema.label %> Vuex module definition
 export default {
   namespaced: true,
-  // state,
-  // mutations,
-  // actions,
-  // getters,
+  state,
+  mutations,
+  actions,
+  getters,
   modules: {
     list: LIST_MODULE({ API_ROOT }),
-    new: NEW_MODULE({ API_ROOT }),
+    new: NEW_MODULE({ API_ROOT, NEW_MODEL: NEW_<%= schema.identifier.toUpperCase() %> }),
     show: SHOW_MODULE({ API_ROOT }),
     edit: EDIT_MODULE({ API_ROOT }),
     destroy: DESTROY_MODULE({ API_ROOT }),
-    form: FORM_MODULE({ API_ROOT, NEW_MODEL: {} }), // TODO - integrate NEW_MODEL
+    form: FORM_MODULE({ API_ROOT, NEW_MODEL: NEW_<%= schema.identifier.toUpperCase() %> }),
     collection: COLLECTION_MODULE({ API_ROOT }),
     <%_ filteredActions.forEach((action, index) => { _%>
       <%= action.uri %>: API_ACTION_MODULE()<%= helpers.trailingComma(filteredActions, index) %>
+    <%_ }) _%>
+    <%_ schema.relations.forEach((rel, index) => { _%>
+    <%_ if (rel.type === 'REF_BELONGS_TO') { _%>
+    // related<%= rel.alias.class_name_plural %>: related<%= rel.alias.class_name_plural %>Module,
+    <%_ } else if (rel.type === 'HAS_MANY') { _%>
+    // related<%= rel.alias.class_name_plural %>: related<%= rel.alias.class_name_plural %>Module,
+    <%_ } else if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+    // related<%= rel.alias.class_name %>: related<%= rel.alias.class_name %>Module,
+    <%_ } _%>
     <%_ }) _%>
   }
 }

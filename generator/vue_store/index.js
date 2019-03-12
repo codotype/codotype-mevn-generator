@@ -2,15 +2,6 @@
 module.exports = {
   name: 'ModuleStore',
   async forEachSchema({ blueprint, configuration, schema }) {
-    // TODO - replace with a single call to forEachSchema
-    // TODO - replace with a single call to forEachSchema
-    // TODO - replace with a single call to forEachSchema
-
-    // Iterates over each schema in the this.options.build.blueprint.schemas array
-    // return blueprint.schemas.forEach(async (schema) => {
-    // } blueprint.schemas.forEach(async (schema) => {
-    // for (var i = blueprint.schemas.length - 1; i >= 0; i--) {
-      // const schema = blueprint.schemas[i]
 
     // Isolates API Actions metadata
     let api_actions = configuration.api_actions[schema.identifier]
@@ -20,14 +11,6 @@ module.exports = {
 
     // Defines the newModel data
     let newModel = this.buildDefault({ schemas: blueprint.schemas, schema: schema })
-
-    schema.relations.forEach((rel) => {
-       if (rel.type === 'HAS_MANY') {
-         newModel[rel.alias.identifier + '_ids'] = []
-       } else if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) {
-         newModel[rel.alias.identifier + '_id'] = ''
-       }
-    })
 
     // Ensures presence of requisite directory module + store directory
     await this.ensureDir('frontend/src/modules/' + schema.identifier)
