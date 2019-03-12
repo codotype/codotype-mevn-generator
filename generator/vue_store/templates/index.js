@@ -9,13 +9,13 @@ import { API_ACTION_MODULE } from '@/store/lib/mixins'
 
 // TODO - split these up into smaller modules in @/store/lib/modules
 import { API_ROOT } from './constants'
-import { COLLECTION_MODULE } from '@/store/lib/mixins'
-import { LIST_MODULE } from '@/store/lib/mixins'
-import { NEW_MODULE } from '@/store/lib/mixins'
-import { SHOW_MODULE } from '@/store/lib/mixins'
-import { EDIT_MODULE } from '@/store/lib/mixins'
-import { DESTROY_MODULE } from '@/store/lib/mixins'
-import { FORM_MODULE } from '@/store/lib/mixins' // TODO - retire this?
+import { COLLECTION_MODULE } from '@/store/lib/collectionModule'
+import { LIST_MODULE } from '@/store/lib/listModule'
+import { NEW_MODULE } from '@/store/lib/newModule'
+import { SHOW_MODULE } from '@/store/lib/showModule'
+import { EDIT_MODULE } from '@/store/lib/editModule'
+import { DESTROY_MODULE } from '@/store/lib/destroyModule'
+import { FORM_MODULE } from '@/store/lib/formModule' // TODO - retire this?
 
 // <%= schema.label %> Vuex module definition
 export default {

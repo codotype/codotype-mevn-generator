@@ -19,7 +19,7 @@ module.exports = {
     // // // //
 
     // Defines the newModel data
-    let newModel = this.buildDefault({ attributes: schema.attributes })
+    let newModel = this.buildDefault({ schemas: blueprint.schemas, schema: schema })
 
     schema.relations.forEach((rel) => {
        if (rel.type === 'HAS_MANY') {
