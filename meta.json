@@ -1,8 +1,8 @@
 {
   "id": "codotype-mevn-generator",
-  "label": "MEVN Generator",
+  "label": "MEVN Fullstack Generator",
   "icon": "https://res.cloudinary.com/codotype/image/upload/v1551192656/tech-logos/vue.png",
-  "description": "Instantly generate full-stack web apps with Express.js, MongoDB, and Vue.js",
+  "description": "Instantly generate full-stack web apps with MongoDB, Express, and Vue.js, and Node.js",
   "tech_tags": ["Vue", "Vuex", "Node.js", "Express.js", "MongoDB", "Axios", "Bootstrap", "JavaScript", "ES6"],
   "type_tags": ["Full-Stack"],
   "self_configuring": false,
@@ -95,7 +95,7 @@
       "class_name_plural": "ApiActions",
       "description": "Add individual RESTful API actions to your models",
       "type": "OPTION_GROUP_TYPE_MODEL_ADDON",
-      "previewTemplate": "<span><pre class='bg-dark text-light mb-0' v-if='model.scope === \"COLLECTION\"'>{{model.verb}} /{{ schema.identifier_plural }}/{{model.uri}} - {{ model.function_name }}()</pre><pre class='bg-dark text-light mb-0' v-else>{{model.verb}} /{{ schema.identifier_plural }}/:{{ schema.identifier }}_id/{{model.uri}} - {{ model.function_name }}()</pre></span>",
+      "previewTemplate": "<small><pre class='bg-dark text-light mb-0' v-if='model.scope === \"COLLECTION\"'>{{model.verb}} /{{ schema.identifier_plural }}/{{model.uri}} - {{ model.function_name }}()</pre><pre class='bg-dark text-light mb-0' v-else>{{model.verb}} /{{ schema.identifier_plural }}/:{{ schema.identifier }}_id/{{model.uri}} - {{ model.function_name }}()</pre></small>",
       "more_info_url": null,
       "attributes": [
         {
