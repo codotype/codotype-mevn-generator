@@ -1,32 +1,24 @@
 <template>
   <div id="app">
-    <AppNavbar/>
-    <router-view/>
+    <Navbar/>
+    <router-view />
     <ToastList/>
   </div>
 </template>
 
 <script>
-import AppNavbar from '@/components/Navbar'
-// import AppFooter from '@/components/Footer'
+import Navbar from '@/components/Navbar'
 import ToastList from '@/modules/toast/components/ToastList'
 
 export default {
   name: 'app',
-
-  // Top-Level Application Components
   components: {
-    AppNavbar,
-    // AppFooter,
+    Navbar,
     ToastList
   },
-
   created () {
-    // Authenticates current user on application start
-    this.$store.dispatch('auth/fetchUserProfile')
+    this.$store.dispatch('auth/fetchUserProfile') // Authenticates current user on application start
   },
-
-  // Top-Level page Meta
   metaInfo: {
     title: 'Loading...', // set a title
     titleTemplate: '<%= blueprint.label %> - %s', // title is now "<%= blueprint.label %> - Loading..."

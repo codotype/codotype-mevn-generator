@@ -3,22 +3,27 @@
   <%_ schema.attributes.forEach((attr) => { _%>
     <b-col lg="6">
 
-      <b-form-group
+      <div
+        class='form-group'
         id="fieldset-<%= attr.identifier %>"
-        description="<%= attr.help %>"
-        label="<%= attr.label %>"
-        label-for="<%= attr.identifier %>-input"
       >
+        <label class='mb-0' for="<%= attr.identifier %>-input"><%= attr.label %></label>
         <%_ if (attr.required) { _%>
         <span class='text-danger'>*</span>
         <%_ } _%>
 
+        <%_ if (attr.help) { _%>
+        <small class='text-muted d-block'>
+          <%= attr.help %>
+        </small>
+        <%_ } _%>
+
         <!-- <b-form-input id="<%= attr.identifier %>-input" :state="state" v-model="name" trim /> -->
 
-      <%_ if (attr.datatype === 'BOOLEAN') { _%>
+      <%_ if (attr.datatype === DATATYPE_BOOLEAN) { _%>
         <b-form-checkbox v-model="model.<%=attr.identifier%>"
         />
-      <%_ } else if (attr.datatype === 'STRING') { _%>
+      <%_ } else if (attr.datatype === DATATYPE_STRING) { _%>
         <b-form-input
           trim
           id="<%= attr.identifier %>-input"
@@ -26,12 +31,12 @@
           placeholder="<%= attr.label %>"
           v-model="model.<%=attr.identifier%>"
         />
-      <%_ } else if (attr.datatype === 'STRING_ARRAY') { _%>
+      <%_ } else if (attr.datatype === DATATYPE_STRING_ARRAY) { _%>
         <InputTag
           placeholder="<%= attr.label %>"
           :tags.sync="model.<%=attr.identifier%>"
         />
-      <%_ } else if (attr.datatype === 'NUMBER') { _%>
+      <%_ } else if (attr.datatype === DATATYPE_NUMBER) { _%>
         <b-form-input
           type="number"
           id="<%= attr.identifier %>-input"
@@ -39,7 +44,7 @@
           placeholder="<%= attr.label %>"
           v-model="model.<%=attr.identifier%>"
         />
-      <%_ } else if (attr.datatype === 'DATE') { _%>
+      <%_ } else if (attr.datatype === DATATYPE_DATE) { _%>
         <b-form-input
           type="date"
           id="<%= attr.identifier %>-input"
@@ -47,7 +52,7 @@
           placeholder="<%= attr.label %>"
           v-model="model.<%=attr.identifier%>"
         />
-      <%_ } else if (attr.datatype === 'TIME') { _%>
+      <%_ } else if (attr.datatype === DATATYPE_TIME) { _%>
         <b-form-input
           type="time"
           id="<%= attr.identifier %>-input"
@@ -55,7 +60,7 @@
           placeholder="<%= attr.label %>"
           v-model="model.<%=attr.identifier%>"
         />
-      <%_ } else if (attr.datatype === 'DATETIME') { _%>
+      <%_ } else if (attr.datatype === DATATYPE_DATETIME) { _%>
         <b-form-input
           type="datetime-local"
           id="<%= attr.identifier %>-input"
@@ -63,7 +68,7 @@
           placeholder="<%= attr.label %>"
           v-model="model.<%=attr.identifier%>"
         />
-      <%_ } else if (attr.datatype === 'JSON') { _%>
+      <%_ } else if (attr.datatype === DATATYPE_JSON) { _%>
         <!-- <textarea
           class="form-control"
           placeholder="<%= attr.label %>"
@@ -71,7 +76,7 @@
           <p class="text-warning">TODO TODO TODO</p>
           <small>IMPLEMENT JSON EDITING HERE</small>
       <%_ } _%>
-      </b-form-group>
+      </div>
     </b-col>
 
     <%_ }) _%>

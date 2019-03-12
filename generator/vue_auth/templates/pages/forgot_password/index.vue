@@ -10,7 +10,7 @@
             <p class="lead">An email has been sent to {{email}}</p>
 
             <small>
-              Didn't get the email? Check your spam filter or <b-button size="sm" variant="link" @click="resetForm()" class="px-0">send another link</b-button>
+              Didn't get the email? Check your spam filter or <b-btn size="sm" variant="link" @click="resetForm()" class="px-0">send another link</b-btn>
             </small>
           </b-card>
         </b-col>
@@ -40,9 +40,9 @@
 
                 <p v-if="error" class="error">Bad EMAIL information</p>
 
-                <b-button variant="outline-primary" block @click="reset()">
+                <b-btn variant="outline-primary" block @click="reset()">
                   Send Reset Email
-                </b-button>
+                </b-btn>
 
               </b-form>
             </b-card-body>

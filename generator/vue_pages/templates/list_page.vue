@@ -2,7 +2,7 @@
   <b-container>
 
     <%_ api_actions.filter(a => ['POST', 'PUT'].includes(a.verb) && a.payload && a.scope === 'ROOT').forEach((action) => { _%>
-    <<%=action.class_name + 'Modal' %> v-if="isAuthenticated" />
+    <<%=action.class_name + 'Modal' %> v-if="isAdmin" />
 
     <%_ }) _%>
     <b-row>
@@ -20,35 +20,35 @@
       <b-col sm="12" md="4" class="text-right">
         <%_ api_actions.filter(a => a.scope === 'ROOT').forEach((action) => { _%>
         <%_ if (['POST', 'PUT'].includes(action.verb) && action.payload) { _%>
-        <b-button
+        <b-btn
           v-if="isAdmin"
           variant="success"
           @click="$store.commit('<%= schema.identifier %>/<%= action.uri %>/showingModal', true)"
         >
           <i class="fa fa-fw fa-plus"></i>
           <%= action.label %>
-        </b-button>
+        </b-btn>
 
         <%_ } else if (['GET'].includes(action.verb)) { _%>
-        <b-button
+        <b-btn
           v-if="isAdmin"
           variant="primary"
           to="/<%= schema.identifier_plural %>/<%= action.uri %>"
         >
           <i class="fa fa-fw fa-plus"></i>
           <%= action.label %>
-        </b-button>
+        </b-btn>
 
         <%_ } _%>
         <%_ }) _%>
-        <b-button
+        <b-btn
           v-if="isAdmin"
           variant="primary"
           to="/<%= schema.identifier_plural %>/new"
         >
           <i class="fa fa-fw fa-plus"></i>
           New <%= schema.label %>
-        </b-button>
+        </b-btn>
 
       </b-col>
     </b-row>

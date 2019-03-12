@@ -1,8 +1,8 @@
 {
   "id": "codotype-mevn-generator",
-  "label": "MEVN Generator",
+  "label": "MEVN Fullstack Generator",
   "icon": "https://res.cloudinary.com/codotype/image/upload/v1551192656/tech-logos/vue.png",
-  "description": "Instantly generate full-stack web apps with Express.js, MongoDB, and Vue.js",
+  "description": "Instantly generate full-stack web apps with MongoDB, Express, and Vue.js, and Node.js",
   "tech_tags": ["Vue", "Vuex", "Node.js", "Express.js", "MongoDB", "Axios", "Bootstrap", "JavaScript", "ES6"],
   "type_tags": ["Full-Stack"],
   "self_configuring": false,
@@ -30,10 +30,10 @@
           "identifier": "generate_docker_compose",
           "type": "BOOLEAN",
           "icon": {
-            "type": "ICON_TYPE_FONT_AWESOME",
-            "value": "fab fa-docker"
+            "type": "ICON_TYPE_URL",
+            "value": "http://res.cloudinary.com/codotype/image/upload/f_png/v1552166225/tech-logos/docker.svg"
           },
-          "help": "Generate a <code>Dockerfile</code> in both the <code>client</code> and <code>server</code> directories - deploy the whole stack with a single <code>docker-compose up</code> command.",
+          "help": "Generate a <code>Dockerfile</code> in both the <code>frontend</code> and <code>backend</code> directories - deploy the whole stack with a single <code>docker-compose up</code> command.",
           "default_value": true,
           "more_info_url": "https://docs.docker.com/compose/"
         },
@@ -41,10 +41,10 @@
           "label": "Deploy with Netlify",
           "identifier": "netlify",
           "type": "BOOLEAN",
-          "help": "Whether or not generate configuration files required for deployment on Netlify.",
+          "help": "Generate a <code>netlify.toml</code> file in the <code>frontend</code> directory for easy deployment to Netlify.",
           "icon": {
             "type": "ICON_TYPE_URL",
-            "value": "https://www.netlify.com/img/press/logos/logomark.png"
+            "value": "https://res.cloudinary.com/codotype/image/upload/f_png/v1552186408/tech-logos/netlify.svg"
           },
           "default_value": false,
           "more_info_url": "https://netlify.com/"
@@ -53,25 +53,13 @@
           "label": "Deploy With Heroku",
           "identifier": "heroku",
           "type": "BOOLEAN",
-          "help": "Whether or not generate configuration files required for deployment on Netlify.",
+          "help": "Generate some additional configuration for easy deployment on Heroku.",
           "icon": {
             "type": "ICON_TYPE_URL",
             "value": "https://cdn.iconscout.com/icon/free/png-256/heroku-225989.png"
           },
           "default_value": true,
           "more_info_url": "http://heroku.com"
-        },
-        {
-          "label": "Deploy With AWS",
-          "identifier": "AWS",
-          "type": "BOOLEAN",
-          "help": "Whether or not generate configuration files required for deployment with the AWS CLI.",
-          "icon": {
-            "type": "ICON_TYPE_URL",
-            "value": "http://aux.iconspalace.com/uploads/aws-icon-256.png"
-          },
-          "default_value": true,
-          "more_info_url": "http://aws.com"
         }
       ]
     },
@@ -88,28 +76,12 @@
           "identifier": "generate_api_doc",
           "type": "BOOLEAN",
           "icon": {
-            "type": "ICON_TYPE_URL",
-            "value": "https://avatars3.githubusercontent.com/u/4103663?s=280&v=4"
+            "type": "ICON_TYPE_FONT_AWESOME",
+            "value": "far fa-comment"
           },
           "help": "Whether or not generate APIDoc-compatible comment headers in your Express.js controllers",
           "default_value": true,
           "more_info_url": "http://apidocjs.com"
-        },
-        {
-          "label": "Code Comments",
-          "identifier": "code_comments",
-          "type": "STRING_SELECT",
-          "icon": {
-            "type": "ICON_TYPE_FONT_AWESOME",
-            "value": "far fa-comment"
-          },
-          "options": [
-            { "id": 1, "value": "CODE_COMMENTS_LIGHT", "label": "Light" },
-            { "id": 2, "value": "CODE_COMMENTS_VERBOSE", "label": "Verbose" }
-          ],
-          "help": "Dictate the level of code commenting in the generated code - great if you're just getting started!",
-          "default_value": "CODE_COMMENTS_LIGHT",
-          "more_info_url": ""
         }
       ]
     },
@@ -123,7 +95,7 @@
       "class_name_plural": "ApiActions",
       "description": "Add individual RESTful API actions to your models",
       "type": "OPTION_GROUP_TYPE_MODEL_ADDON",
-      "previewTemplate": "<span><pre class='bg-dark text-light mb-0' v-if='model.scope === \"COLLECTION\"'>{{model.verb}} /{{ schema.identifier_plural }}/{{model.uri}} - {{ model.function_name }}</pre><pre class='bg-dark text-light mb-0' v-else>{{model.verb}} /{{ schema.identifier_plural }}/:{{ schema.identifier }}_id/{{model.uri}} - {{ model.function_name }}</pre></span>",
+      "previewTemplate": "<small><pre class='bg-dark text-light mb-0' v-if='model.scope === \"COLLECTION\"'>{{model.verb}} /{{ schema.identifier_plural }}/{{model.uri}} - {{ model.function_name }}()</pre><pre class='bg-dark text-light mb-0' v-else>{{model.verb}} /{{ schema.identifier_plural }}/:{{ schema.identifier }}_id/{{model.uri}} - {{ model.function_name }}()</pre></small>",
       "more_info_url": null,
       "attributes": [
         {

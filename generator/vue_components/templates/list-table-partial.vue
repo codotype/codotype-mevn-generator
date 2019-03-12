@@ -110,7 +110,7 @@
             <%_ api_actions.filter(a => a.scope === 'MODEL').forEach((action) => { _%>
             <%_ if (action.payload) { _%>
             <b-dropdown-item
-              v-if="isAuthenticated"
+              v-if="isAdmin"
               @click="$store.commit('<%= schema.identifier %>/<%= action.uri %>/state', { showingModal: true, scope: m._id, payload: {}})"
             >
               <%= action.label %>
@@ -118,7 +118,7 @@
 
             <%_ } else { _%>
             <b-dropdown-item
-              v-if="isAuthenticated"
+              v-if="isAdmin"
               @click="<%= action.function_name %>(m._id)"
             >
               <%= action.label %>
@@ -132,7 +132,8 @@
           <!-- Bootstrap Modal Component -->
           <b-modal
             lazy
-            v-if="isAdmin" :id="'modal_' + m._id"
+            v-if="isAdmin"
+            :id="'modal_' + m._id"
             :title="'Destroy <%= schema.label %>?'"
             @ok="onConfirmDestroy(m)"
             ok-variant='danger'

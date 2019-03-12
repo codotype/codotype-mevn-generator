@@ -32,10 +32,10 @@
 
                   <b-row>
                     <b-col cols="6">
-                      <b-button variant="primary" class="px-4" @click="login()">Login</b-button>
+                      <b-btn variant="primary" class="px-4" @click="login()">Login</b-btn>
                     </b-col>
                     <b-col cols="6" class="text-right">
-                      <b-button variant="link" to="/auth/forgot_password" class="px-0">Forgot password?</b-button>
+                      <b-btn variant="link" to="/auth/forgot_password" class="px-0">Forgot password?</b-btn>
                     </b-col>
                   </b-row>
                 </b-form>
@@ -46,7 +46,7 @@
                 <div>
                   <h2>Sign up</h2>
                   <p>Register a new account to get started using all the great features of this web application</p>
-                  <b-button to="/auth/register" variant="primary" class="active mt-3">Register Now!</b-button>
+                  <b-btn to="/auth/register" variant="primary" class="active mt-3">Register Now!</b-btn>
                 </div>
               </b-card-body>
             </b-card>

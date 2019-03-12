@@ -58,9 +58,9 @@
 
                 <p v-if="register_user.error" class="error">Bad registration information</p>
 
-                <b-button variant="primary" block @click="register()">
+                <b-btn variant="primary" block @click="register()">
                   Create Account
-                </b-button>
+                </b-btn>
               </b-form>
             </b-card-body>
           </b-card>

@@ -37,12 +37,12 @@ export default {
 
     // Defines Vue.component.computed
     this.$options.computed = mapGetters({
-      filter: `${module}/paginatedCollection/filter`
+      filter: `${module}/list/filter`
     })
     // Defines Vue.component.methods
     this.$options.methods = {
       ...mapActions({
-        fetchFiltered: `${module}/paginatedCollection/setFilter`
+        fetchFiltered: `${module}/list/setFilter`
       }),
       setFilter (filter) {
         // Defines a function that sets the pagination's page to 0
