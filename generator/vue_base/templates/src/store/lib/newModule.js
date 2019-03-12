@@ -1,8 +1,10 @@
 import axios from 'axios'
+import router from '@/routers'
 
 // TODO - ABSTRACT INTO A SEPARATE FILE
 // TODO - DOCUMENT
-export const NEW_MODULE = ({ API_ROOT }) => {
+// TODO - IMPLEMENT NEW_MODEL
+export const NEW_MODULE = ({ API_ROOT, NEW_MODEL }) => {
   return Object.assign({}, {
     namespaced: true,
     state: {
@@ -32,7 +34,7 @@ export const NEW_MODULE = ({ API_ROOT }) => {
         .then(() => {
           commit('loading', false)
           commit('toast/add', { message: 'Created <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
-          // router.push(`/<%= schema.identifier_plural %>`)
+          router.push(`/<%= schema.identifier_plural %>`)
         })
         .catch((err) => {
           commit('loading', false)
