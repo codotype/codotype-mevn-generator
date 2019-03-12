@@ -23,6 +23,7 @@
       <b-row>
         <div class="col-sm-8">
           <h2>
+            <i class="<%= schemaOptions.fontawesome_icon %>"></i>
             {{ header || '<%= schema.label %> Detail' }}
           </h2>
         </div>

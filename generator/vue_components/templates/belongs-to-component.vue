@@ -52,7 +52,21 @@
 <!-- // // // //  -->
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
-  props: ['model']
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
+  mounted () {
+    this.$store.dispatch('<%= schema.identifier %>/fetch<%= rel.alias.class_name %>', this.id)
+  },
+  methods: mapActions({}),
+  computed: mapGetters({
+    model: '<%= schema.identifier %>/<%= rel.alias.identifier %>'
+  })
 }
 </script>

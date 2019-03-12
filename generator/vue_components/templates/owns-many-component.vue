@@ -90,30 +90,59 @@
 
             <!-- Edit <%= related_schema.label %>-->
             <td class='text-right'>
-              <b-btn size="sm" variant="outline-primary" :to=" '/<%= related_schema.identifier_plural %>/' + m._id">
-                <i class="fa fa-fw fa-eye"></i>
-              </b-btn>
 
-              <b-btn size="sm" variant="outline-warning" :to=" '/<%= related_schema.identifier_plural %>/' + m._id + '/edit' ">
-                <i class="far fa-fw fa-edit"></i>
-              </b-btn>
+              <b-dropdown right size="sm">
+                <b-dropdown-item :to=" '/<%= related_schema.identifier_plural %>/' + m._id">
+                  <i class="fa fa-fw fa-eye"></i>
+                  View
+                </b-dropdown-item>
 
-              <b-btn size="sm" variant="outline-danger" v-b-modal="'modal_' + m._id">
-                <i class="far fa-fw fa-trash-alt"></i>
-              </b-btn>
+                <b-dropdown-item v-if="isAuthenticated" :to=" '/<%= related_schema.identifier_plural %>/' + m._id + '/edit' ">
+                  <i class="far fa-fw fa-edit"></i>
+                  Edit
+                </b-dropdown-item>
 
-              <!-- Bootstrap Modal Component -->
-              <b-modal :id="'modal_' + m._id"
-                :title="'Destroy <%= related_schema.label %>?'"
-                @ok="onConfirmDestroy(m)"
-                ok-variant='danger'
-                ok-title='DESTROY'
-                cancel-title='Cancel'
-              >
-                <p class="text-left">Are you sure you want to destroy this <%= related_schema.label %>?</p>
-              </b-modal>
+                <b-dropdown-item v-if="isAdmin" v-b-modal="'modal_' + m._id">
+                  <i class="far fa-fw fa-trash-alt"></i>
+                  Delete
+                </b-dropdown-item>
 
+                <%_ if (api_actions.filter(a => a.scope === 'MODEL').length) { _%>
+                <b-dropdown-divider/>
+                <%_ api_actions.filter(a => a.scope === 'MODEL').forEach((action) => { _%>
+                <%_ if (action.payload) { _%>
+                <b-dropdown-item
+                  v-if="isAdmin"
+                  @click="$store.commit('<%= related_schema.identifier %>/<%= action.uri %>/state', { showingModal: true, scope: m._id, payload: {}})"
+                >
+                  <%= action.label %>
+                </b-dropdown-item>
+
+                <%_ } else { _%>
+                <b-dropdown-item
+                  v-if="isAdmin"
+                  @click="<%= action.function_name %>(m._id)"
+                >
+                  <%= action.label %>
+                </b-dropdown-item>
+
+                <%_ } _%>
+                <%_ }) _%>
+                <%_ } _%>
+              </b-dropdown>
             </td>
+
+            <!-- Bootstrap Modal Component -->
+            <b-modal :id="'modal_' + m._id"
+              :title="'Destroy <%= related_schema.label %>?'"
+              @ok="onConfirmDestroy(m)"
+              ok-variant='danger'
+              ok-title='DESTROY'
+              cancel-title='Cancel'
+            >
+              <p class="text-left">Are you sure you want to destroy this <%= related_schema.label %>?</p>
+            </b-modal>
+
           </tr>
         </tbody>
 
@@ -148,6 +177,8 @@ export default {
     onConfirmDestroy: '<%= related_schema.identifier %>/deleteModel'
   }),
   computed: mapGetters({
+    isAuthenticated: 'auth/is_authenticated',
+    isAdmin: 'auth/isAdmin',
     <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
     model: '<%= schema.identifier %>/<%= rel.alias.identifier %>',
     <%_ } else if (rel.type === 'HAS_MANY') { _%>
