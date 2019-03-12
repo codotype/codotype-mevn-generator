@@ -4,8 +4,7 @@ module.exports = {
   async forEachSchema({ blueprint, configuration, schema }) {
 
     // Pulls model options from configuration object
-    // const schemaOptions = configuration.model_options[schema._id]
-    const schemaOptions = {} // TODO - fix this!
+    const schemaOptions = configuration.ui_option[schema.identifier]
 
     // Defines destination directory for files in this loop
     const moduleRoot =  'frontend/src/modules/' + schema.identifier
