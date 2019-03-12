@@ -45,7 +45,7 @@
             <%_ api_actions.filter(a => a.scope === 'MODEL').forEach((action) => { _%>
             <%_ if (action.payload) { _%>
             <b-dropdown-item
-              v-if="isAuthenticated"
+              v-if="isAdmin"
               @click="$store.commit('<%= schema.identifier %>/<%= action.uri %>/state', { showingModal: true, scope: model._id, payload: {}})"
             >
               <%= action.label %>
@@ -53,7 +53,7 @@
 
             <%_ } else { _%>
             <b-dropdown-item
-              v-if="isAuthenticated"
+              v-if="isAdmin"
               @click="<%= action.function_name %>(model._id)"
             >
               <%= action.label %>

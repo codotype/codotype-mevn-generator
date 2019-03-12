@@ -90,17 +90,17 @@
 
             <!-- Edit <%= related_schema.label %>-->
             <td class='text-right'>
-              <b-button size="sm" variant="outline-primary" :to=" '/<%= related_schema.identifier_plural %>/' + m._id">
+              <b-btn size="sm" variant="outline-primary" :to=" '/<%= related_schema.identifier_plural %>/' + m._id">
                 <i class="fa fa-fw fa-eye"></i>
-              </b-button>
+              </b-btn>
 
-              <b-button size="sm" variant="outline-warning" :to=" '/<%= related_schema.identifier_plural %>/' + m._id + '/edit' ">
+              <b-btn size="sm" variant="outline-warning" :to=" '/<%= related_schema.identifier_plural %>/' + m._id + '/edit' ">
                 <i class="far fa-fw fa-edit"></i>
-              </b-button>
+              </b-btn>
 
-              <b-button size="sm" variant="outline-danger" v-b-modal="'modal_' + m._id">
+              <b-btn size="sm" variant="outline-danger" v-b-modal="'modal_' + m._id">
                 <i class="far fa-fw fa-trash-alt"></i>
-              </b-button>
+              </b-btn>
 
               <!-- Bootstrap Modal Component -->
               <b-modal :id="'modal_' + m._id"
