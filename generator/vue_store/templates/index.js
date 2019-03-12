@@ -1,7 +1,3 @@
-import actions from './actions'
-import state from './state'
-import getters from './getters'
-import mutations from './mutations'
 <%_ let filteredActions = api_actions.filter(a => ['POST', 'PUT'].includes(a.verb) && a.payload) _%>
 <%_ if (filteredActions.length) { _%>
 import { API_ACTION_MODULE } from '@/store/lib/mixins'
@@ -20,21 +16,17 @@ import { FORM_MODULE } from '@/store/lib/formModule' // TODO - retire this?
 // Relation modules
 <%_ schema.relations.forEach((rel, index) => { _%>
 <%_ if (rel.type === 'REF_BELONGS_TO') { _%>
-// import { related<%= rel.alias.class_name_plural %>Module } from './related<%= rel.alias.class_name_plural %>Module'
+import related<%= rel.alias.class_name_plural %>Module from './related<%= rel.alias.class_name_plural %>Module'
 <%_ } else if (rel.type === 'HAS_MANY') { _%>
-// import { related<%= rel.alias.class_name_plural %>Module } from './related<%= rel.alias.class_name_plural %>Module'
+import related<%= rel.alias.class_name_plural %>Module from './related<%= rel.alias.class_name_plural %>Module'
 <%_ } else if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
-// import { related<%= rel.alias.class_name %>Module } from './related<%= rel.alias.class_name %>Module'
+import related<%= rel.alias.class_name %>Module from './related<%= rel.alias.class_name %>Module'
 <%_ } _%>
 <%_ }) _%>
 
 // <%= schema.label %> Vuex module definition
 export default {
   namespaced: true,
-  state,
-  mutations,
-  actions,
-  getters,
   modules: {
     list: LIST_MODULE({ API_ROOT }),
     new: NEW_MODULE({ API_ROOT, NEW_MODEL: NEW_<%= schema.identifier.toUpperCase() %> }),
@@ -48,11 +40,11 @@ export default {
     <%_ }) _%>
     <%_ schema.relations.forEach((rel, index) => { _%>
     <%_ if (rel.type === 'REF_BELONGS_TO') { _%>
-    // related<%= rel.alias.class_name_plural %>: related<%= rel.alias.class_name_plural %>Module,
+    related<%= rel.alias.class_name_plural %>: related<%= rel.alias.class_name_plural %>Module,
     <%_ } else if (rel.type === 'HAS_MANY') { _%>
-    // related<%= rel.alias.class_name_plural %>: related<%= rel.alias.class_name_plural %>Module,
+    related<%= rel.alias.class_name_plural %>: related<%= rel.alias.class_name_plural %>Module,
     <%_ } else if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
-    // related<%= rel.alias.class_name %>: related<%= rel.alias.class_name %>Module,
+    related<%= rel.alias.class_name %>: related<%= rel.alias.class_name %>Module,
     <%_ } _%>
     <%_ }) _%>
   }
