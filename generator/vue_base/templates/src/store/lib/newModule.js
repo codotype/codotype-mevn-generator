@@ -33,12 +33,14 @@ export const NEW_MODULE = ({ API_ROOT, NEW_MODEL }) => {
         })
         .then(() => {
           commit('loading', false)
-          commit('toast/add', { message: 'Created <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
-          router.push(`/<%= schema.identifier_plural %>`)
+          // commit('toast/add', { message: 'Created model', context: 'success', dismissible: true }, { root: true })
+          // commit('toast/add', { message: 'Created <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
+          // router.push(`/<%= schema.identifier_plural %>`)
+          router.back()
         })
         .catch((err) => {
           commit('loading', false)
-          commit('toast/add', { message: 'Create error', context: 'danger', dismissible: true }, { root: true })
+          // commit('toast/add', { message: 'Create error', context: 'danger', dismissible: true }, { root: true })
           throw err
         })
       },

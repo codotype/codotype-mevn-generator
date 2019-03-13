@@ -4,14 +4,14 @@ module.exports = {
   async forEachSchema({ blueprint, configuration, schema }) {
 
     // Pulls model options from configuration object
-    const schemaOptions = configuration.ui_option[schema.identifier]
+    const schemaOptions = configuration.ui_option[schema.identifier] || {}
 
     // Defines destination directory for files in this loop
     const moduleRoot =  'frontend/src/modules/' + schema.identifier
 
     // Isolates API Actions metadata
-    let api_actions = configuration.api_actions[schema.identifier]
-    if (!api_actions[0]) { api_actions = [] }
+    let api_actions = configuration.api_actions[schema.identifier] || []
+    // if (!api_actions[0]) { api_actions = [] }
 
     // Ensures existence of pages directory
     await this.ensureDir(moduleRoot + '/pages')

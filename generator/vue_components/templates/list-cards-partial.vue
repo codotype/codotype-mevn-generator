@@ -75,7 +75,7 @@
             <!-- Bootstrap Modal Component -->
             <b-modal :id="'modal_' + m._id"
               :title="'Destroy <%= schema.label %>?'"
-              @ok="onConfirmDestroy(m)"
+              @ok="onConfirmDestroy(m._id)"
               ok-variant='danger'
               ok-title='DESTROY'
               cancel-title='Cancel'
@@ -98,7 +98,7 @@ import { mapActions } from 'vuex'
 export default {
   props: ['collection'],
   methods: mapActions({
-    onConfirmDestroy: '<%= schema.identifier %>/deleteModel'
+    onConfirmDestroy: '<%= schema.identifier %>/destroy'
   })
 }
 </script>

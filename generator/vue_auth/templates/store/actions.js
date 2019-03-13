@@ -66,7 +66,7 @@ const actions = {
       commit('logging_in', false)
 
       // Shows REGISTER_SUCCESS_NOTIFICATION message
-      commit('toast/add', REGISTER_SUCCESS_NOTIFICATION, { root: true })
+      // commit('toast/add', REGISTER_SUCCESS_NOTIFICATION, { root: true })
 
       // Redirects to login route
       // TODO - emit event instead of routing in action
@@ -75,7 +75,7 @@ const actions = {
     .catch((err) => {
       // Shows REGISTER_ERROR_NOTIFICATION message
       commit('logging_in', false)
-      commit('toast/add', REGISTER_ERROR_NOTIFICATION, { root: true })
+      // commit('toast/add', REGISTER_ERROR_NOTIFICATION, { root: true })
       throw err
     })
   },
@@ -106,7 +106,7 @@ const actions = {
       commit('current_user', { email, admin, _id, role })
 
       // Shows LOGIN_SUCCESS_NOTIFICATION message
-      commit('toast/add', LOGIN_SUCCESS_NOTIFICATION, { root: true })
+      // commit('toast/add', LOGIN_SUCCESS_NOTIFICATION, { root: true })
 
       // Clears state.login_user
       commit('clear_login_user')
@@ -118,7 +118,7 @@ const actions = {
     .catch((err) => {
       // Shows LOGIN_ERROR_NOTIFICATION message
       commit('logging_in', false)
-      commit('toast/add', LOGIN_ERROR_NOTIFICATION, { root: true })
+      // commit('toast/add', LOGIN_ERROR_NOTIFICATION, { root: true })
       throw err
     })
   },

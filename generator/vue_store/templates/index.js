@@ -35,9 +35,6 @@ export default {
     destroy: DESTROY_MODULE({ API_ROOT }),
     form: FORM_MODULE({ API_ROOT, NEW_MODEL: NEW_<%= schema.identifier.toUpperCase() %> }),
     collection: COLLECTION_MODULE({ API_ROOT }),
-    <%_ filteredActions.forEach((action, index) => { _%>
-      <%= action.uri %>: API_ACTION_MODULE()<%= helpers.trailingComma(filteredActions, index) %>
-    <%_ }) _%>
     <%_ schema.relations.forEach((rel, index) => { _%>
     <%_ if (rel.type === 'REF_BELONGS_TO') { _%>
     related<%= rel.alias.class_name_plural %>: related<%= rel.alias.class_name_plural %>Module,
@@ -46,6 +43,9 @@ export default {
     <%_ } else if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
     related<%= rel.alias.class_name %>: related<%= rel.alias.class_name %>Module,
     <%_ } _%>
+    <%_ }) _%>
+    <%_ filteredActions.forEach((action, index) => { _%>
+    <%= action.uri %>: API_ACTION_MODULE()<%= helpers.trailingComma(filteredActions, index) %>
     <%_ }) _%>
   }
 }

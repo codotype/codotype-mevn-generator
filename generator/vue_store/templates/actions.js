@@ -22,7 +22,7 @@ export default {
     })
     .then(() => {
       // commit('fetching', false)
-      commit('toast/add', { message: '<%= action.label %> Success', context: 'success', dismissible: true }, { root: true })
+      // commit('toast/add', { message: '<%= action.label %> Success', context: 'success', dismissible: true }, { root: true })
     })
   <%_ } else if ('GET' === action.verb) { _%>
   <%= action.function_name %> ({ commit, rootGetters }) {

@@ -33,8 +33,8 @@
 
       <!-- Empty Table Row -->
       <tr class='table-warning' v-if="!collection[0]">
-        <%_ schema.attributes.forEach((attr, index) => { _%>
-        <%_ if (index === 0) { _%>
+        <%_ schema.attributes.forEach((attr, indx) => { _%>
+        <%_ if (indx === 0) { _%>
         <td>No <%= schema.label_plural %> Available</td>
         <%_ } else { _%>
         <td></td>
@@ -135,7 +135,7 @@
             v-if="isAdmin"
             :id="'modal_' + m._id"
             :title="'Destroy <%= schema.label %>?'"
-            @ok="onConfirmDestroy(m)"
+            @ok="onConfirmDestroy(m._id)"
             ok-variant='danger'
             ok-title='DESTROY'
             cancel-title='Cancel'
@@ -171,7 +171,7 @@ export default {
     <%= action.function_name %>: '<%= schema.identifier %>/<%= action.function_name %>',
     <%_ }) _%>
     <%_ } _%>
-    onConfirmDestroy: '<%= schema.identifier %>/deleteModel'
+    onConfirmDestroy: '<%= schema.identifier %>/destroy'
   }),
   computed: mapGetters({
     currentUser: 'auth/current_user',

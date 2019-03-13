@@ -68,7 +68,7 @@ export default {
   },
   methods: mapActions({
     fetch: '<%= schema.identifier %>/show/fetch',
-    onConfirmDestroy: '<%= schema.identifier %>/deleteModel'
+    onConfirmDestroy: '<%= schema.identifier %>/destroy'
   }),
   computed: mapGetters({
     currentUser: 'auth/current_user',

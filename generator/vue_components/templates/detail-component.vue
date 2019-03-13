@@ -10,7 +10,7 @@
       <!-- TODO - abstract into a separate component -->
       <b-modal :id="'destroyModal'"
         :title="'Destroy <%= schema.label %>?'"
-        @ok="onConfirmDestroy(model)"
+        @ok="onConfirmDestroy(model._id)"
         footer-bg-variant='danger'
         ok-variant='danger'
         ok-title='DESTROY'
@@ -140,7 +140,7 @@ export default {
     <%= action.function_name %>: '<%= schema.identifier %>/<%= action.function_name %>',
     <%_ }) _%>
     <%_ } _%>
-    onConfirmDestroy: '<%= schema.identifier %>/deleteModel'
+    onConfirmDestroy: '<%= schema.identifier %>/destroy'
   }),
   computed: mapGetters({
     currentUser: 'auth/current_user',
