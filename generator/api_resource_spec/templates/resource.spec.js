@@ -9,7 +9,7 @@ describe('<%= schema.label %> API', () => {
         it('should respond with JSON object', (done) => {
             request(app)
             .get(API_ROOT)
-            .expect(200)
+            .expect(401)
             .expect('Content-Type', /json/)
             .end((err, res) => {
                 if (err) return done(err);
@@ -28,7 +28,7 @@ describe('<%= schema.label %> API', () => {
                 <%= attr.identifier %>: '<%= attr.default_value %>'<%= helpers.trailingComma(schema.attributes, index) %>
                 <%_ }) _%>
             })
-            .expect(200)
+            .expect(401)
             .expect('Content-Type', /json/)
             .end((err, res) => {
                 if (err) return done(err);
@@ -42,7 +42,7 @@ describe('<%= schema.label %> API', () => {
         it('should respond with JSON object', (done) => {
             request(app)
             .get(API_ROOT + '/1')
-            .expect(200)
+            .expect(401)
             .expect('Content-Type', /json/)
             .end((err, res) => {
                 if (err) return done(err);
@@ -61,7 +61,7 @@ describe('<%= schema.label %> API', () => {
                 <%= attr.identifier %>: '<%= attr.default_value %>'<%= helpers.trailingComma(schema.attributes, index) %>
                 <%_ }) _%>
             })
-            .expect(200)
+            .expect(401)
             .expect('Content-Type', /json/)
             .end((err, res) => {
                 if (err) return done(err);

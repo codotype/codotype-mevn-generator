@@ -7,7 +7,7 @@ describe('<%= schema.label %> API', function() {
         it('should respond with JSON object', function(done) {
             request(app)
             .get('/api/<%= schema.identifier_plural %>')
-            .expect(200)
+            .expect(401)
             .expect('Content-Type', /json/)
             .end(function(err, res) {
                 if (err) return done(err);

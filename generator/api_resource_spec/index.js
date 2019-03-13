@@ -6,7 +6,9 @@ module.exports = {
     let specPaths = []
 
     // Iterates over each schema in the blueprint.schemas array
-    blueprint.schemas.forEach(async (schema) => {
+    // blueprint.schemas.forEach(async (schema) => {
+    for (var i = blueprint.schemas.length - 1; i >= 0; i--) {
+      let schema = blueprint.schemas[i]
 
       // Defines the schema-specific destination
       let resourceDest = 'backend/src/api/' + schema.identifier
@@ -18,31 +20,38 @@ module.exports = {
       let specFilePath = resourceDest + '/' + schema.identifier + '.spec.js'
 
       // Stores the spec path
-      specPaths.push(specFilePath)
+      // specPaths.push(specFilePath)
+      specPaths.push(`../src/api/${schema.identifier}/${schema.identifier}.spec.js`)
 
       // backend/api/resource/resource.spec.js
-      if (schema.identifier === 'user') {
-        await this.copyTemplate(
-          this.templatePath('user.spec.js'),
-          this.destinationPath(specFilePath),
-          { schema }
-        );
-      } else {
-        await this.copyTemplate(
-          this.templatePath('resource.spec.js'),
-          this.destinationPath(specFilePath),
-          { schema }
-        );
-      }
+      // if (schema.identifier === 'user') {
+      //   await this.copyTemplate(
+      //     this.templatePath('user.spec.js'),
+      //     this.destinationPath(specFilePath),
+      //     { schema }
+      //   );
+      // } else {
+      //   await this.copyTemplate(
+      //     this.templatePath('resource.spec.js'),
+      //     this.destinationPath(specFilePath),
+      //     { schema }
+      //   );
+      // }
 
-    })
+      await this.copyTemplate(
+        this.templatePath('resource.spec.js'),
+        this.destinationPath(specFilePath),
+        { schema }
+      );
+
+    }
 
     // Ensures the presence of the web_api/test directory
     await this.ensureDir('/backend/test')
 
     // Writes the entrypoint in web_api/test/index.js
     specPaths = specPaths.map((p) => {
-      return `require('../${p}');`
+      return `require('${p}');`
     })
 
     // Writes the template

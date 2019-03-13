@@ -18,7 +18,7 @@ module.exports = {
     await this.composeWith('./api_environment')
     await this.composeWith('./api_resource')
     await this.composeWith('./api_routes')
-    // await this.composeWith('./api_resource_spec')
+    await this.composeWith('./api_resource_spec')
 
     // Docs & Scripts
     await this.composeWith('./base_readmes')
