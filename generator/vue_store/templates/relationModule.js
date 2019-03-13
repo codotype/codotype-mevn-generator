@@ -46,7 +46,7 @@ export default {
       })
       .catch((err) => {
         commit('loading', false)
-        commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+        // commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
         throw err // TODO - better error handling
       })
     }
@@ -66,7 +66,7 @@ export default {
       })
       .catch((err) => {
         commit('loading', false)
-        commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+        // commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
         throw err // TODO - better error handling
       })
     }
@@ -85,7 +85,7 @@ export default {
       })
       .catch((err) => {
         commit('loading', false)
-        commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
+        // commit('toast/add', { message: 'Fetch error', context: 'danger', dismissible: true }, { root: true })
         throw err // TODO - better error handling
       })
     }

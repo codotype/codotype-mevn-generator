@@ -35,12 +35,13 @@ export const EDIT_MODULE = ({ API_ROOT }) => {
         .then(({ data }) => {
           commit('model', data)
           commit('loading', false)
+          // commit('toast/add', { message: 'Updated', context: 'success', dismissible: true }, { root: true })
           // commit('toast/add', { message: 'Created <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
           // router.push(`/<%= schema.identifier_plural %>`)
         })
         .catch((err) => {
           commit('loading', false)
-          commit('toast/add', { message: 'Fetch Error', context: 'danger', dismissible: true }, { root: true })
+          // commit('toast/add', { message: 'Fetch Error', context: 'danger', dismissible: true }, { root: true })
           throw err
         })
       },
@@ -53,12 +54,12 @@ export const EDIT_MODULE = ({ API_ROOT }) => {
         })
         .then(() => {
           commit('loading', false)
-          commit('toast/add', { message: 'Updated successfully', context: 'success', dismissible: true }, { root: true })
-          // router.back()
+          // commit('toast/add', { message: 'Updated successfully', context: 'success', dismissible: true }, { root: true })
+          router.back()
         })
         .catch((err) => {
           commit('loading', false)
-          commit('toast/add', { message: 'Update error', context: 'danger', dismissible: true }, { root: true })
+          // commit('toast/add', { message: 'Update error', context: 'danger', dismissible: true }, { root: true })
           throw err
         })
       },

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from '@/routers'
 
 // FORM MODULE Action Vuex Module
 // TODO - ABSTRACT INTO A SEPARATE FILE
@@ -61,12 +62,14 @@ export const FORM_MODULE = ({ API_ROOT, NEW_MODEL }) => {
         })
         .then(() => {
           commit('loading', false)
-          commit('toast/add', { message: 'Created <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
+          // commit('toast/add', { message: 'Created model', context: 'success', dismissible: true }, { root: true })
+          // commit('toast/add', { message: 'Created <%= schema.label %>', context: 'success', dismissible: true }, { root: true })
           // router.push(`/<%= schema.identifier_plural %>`)
+          router.back()
         })
         .catch((err) => {
           commit('loading', false)
-          commit('toast/add', { message: 'Create error', context: 'danger', dismissible: true }, { root: true })
+          // commit('toast/add', { message: 'Create error', context: 'danger', dismissible: true }, { root: true })
           throw err
         })
       },
@@ -79,12 +82,12 @@ export const FORM_MODULE = ({ API_ROOT, NEW_MODEL }) => {
         })
         .then(() => {
           commit('loading', false)
-          commit('toast/add', { message: 'Updated successfully', context: 'success', dismissible: true }, { root: true })
-          // router.back()
+          // commit('toast/add', { message: 'Updated successfully', context: 'success', dismissible: true }, { root: true })
+          router.back()
         })
         .catch((err) => {
           commit('loading', false)
-          commit('toast/add', { message: 'Update error', context: 'danger', dismissible: true }, { root: true })
+          // commit('toast/add', { message: 'Update error', context: 'danger', dismissible: true }, { root: true })
           throw err
         })
       },

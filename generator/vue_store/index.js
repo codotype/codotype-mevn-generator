@@ -4,7 +4,7 @@ module.exports = {
   async forEachSchema({ blueprint, configuration, schema }) {
 
     // Isolates API Actions metadata
-    let api_actions = configuration.api_actions[schema.identifier]
+    let api_actions = configuration.api_actions[schema.identifier] || []
 
     // Defines the newModel data
     let newModel = this.buildDefault({ schemas: blueprint.schemas, schema: schema })

@@ -132,7 +132,7 @@
         <!-- Bootstrap Modal Component -->
         <b-modal :id="'modal_' + m._id"
           :title="'Destroy <%= related_schema.label %>?'"
-          @ok="onConfirmDestroy(m)"
+          @ok="onConfirmDestroy(m._id)"
           ok-variant='danger'
           ok-title='DESTROY'
           cancel-title='Cancel'
@@ -167,7 +167,7 @@ export default {
     <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
     fetch: '<%= schema.identifier %>/related<%= rel.alias.class_name_plural %>/fetch',
     <%_ } _%>
-    onConfirmDestroy: '<%= related_schema.identifier %>/deleteModel'
+    onConfirmDestroy: '<%= related_schema.identifier %>/destroy'
   }),
   computed: mapGetters({
     isAuthenticated: 'auth/is_authenticated',

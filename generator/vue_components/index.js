@@ -4,10 +4,11 @@ module.exports = {
   async forEachSchema({ blueprint, configuration, schema }) {
 
     // Pulls model options from configuration object
-    const schemaOptions = configuration.ui_option[schema.identifier]
+    const schemaOptions = configuration.ui_option[schema.identifier] || {}
 
     // Isolates API Actions metadata
-    let api_actions = configuration.api_actions[schema.identifier]
+    // console.log(configuration)
+    let api_actions = configuration.api_actions[schema.identifier] || []
 
     // Destination for module / components directory
     const moduleComponentsDest = 'frontend/src/modules/' + schema.identifier + '/components/'
@@ -56,7 +57,7 @@ module.exports = {
       rel = schema.relations[j]
 
       related_schema = blueprint.schemas.find(s => s.id === rel.related_schema_id)
-      related_api_actions = configuration.api_actions[related_schema.identifier]
+      related_api_actions = configuration.api_actions[related_schema.identifier] || []
       // TODO - add HAS_MANY UI
       if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) {
         await this.copyTemplate(
