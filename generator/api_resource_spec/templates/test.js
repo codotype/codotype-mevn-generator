@@ -23,7 +23,7 @@ before(() => {
 })
 
 // TODO - import all library tests here
-// require('../src/lib/jwt.spec');
+require('../src/lib/jwt.spec');
 
 // Import all spec & integration tests here
 <%- specPaths.join('\n') %>

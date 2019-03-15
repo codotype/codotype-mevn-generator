@@ -1,4 +1,4 @@
-const jwt = require('../server/lib/jwt');
+const jwt = require('../src/lib/jwt');
 
 // // // //
 
