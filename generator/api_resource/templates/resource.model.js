@@ -8,7 +8,7 @@ const <%= schema.class_name %>Model = new mongoose.Schema({
   <%= attr.identifier %>: {
     type: Boolean
   },
-  <%_ } else if (attr.datatype === DATATYPE_NUMBER) { _%>
+  <%_ } else if ([DATATYPE_INTEGER, DATATYPE_FLOAT, DATATYPE_DOUBLE].includes(attr.datatype)) { _%>
   <%= attr.identifier %>: {
     type: Number,
     required: <%= attr.required %>,
