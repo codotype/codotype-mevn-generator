@@ -17,10 +17,11 @@ module.exports = {
       options: { requiredUserAttributes }
     })
 
+    // TODO - make inlineDeconstruction a helper function
     const inlineDeconstrction = requiredUserAttributes.map(r => r.identifier).join(', ')
     await this.renderComponent({
-      src: 'store/actions.js',
-      dest: 'frontend/src/modules/auth/store/actions.js',
+      src: 'store/index.js',
+      dest: 'frontend/src/modules/auth/store/index.js',
       options: { inlineDeconstrction }
     })
 
