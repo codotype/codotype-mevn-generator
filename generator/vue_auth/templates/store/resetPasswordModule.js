@@ -3,7 +3,7 @@ import router from '@/routers'
 import { RESET_PASSWORD_ROUTE } from './constants'
 
 export default {
-  namespaced: true
+  namespaced: true,
   state: {
     loading: '',
     password: 'reverse',
