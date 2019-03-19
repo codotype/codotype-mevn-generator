@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken')
+const jwt = require('../../lib/jwt')
 
 // // // //
 
@@ -29,40 +29,22 @@ module.exports.requireAuthenticated = function (req, res, next) {
 
   }
 
-  // Ensure validity of token and presence in Redis
+  // Assigns req.user
   else {
 
-    // Isolates Token from 'JWT ' prefix
-    token = token.split('JWT ')[1];
-
-    // Ensure validity of token
-    jwt.verify(token, process.env.JWT_SECRET, function (err, decoded) {
-
-      // Verification error
-      if (err) {
-        // 401 Unauthorized
-        res.writeHead(401, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Invalid token format.' }));
-        return;
-      }
-
-      // Isolates values from decoded token
-      const user_id = decoded.id;
-      const email = decoded.email;
-      const admin = decoded.admin;
-      const role = decoded.role;
-      const issuedAt = decoded.iat; // NOTE - unused
-
-      // Success - user is authorized
-      // Attach the req.user object to be used in the application's controllers
-      req.user = { id: user_id, email: email, admin: admin, role: role };
-
-      // Continue through this middleware to the original request
-      next();
+    try {
+      // Isolates Token from 'JWT ' prefix
+      token = token.split('JWT ')[1];
+      req.user = jwt.verify(token)
+    } catch (err) {
+      // 401 Unauthorized
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Invalid token format.' }));
       return;
+    }
 
-    });
-
+    // Continue through this middleware to the original request
+    next();
   }
 
 };
@@ -71,36 +53,32 @@ module.exports.requireAuthenticated = function (req, res, next) {
 module.exports.requireRole = function (requiredRole) {
 
   // Returns middleware function to check required role
-  const func = (req, res, next) => {
+  const checkRole = (req, res, next) => {
 
-      // Reject requests from non-admin users
-      if (!req.user.admin && req.user.role !== requiredRole) {
+    // Reject requests from non-admin users
+    if (!req.user.admin && req.user.role !== requiredRole) {
 
-        // Returns 'missing token' message
-        res.writeHead(401, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'You are not authorized for this API endpoint' }));
-        return;
+      // Returns 'missing token' message
+      return res.status(401).json({ error: 'You are not authorized for this API endpoint' });
 
-      }
+    }
 
-      // Continue through this middleware to the original request
-      next();
-      return;
+    // Continue through this middleware to the original request
+    next();
+    return;
   }
-  return func
+
+  // Returns checkRole function
+  return checkRole
 };
 
 // Rejects requests for non-admin users
 module.exports.requireAdmin = function (req, res, next) {
 
   // Reject requests from non-admin users
+  // Returns 'missing token' message
   if (!req.user.admin) {
-
-    // Returns 'missing token' message
-    res.writeHead(401, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: 'You are not authorized for this API endpoint' }));
-    return;
-
+    return res.status(401).json({ error: 'You are not authorized for this API endpoint' });
   }
 
   // Continue through this middleware to the original request

@@ -119,6 +119,7 @@ exports.forgot_password = async (req, res) => {
   const userEmail = req.body.email;
 
   // TODO - send error if no email is supplied
+  if (!userEmail) { return res.status(400).json({ message: 'Missing email parameter' }) }
 
   // Finds the User model associated with the email
   const user = await User.findOne({ email: userEmail.toLowerCase() })
@@ -127,20 +128,8 @@ exports.forgot_password = async (req, res) => {
   // Handle invalid email address
   if (!user) return res.status(400).json({ message: 'Invalid email address' })
 
-  // Creates a random password reset token for the user
-  let buf = await crypto.randomBytes(12)
-  const passwordResetToken = buf.toString('hex');
-
-  // Calculates tomorrow's date
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
-  // Assigns user password reset variables
-  user.password_reset_expiration = tomorrow;
-  user.password_reset_token = passwordResetToken;
-
-  // Saves the user model
-  await user.save().catch(err => res.status(422).json(err) );
+  // Genreates user password reset token
+  await user.generatePasswordResetToken()
 
   // Assembles email
   const dispatch = {
