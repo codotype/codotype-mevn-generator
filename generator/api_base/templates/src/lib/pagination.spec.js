@@ -30,7 +30,7 @@ describe('/lib/pagination.js', () => {
       let params = getPaginationParams({ query: empty_query })
       assert.equal(params.offset, 0);
       assert.equal(params.page, 0)
-      assert.equal(params.per_page, 10);
+      assert.equal(params.per_page, 300);
     });
   });
 

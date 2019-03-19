@@ -13,8 +13,6 @@ describe('/lib/jwt.js', () => {
       // Verifies the payload
       let verify_payload = jwt.verify(token);
 
-      // console.log(JWT_PAYLOAD)
-
       // Asserts equality of original payload and signed/verified payload
       // assert.equal(JWT_PAYLOAD.id, verify_payload.id);
       assert.equal(JWT_PAYLOAD.email, verify_payload.email);

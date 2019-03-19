@@ -22,6 +22,7 @@ exports.register = (req, res) => {
 
     // Creates a new User
     const newUser = new User({ <%= inlineDeconstrction %>, password })
+    // TODO - RE-INTEGRATE USER ROLE, REPLACE ADMIN BOOLEAN
     // newUser.role = ''
     return newUser.save()
   }
@@ -59,7 +60,7 @@ exports.login = (req, res) => {
   // Ensures presence of the User in the database
   // Verifies the supplied password against the database
   // Sends user data & token to the client if verifications pass
-  const response = (user) => {
+  const respond = (user) => {
 
     // User does NOT exist
     if (!user) {
@@ -97,7 +98,7 @@ exports.login = (req, res) => {
 
   // Error handling
   const onError = (error) => {
-    res.status(403).json({
+    res.status(401).json({
       message: error.message
     })
   }
@@ -107,7 +108,6 @@ exports.login = (req, res) => {
   User.findOneByEmail(email)
   .then(respond)
   .catch(onError)
-
 }
 
 // // // //

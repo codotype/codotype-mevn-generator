@@ -13,7 +13,6 @@ const {
 // Signs a new JWT
 // Used in /api/auth/auth.controller.js
 module.exports.sign = (user) => {
-  console.log(user)
 
   // Assembles JWT payload
   const jwt_payload = {

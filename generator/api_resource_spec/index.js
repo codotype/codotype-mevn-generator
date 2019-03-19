@@ -20,24 +20,9 @@ module.exports = {
       let specFilePath = resourceDest + '/' + schema.identifier + '.spec.js'
 
       // Stores the spec path
-      // specPaths.push(specFilePath)
       specPaths.push(`../src/api/${schema.identifier}/${schema.identifier}.spec.js`)
 
       // backend/api/resource/resource.spec.js
-      // if (schema.identifier === 'user') {
-      //   await this.copyTemplate(
-      //     this.templatePath('user.spec.js'),
-      //     this.destinationPath(specFilePath),
-      //     { schema }
-      //   );
-      // } else {
-      //   await this.copyTemplate(
-      //     this.templatePath('resource.spec.js'),
-      //     this.destinationPath(specFilePath),
-      //     { schema }
-      //   );
-      // }
-
       await this.copyTemplate(
         this.templatePath('resource.spec.js'),
         this.destinationPath(specFilePath),
@@ -53,6 +38,12 @@ module.exports = {
     specPaths = specPaths.map((p) => {
       return `require('${p}');`
     })
+
+    // Copy mocks
+    await this.copyTemplate(
+      this.templatePath('mocks.js'),
+      this.destinationPath('/backend/test/mocks.js')
+    );
 
     // Writes the template
     await this.copyTemplate(

@@ -12,10 +12,13 @@ describe('Auth API', () => {
   describe('POST /api/auth/login', () => {
 
     // Creates USER_MOCK record before running tests
-    // before(() => { return User.create(USER_MOCK) });
+    before(() => {
+      let user = new User(USER_MOCK)
+      return user.save()
+    });
 
     // Destroys USER_MOCK after running tests
-    // after(() => { return User.destroy({ where: { email: USER_MOCK.email } }) });
+    after(() => { return User.deleteOne({ email: USER_MOCK.email }) });
 
     it('should authenticate user', (done) => {
       // Pulls email & password from USER_MOCK
@@ -33,9 +36,9 @@ describe('Auth API', () => {
     });
 
     it('should NOT authenticate user', (done) => {
-      // Pulls email & password from USER_MOCK
+      // Pulls email & password from USER_MOCK, defines invalid password
       const { email } = USER_MOCK;
-      const password = 'not MY password';
+      const password = 'not-actually-the-password';
 
       request(app)
       .post(API_ROOT + '/login')
