@@ -1,4 +1,3 @@
-// TODO - generate mocks for all models here
 // TODO - update user mock as needed
 // TODO - user mock should encapsulate ALL attributes
 const USER_MOCK = {

@@ -6,11 +6,11 @@ const jwt = require('../../lib/jwt')
 // // // //
 
 // POST /api/auth/register
-// { <%= inlineDeconstrction %>, password }
+// { <%= inlineDeconstruction %>, password }
 exports.register = (req, res) => {
 
   // Pulls parameters from req.body
-  const { <%= inlineDeconstrction %>, password } = req.body
+  const { <%= inlineDeconstruction %>, password } = req.body
 
   // Create a new User instance if one does not exist
   const create = (user) => {
@@ -21,7 +21,7 @@ exports.register = (req, res) => {
     }
 
     // Creates a new User
-    const newUser = new User({ <%= inlineDeconstrction %>, password })
+    const newUser = new User({ <%= inlineDeconstruction %>, password })
     // TODO - RE-INTEGRATE USER ROLE, REPLACE ADMIN BOOLEAN
     // newUser.role = ''
     return newUser.save()

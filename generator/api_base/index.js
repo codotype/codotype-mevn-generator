@@ -9,12 +9,12 @@ module.exports = {
     )
 
     const userSchema = blueprint.schemas.find(s => s.identifier === 'user')
-    const inlineDeconstrction = userSchema.attributes.map(r => r.identifier).join(', ')
+    const inlineDeconstruction = userSchema.attributes.map(r => r.identifier).join(', ')
 
     await this.renderComponent({
       src: 'src/api/auth/auth.controller.js',
       dest: 'backend/src/api/auth/auth.controller.js',
-      options: { inlineDeconstrction }
+      options: { inlineDeconstruction }
     })
 
     await this.renderComponent({ src: 'LICENSE', dest: 'backend/LICENSE' })
