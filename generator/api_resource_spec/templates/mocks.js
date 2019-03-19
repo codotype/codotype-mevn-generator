@@ -15,9 +15,16 @@ const USER_MOCK_ALT = {
   password: 'securepassword'
 };
 
+<%_ Object.keys(mocks).forEach((m) => { _%>
+const <%= m %> = <%- JSON.stringify(mocks[m], null, 2) %>
+
+<%_ }) _%>
 // // // //
 
 module.exports = {
   USER_MOCK,
-  USER_MOCK_ALT
+  USER_MOCK_ALT,
+  <%_ Object.keys(mocks).forEach((m) => { _%>
+  <%= m %>,
+  <%_ }) _%>
 }

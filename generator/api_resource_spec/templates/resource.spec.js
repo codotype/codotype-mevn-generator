@@ -2,7 +2,7 @@ const app = require('../../app');
 const request = require('supertest');
 const User = require('../user/user.model')
 const { JWT_HEADER } = require('../../../test/utils');
-const { USER_MOCK, USER_MOCK_ALT } = require('../../../test/mocks');
+const { <%= mockToken %>, USER_MOCK_ALT } = require('../../../test/mocks');
 
 const API_ROOT = '/api/<%= schema.identifier_plural %>'
 
@@ -39,7 +39,7 @@ describe('<%= schema.label %> API', () => {
     it('authenticated request should respond with JSON object', (done) => {
       request(app)
       .post(API_ROOT)
-      <%- helpers.indent(include('./postPayload.js'), 6) %>
+      .send(<%= mockToken %>)
       .set('authorization', JWT_HEADER)
       .expect(200)
       .expect('Content-Type', /json/)
@@ -53,7 +53,7 @@ describe('<%= schema.label %> API', () => {
     it('unauthenticated request should respond with 403 forbidden', (done) => {
       request(app)
       .post(API_ROOT)
-      <%- helpers.indent(include('./postPayload.js'), 6) %>
+      .send(<%= mockToken %>)
       .expect(401)
       .expect('Content-Type', /json/)
       .end((err, res) => {
@@ -80,6 +80,8 @@ describe('<%= schema.label %> API', () => {
   //     });
   //   });
   // });
+
+  // // // //
 
   // describe('PUT /api/<%= schema.identifier_plural %>/:id', () => {
   //   it('should respond with JSON object', (done) => {
