@@ -47,10 +47,16 @@ module.exports.create = async (req, res, next) => {
       }
 
       // Defines a default password
+      // TODO - this is pretty terrible and should be changed...
       const password = Math.random.toString()
 
       // Creates a new User
-      const newUser = new User({ <%= inlineDeconstruction %>, password })
+      const newUser = new User({
+        <%= objectKeys.join(',\n      ') %>
+        password
+      })
+
+      // Saves the new User
       return newUser.save()
     }
 

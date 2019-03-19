@@ -100,5 +100,6 @@ module.exports.show<%= rel.alias.class_name_plural %> = (req, res, next) => {
     })
     .catch( err => next(boom.badImplementation(err)));
 };
+
 <%_ } _%>
 <%_ }) _%>

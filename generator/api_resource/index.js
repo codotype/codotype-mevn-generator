@@ -21,7 +21,7 @@ module.exports = {
 
     // Deconstructs schema attributes
     let defaultModel = this.buildDefault({ schema, schemas: blueprint.schemas })
-    // TODO - might be helpful to abstract into util, or parent generator
+    // TODO - might be helpful to abstract into util, or parent generator?
     let inlineDeconstruction = Object.keys(defaultModel).join(', ')
     let objectKeys = Object.keys(defaultModel)
 
