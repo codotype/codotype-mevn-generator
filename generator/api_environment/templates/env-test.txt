@@ -11,7 +11,7 @@ JWT_SUBJECT=user
 PASSWORD_ENCRYPTION_SECRET=sUpErSeCrEtPaSsWoRdEnCrYpTiOnSeCrEt
 
 # MongoDB
-MONGO_DB_URI=mongodb://localhost/<%= blueprint.identifier %>_dev
+MONGO_DB_URI=mongodb://localhost/<%= blueprint.identifier %>_test
 
 # Mailgun & password reset configuration
 MAILGUN_API_KEY=YOUR_MAILGUN_API_KEY
