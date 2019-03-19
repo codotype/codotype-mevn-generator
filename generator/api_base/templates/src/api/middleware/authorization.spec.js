@@ -128,6 +128,8 @@ describe('Authorization middleware', () => {
       });
     });
 
+    // // // //
+
     it('non-admin user does not have RANDOM role', () => {
       // Defines mock request
       const req = httpMocks.createRequest({
@@ -148,6 +150,8 @@ describe('Authorization middleware', () => {
         });
       });
     });
+
+    // // // //
 
     it('admin user always passes through requireRole', () => {
       // Defines mock request
@@ -197,6 +201,8 @@ describe('Authorization middleware', () => {
         });
       });
     });
+
+    // // // //
 
     it('user is not an administrator', () => {
       // Defines mock request

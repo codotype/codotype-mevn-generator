@@ -22,11 +22,15 @@ module.exports = {
       // Stores the spec path
       specPaths.push(`../src/api/${schema.identifier}/${schema.identifier}.spec.js`)
 
+      // Builds default new model
+      let newModel = this.buildMock({ schemas: blueprint.schemas, schema: schema })
+      // const inlineDeconstrction = userSchema.attributes.map(r => r.identifier).join(', ')
+
       // backend/api/resource/resource.spec.js
       await this.copyTemplate(
         this.templatePath('resource.spec.js'),
         this.destinationPath(specFilePath),
-        { schema }
+        { schema, newModel: JSON.stringify(newModel, null, 2) }
       );
 
     }

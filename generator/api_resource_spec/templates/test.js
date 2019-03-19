@@ -31,7 +31,6 @@ require('../src/api/middleware/authorization.spec');
 
 // Import all spec & integration tests here
 require('../src/api/auth/auth.spec')
-<%- specPaths = [] %>
 <%- specPaths.join('\n') %>
 
 // Runs after all tests are complete
