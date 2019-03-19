@@ -7,6 +7,7 @@ const <%= schema.class_name %> = require('./<%= schema.identifier %>.model')
 
 <%_ if (schema.identifier === 'user') { _%>
 <%- include('./partials/controller-user-profile.js') %>
+
 <%_ } _%>
 <%- include('./partials/controller-list.js') %>
 

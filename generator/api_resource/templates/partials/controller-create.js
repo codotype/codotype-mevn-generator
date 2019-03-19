@@ -52,7 +52,7 @@ module.exports.create = async (req, res, next) => {
 
       // Creates a new User
       const newUser = new User({
-        <%= objectKeys.join(',\n      ') %>
+        <%= objectKeys.join(',\n      ') %>,
         password
       })
 
