@@ -78,6 +78,11 @@ const userAttributes = {
     type: Boolean,
     default: true
   },
+  role: {
+    type: String,
+    required: true,
+    default: 'USER'
+  },
   <%_ schema.attributes.filter(a => a.identifier !== 'email').forEach((attr) => { _%>
   <%_ if (attr.datatype === DATATYPE_BOOLEAN) { _%>
   <%= attr.identifier %>: {
@@ -144,8 +149,26 @@ UserModel.method('verify', function (password) {
 })
 
 // Return true if the reset token is valid for this user
-UserModel.method('validResetToken', function(token){
+UserModel.method('validResetToken', function (token) {
   return this.password_reset_token === token && new Date() < this.password_reset_expiration
+})
+
+// Generates password_reset_expiration & password_reset_token
+UserModel.method('generatePasswordResetToken', function () {
+
+  // Creates a random password reset token for the user
+  const passwordResetToken = crypto.randomBytes(12).toString('hex')
+
+  // Calculates tomorrow's date
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  // Assigns user password reset variables
+  this.password_reset_expiration = tomorrow;
+  this.password_reset_token = passwordResetToken;
+
+  // Saves the user model, returns a Promise
+  return this.save()
 })
 
 // TODO - document & test

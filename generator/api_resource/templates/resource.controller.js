@@ -14,7 +14,7 @@ const <%= relation.schema.class_name %> = require('../<%= relation.schema.identi
 <%_ if (schema.identifier === 'user') { _%>
 <%_ if (generate_api_doc) { _%>
 /**
-* @api {get} /api/<%= schema.identifier_plural %> Profile
+* @api {get} /api/<%= schema.identifier_plural %>/profile Profile
 * @APIname Profile
 * @APIgroup <%= schema.class_name %> Controller
 * @apidescription Gets profile of the current <%= schema.label %>
@@ -22,7 +22,7 @@ const <%= relation.schema.class_name %> = require('../<%= relation.schema.identi
 * @apiError (Error) 500 Internal server error
 */
 <%_ } else { _%>
-// GET /api/<%= schema.identifier_plural %> Profile
+// GET /api/<%= schema.identifier_plural %>/profile Profile
 <%_ } _%>
 exports.profile = async (req, res) => {
   const user = await <%= schema.class_name %>.findOne({ email: req.user.email }, '-__v').exec()

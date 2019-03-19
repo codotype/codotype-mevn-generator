@@ -24,27 +24,27 @@ router.get('/profile', controller.profile)
 <%_ schemaApiActions.forEach((action) => { _%>
 <%_ if (action.scope === 'ROOT' && action.verb === 'GET') { _%>
 // GET /<%= schema.identifier_plural %>/<%= action.uri %>
-router.get('/<%= action.uri %>', requireRole('MENTOR'), requireAdmin, controller.<%= action.function_name %>);
+router.get('/<%= action.uri %>', requireRole('USER'), requireAdmin, controller.<%= action.function_name %>);
 
 <%_ } else if (action.scope === 'ROOT' && action.verb === 'POST') { _%>
 // POST /<%= schema.identifier_plural %>/<%= action.uri %>
-router.post('/<%= action.uri %>', requireRole('MENTOR'), requireAdmin, controller.<%= action.function_name %>);
+router.post('/<%= action.uri %>', requireRole('USER'), requireAdmin, controller.<%= action.function_name %>);
 
 <%_ } else if (action.scope === 'ROOT' && action.verb === 'PUT') { _%>
 // PUT /<%= schema.identifier_plural %>/<%= action.uri %>
-router.put('/<%= action.uri %>', requireRole('MENTOR'), requireAdmin, controller.<%= action.function_name %>);
+router.put('/<%= action.uri %>', requireRole('USER'), requireAdmin, controller.<%= action.function_name %>);
 
 <%_ } else if (action.scope === 'MODEL' && action.verb === 'GET') { _%>
 // GET /<%= schema.identifier_plural %>/:id/<%= action.uri %>
-router.get('/:id/<%= action.uri %>', requireRole('MENTOR'), requireAdmin, controller.<%= action.function_name %>);
+router.get('/:id/<%= action.uri %>', requireRole('USER'), requireAdmin, controller.<%= action.function_name %>);
 
 <%_ } else if (action.scope === 'MODEL' && action.verb === 'POST') { _%>
 // POST /<%= schema.identifier_plural %>/:id/<%= action.uri %>
-router.post('/:id/<%= action.uri %>', requireRole('MENTOR'), requireAdmin, controller.<%= action.function_name %>);
+router.post('/:id/<%= action.uri %>', requireRole('USER'), requireAdmin, controller.<%= action.function_name %>);
 
 <%_ } else if (action.scope === 'MODEL' && action.verb === 'PUT') { _%>
 // PUT /<%= schema.identifier_plural %>/:id/<%= action.uri %>
-router.put('/:id/<%= action.uri %>', requireRole('MENTOR'), requireAdmin, controller.<%= action.function_name %>);
+router.put('/:id/<%= action.uri %>', requireRole('USER'), requireAdmin, controller.<%= action.function_name %>);
 
 <%_ } _%>
 <%_ }) _%>

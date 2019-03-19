@@ -27,10 +27,11 @@ before(() => {
 require('../src/lib/jwt.spec');
 require('../src/lib/mailer.spec');
 require('../src/lib/pagination.spec');
+require('../src/api/middleware/authorization.spec');
 
 // Import all spec & integration tests here
 require('../src/api/auth/auth.spec')
-<%- specPaths=[] %>
+<%- specPaths = [] %>
 <%- specPaths.join('\n') %>
 
 // Runs after all tests are complete
