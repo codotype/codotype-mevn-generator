@@ -1,11 +1,15 @@
 import axios from 'axios'
 import router from '@/routers'
 import { RESET_PASSWORD_ROUTE } from './constants'
+import LOADING_MODULE from '@/store/lib/loadingModule'
 
+// TODO - needs error handling!!
 export default {
   namespaced: true,
+  modules: {
+    loading: LOADING_MODULE()
+  },
   state: {
-    loading: '',
     password: 'reverse',
     password_verify: 'reverse',
     password_reset_token: '',
@@ -13,7 +17,6 @@ export default {
     done: false
   },
   getters: {
-    loading: state => state.loading,
     password: state => state.password,
     password_verify: state => state.password_verify,
     verified: state => !(state.password && state.password_verify && state.password === state.password_verify),
@@ -22,7 +25,6 @@ export default {
     done: state => state.done
   },
   mutations: {
-    loading (state, loading) { state.loading = loading },
     password (state, password) { state.password = password },
     password_verify (state, password_verify) { state.password_verify = password_verify },
     password_reset_token (state, password_reset_token) { state.password_reset_token = password_reset_token },
@@ -30,12 +32,10 @@ export default {
     done (state, done) { state.done = done }
   },
   actions: {
-    // post
-    // Handles resetting user password
-    post ({ state, commit }) {
+    submit ({ state, commit }) {
       commit('loading', true)
 
-      // Sends login data to server
+      // Handles resetting user password
       axios({
         method: 'post',
         url: RESET_PASSWORD_ROUTE,
@@ -45,7 +45,6 @@ export default {
         }
       })
       .then(() => {
-        // TODO - redirect to login page
         commit('done', true)
         commit('loading', false)
         commit('password', '')

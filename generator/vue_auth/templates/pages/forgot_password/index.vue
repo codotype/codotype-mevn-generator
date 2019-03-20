@@ -4,6 +4,7 @@
 
       <Loading v-if="loading" />
 
+      <!-- TODO - abstract into a separate component, simplify -->
       <b-row v-else-if="done" class="justify-content-center">
         <b-col md="8" sm="8">
           <b-card class="mx-4 text-center">
@@ -38,9 +39,14 @@
                   />
                 </b-form-group>
 
+                <!-- TODO - better error handling -->
                 <p v-if="error" class="error">Bad EMAIL information</p>
 
-                <b-btn variant="outline-primary" block @click="reset()">
+                <b-btn
+                  block
+                  @click="submit()"
+                  variant="outline-primary"
+                >
                   Send Reset Email
                 </b-btn>
 
@@ -68,10 +74,7 @@ export default {
   },
   computed: mapGetters(['loading', 'email', 'error', 'done' ]),
   methods: {
-    ...mapActions({
-      reset: 'post',
-      resetForm: 'resetForm'
-    }),
+    ...mapActions(['submit', 'resetForm']),
     ...mapMutations({
       setEmail: 'email'
     })

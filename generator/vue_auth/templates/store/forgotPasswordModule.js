@@ -1,35 +1,35 @@
 import axios from 'axios'
 import { RESET_ROUTE } from './constants'
+import LOADING_MODULE from '@/store/lib/loadingModule'
 
-// Reset Token Module
 export default {
   namespaced: true,
+  modules: {
+    loading: LOADING_MODULE()
+  },
   state: {
     email: '',
-    loading: false,
-    error: '',
     done: false
   },
   getters: {
     email: state => state.email,
-    loading: state => state.loading,
-    error: state => state.error,
     done: state => state.done
   },
   mutations: {
     email (state, email) { state.email = email },
-    loading (state, loading) { state.loading = loading },
-    error (state, error) { state.error = error },
     done (state, done) { state.done = done }
   },
   actions: {
-    // resetToken
-    // TODO - resetToken should be it own module?
-    // Handles user.password_reset_token creation
-    post ({ state, commit }) {
+    resetForm ({ commit }) {
+      commit('email', '')
+      commit('done', false)
+    },
+    submit ({ state, commit }) {
       commit('loading', true)
 
       // Sends login data to server
+      // Handles user.password_reset_token creation
+      // Reset link is emailed to the user
       axios({
         method: 'post',
         url: RESET_ROUTE,
@@ -43,14 +43,9 @@ export default {
       })
       .catch((err) => {
         commit('loading', false)
-        commit('error', err.message)
+        // commit('error', err.message)
+        // TODO - integrate with TOAST module
       })
-    },
-    // resetForm
-    resetForm ({ commit }) {
-      commit('email', '')
-      commit('error', '')
-      commit('done', false)
     }
   }
 }

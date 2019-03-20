@@ -4,28 +4,3 @@ export const REGISTER_ROUTE = '/api/auth/register'
 export const RESET_ROUTE = '/api/auth/forgot_password'
 export const RESET_PASSWORD_ROUTE = '/api/auth/reset_password'
 export const PROFILE_ROUTE = '/api/users/profile'
-
-// Notifications
-export const LOGIN_SUCCESS_NOTIFICATION = {
-  message: 'Successfully authenticated',
-  context: 'success',
-  dismissible: true
-}
-
-export const LOGIN_ERROR_NOTIFICATION = {
-  message: 'Authentication error',
-  context: 'warning',
-  dismissible: true
-}
-
-export const REGISTER_SUCCESS_NOTIFICATION = {
-  message: 'Successfully registered',
-  context: 'success',
-  dismissible: true
-}
-
-export const REGISTER_ERROR_NOTIFICATION = {
-  message: 'Registration error',
-  context: 'warning',
-  dismissible: true
-}
