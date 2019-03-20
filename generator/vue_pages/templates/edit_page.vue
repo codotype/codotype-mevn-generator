@@ -15,12 +15,19 @@
     <b-row>
       <b-col sm="12" class="text-right">
 
-        <b-btn variant="secondary" @click="$router.go(-1)" class="mr-2">
+        <b-btn
+          class="mr-2"
+          variant="secondary"
+          @click="$router.go(-1)"
+        >
           <i class="fa fa-fw fa-times"></i>
           Cancel
         </b-btn>
 
-        <b-btn variant="primary" @click="formSubmit(model)">
+        <b-btn
+          variant="primary"
+          @click="updateModel(model)"
+        >
           <i class="fa fa-fw fa-plus"></i>
           Update <%= schema.label %>
         </b-btn>
@@ -64,7 +71,7 @@ export default {
   }),
   methods: mapActions({
     fetch: '<%= schema.identifier %>/edit/fetch',
-    formSubmit: '<%= schema.identifier %>/edit/update'
+    updateModel: '<%= schema.identifier %>/edit/update'
   })
 }
 </script>

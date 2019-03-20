@@ -90,7 +90,7 @@
           </tr>
         <%_ }) _%>
         <%_ schema.relations.forEach((rel) => { _%>
-        <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+        <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
           <tr>
             <td><%= rel.alias.label %></td>
             <td v-if="model.<%= rel.alias.identifier %>_id">
@@ -100,7 +100,7 @@
             </td>
             <td v-else>N/A</td>
           </tr>
-        <%_ } else if (['HAS_MANY'].includes(rel.type)) { _%>
+        <%_ } else if ([RELATION_TYPE_HAS_MANY].includes(rel.type)) { _%>
           <tr>
             <td><%= rel.alias.label_plural %></td>
             <td>{{model.<%= rel.alias.identifier %>_ids.length }} <%= rel.alias.label_plural %></td>

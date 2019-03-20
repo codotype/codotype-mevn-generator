@@ -15,8 +15,8 @@
                     <b-form-input
                       placeholder="Email"
                       autocomplete="email"
-                      v-model="login_user.email"
-                      @keyup.native.enter="login()"
+                      v-model="user.email"
+                      @keyup.native.enter="login(user)"
                     />
                   </b-input-group>
 
@@ -25,14 +25,14 @@
                       type="password"
                       placeholder="Password"
                       autocomplete="current-password"
-                      v-model="login_user.password"
-                      @keyup.native.enter="login()"
+                      v-model="user.password"
+                      @keyup.native.enter="login(user)"
                     />
                   </b-input-group>
 
                   <b-row>
                     <b-col cols="6">
-                      <b-btn variant="primary" class="px-4" @click="login()">Login</b-btn>
+                      <b-btn variant="primary" class="px-4" @click="login(user)">Login</b-btn>
                     </b-col>
                     <b-col cols="6" class="text-right">
                       <b-btn variant="link" to="/auth/forgot_password" class="px-0">Forgot password?</b-btn>
@@ -69,12 +69,19 @@ export default {
   components: {
     Loading
   },
+  data () {
+    return {
+      user: {
+        email: 'john@doe.com',
+        password: 'abc123'
+      }
+    }
+  },
   computed: mapGetters({
-    login_user: 'auth/login_user',
-    fetching: 'auth/logging_in'
+    fetching: 'auth/login/loading'
   }),
   methods: mapActions({
-    login: 'auth/login'
+    login: 'auth/login/submit'
   })
 }
 </script>

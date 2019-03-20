@@ -15,7 +15,7 @@
       <%_ } _%>
       <%_ }) _%>
       <%_ related_schema.relations.forEach((r) => { _%>
-      <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(r.type)) {_%>
+      <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(r.type)) {_%>
       <th><%= r.alias.label %></th>
       <%_ } _%>
       <%_ }) _%>
@@ -35,7 +35,7 @@
         <%_ } _%>
         <%_ }) _%>
         <%_ related_schema.relations.forEach((r) => { _%>
-        <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(r.type)) { _%>
+        <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(r.type)) { _%>
         <td></td>
         <%_ } _%>
         <%_ }) _%>
@@ -66,7 +66,7 @@
 
 
       <%_ related_schema.relations.forEach((r) => { _%>
-      <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(r.type)) { _%>
+      <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(r.type)) { _%>
 
         <td v-if="m.<%= r.alias.identifier %>_id">
           <router-link :to="'/<%= r.schema.identifier_plural %>/' + m.<%= r.alias.identifier + '_id' %>">
@@ -74,7 +74,7 @@
           </router-link>
         </td>
         <td v-else>N/A</td>
-      <%_ } else if (r.type === 'HAS_MANY') { _%>
+      <%_ } else if (r.type === RELATION_TYPE_HAS_MANY) { _%>
 
         <td v-if="m.<%=r.alias.identifier %>_ids">
           {{ m.<%=r.alias.identifier %>_ids.length }} <%=r.alias.label_plural %>
@@ -160,9 +160,9 @@ export default {
     this.fetch(this.id)
   },
   methods: mapActions({
-    <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+    <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
     fetch: '<%= schema.identifier %>/related<%= rel.alias.class_name %>/fetch',
-    <%_ } else if (rel.type === 'HAS_MANY') { _%>
+    <%_ } else if (rel.type === RELATION_TYPE_HAS_MANY) { _%>
     fetch: '<%= schema.identifier %>/related<%= rel.alias.class_name_plural %>/fetch',
     <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
     fetch: '<%= schema.identifier %>/related<%= rel.alias.class_name_plural %>/fetch',
@@ -172,9 +172,9 @@ export default {
   computed: mapGetters({
     isAuthenticated: 'auth/is_authenticated',
     isAdmin: 'auth/isAdmin',
-    <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+    <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
     model: '<%= schema.identifier %>/related<%= rel.alias.class_name %>/model',
-    <%_ } else if (rel.type === 'HAS_MANY') { _%>
+    <%_ } else if (rel.type === RELATION_TYPE_HAS_MANY) { _%>
     collection: '<%= schema.identifier %>/related<%= rel.alias.class_name_plural %>/collection',
     <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
     collection: '<%= schema.identifier %>/related<%= rel.alias.class_name_plural %>/collection',

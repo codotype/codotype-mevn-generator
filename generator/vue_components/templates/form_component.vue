@@ -36,7 +36,7 @@
           placeholder="<%= attr.label %>"
           :tags.sync="model.<%=attr.identifier%>"
         />
-      <%_ } else if (attr.datatype === DATATYPE_NUMBER) { _%>
+      <%_ } else if ([DATATYPE_INTEGER, DATATYPE_FLOAT, DATATYPE_DOUBLE].includes(attr.datatype)) { _%>
         <b-form-input
           type="number"
           id="<%= attr.identifier %>-input"
@@ -81,14 +81,14 @@
 
     <%_ }) _%>
     <%_ schema.relations.forEach((rel) => { _%>
-    <%_ if (['BELONGS_TO', 'HAS_ONE', 'HAS_MANY'].includes(rel.type)) { _%>
+    <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE, RELATION_TYPE_HAS_MANY].includes(rel.type)) { _%>
     <div class="col-lg-6">
       <div class="form-group">
         <label class='mb-0'>
           <%= rel.alias.label %>
           <%_ if (rel.required) { %><span class='text-danger'>*</span><% } _%>
         </label>
-        <%_ if (rel.type === 'BELONGS_TO') { _%>
+        <%_ if (rel.type === RELATION_TYPE_BELONGS_TO) { _%>
         <select
           type="text"
           class="form-control"
@@ -104,7 +104,7 @@
             {{ <%= rel.schema.identifier %>.<%= rel.related_lead_attribute %> }}
           </option>
         </select>
-      <%_ } else if (rel.type === 'HAS_MANY') { _%>
+      <%_ } else if (rel.type === RELATION_TYPE_HAS_MANY) { _%>
         <select
           type="text"
           multiple class="form-control"
@@ -120,7 +120,7 @@
             {{ <%= rel.schema.identifier %>.<%= rel.related_lead_attribute %> }}
           </option>
         </select>
-      <%_ } else if (rel.type === 'HAS_ONE') { _%>
+      <%_ } else if (rel.type === RELATION_TYPE_HAS_ONE) { _%>
         <select
           type="text"
           class="form-control"

@@ -1,14 +1,12 @@
 module.exports = {
-  name: 'NodeExpressResources',
+  name: 'NodeExpressController',
   async forEachSchema({ blueprint, configuration, schema }) {
 
     // Pulls `generate_api_doc` from configuration.options
     // Used to conditionally generate APIDoc headers
-    // const { generate_api_doc } = configuration.options
-    const generate_api_doc = true
+    const { generate_api_doc } = configuration.documentation
 
     // Pulls schema api_actions
-    // TODO - IMPLEMENT IN META.JSON
     let schemaApiActions = []
     if (configuration.api_actions[schema.identifier]) {
       schemaApiActions = configuration.api_actions[schema.identifier]
@@ -21,34 +19,21 @@ module.exports = {
     await this.ensureDir(resourceDest)
 
     // Deconstructs schema attributes
-    // TODO - might be helpful to abstract into util, or parent generator
-    const inlineDeconstrction = schema.attributes.map(r => r.identifier).join(', ')
-
-    // src/api/resource/resource.model.js
-    if (schema.identifier === 'user') {
-      await this.copyTemplate(
-        this.templatePath('user.resource.model.js'),
-        this.destinationPath(resourceDest + '/' + schema.identifier + '.model.js'),
-        { schema, inlineDeconstrction }
-      );
-    } else {
-      await this.copyTemplate(
-        this.templatePath('resource.model.js'),
-        this.destinationPath(resourceDest + '/' + schema.identifier + '.model.js'),
-        { schema }
-      );
-    }
+    let defaultModel = this.buildDefault({ schema, schemas: blueprint.schemas })
+    // TODO - might be helpful to abstract into util, or parent generator?
+    let inlineDeconstruction = Object.keys(defaultModel).join(', ')
+    let objectKeys = Object.keys(defaultModel)
 
     // src/api/resource/resource.controller.js
     await this.copyTemplate(
       this.templatePath('resource.controller.js'),
       this.destinationPath(resourceDest + '/' + schema.identifier + '.controller.js'),
-      { schema, generate_api_doc, schemaApiActions, inlineDeconstrction }
+      { schema, generate_api_doc, schemaApiActions, inlineDeconstruction, objectKeys }
     );
 
     // src/api/resource/index.js
     await this.copyTemplate(
-      this.templatePath('index.js'),
+      this.templatePath('resource.router.js'),
       this.destinationPath(resourceDest + '/index.js'),
       { schema, schemaApiActions }
     );

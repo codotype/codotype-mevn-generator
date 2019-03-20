@@ -43,13 +43,13 @@
             <%_ }) _%>
 
             <%_ schema.relations.forEach((rel) => { _%>
-            <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+            <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
             <p class="card-text" v-if="m.<%= rel.alias.identifier %>_id">
               <router-link :to="'/<%= rel.schema.identifier_plural %>/' + m.<%= rel.alias.identifier + '_id' %>">
                 {{m.<%= rel.alias.identifier %>.<%= rel.related_lead_attribute %>}}
               </router-link>
             </p>
-            <%_ } else if (rel.type === 'HAS_MANY') { _%>
+            <%_ } else if (rel.type === RELATION_TYPE_HAS_MANY) { _%>
             <!-- <p class="card-text" v-else>N/A</p> -->
             <p class="card-text">
               {{ m.<%=rel.alias.identifier %>_ids.length }} <%=rel.alias.label_plural %>

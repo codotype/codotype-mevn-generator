@@ -1,7 +1,7 @@
 <template>
   <div class="app d-flex flex-row align-items-center">
     <b-container>
-      <Loading v-if="fetching" />
+      <Loading v-if="loading" />
       <b-row class="justify-content-center">
         <b-col md="8" sm="8">
           <b-card no-body class="mx-4">
@@ -9,7 +9,7 @@
               <b-form>
                 <h1>Register</h1>
                 <p class="text-muted">Create your account</p>
-                <%_ requiredUserAttributes.forEach((r) => { _%>
+                <%_ userSchema.attributes.forEach((r) => { _%>
 
                 <b-form-group
                   id="<%= r.identifier.replace('_', '-') %>-fieldset"
@@ -21,7 +21,7 @@
                     id="<%= r.identifier.replace('_', '-') %>-input"
                     autocomplete="<%= r.identifier %>"
                     placeholder="<%= r.label %>"
-                    v-model.trim="register_user.<%= r.identifier %>"
+                    v-model.trim="user.<%= r.identifier %>"
                   />
                 </b-form-group>
                 <%_ }) _%>
@@ -37,7 +37,7 @@
                     id="password-input"
                     autocomplete="new-password"
                     placeholder="Password"
-                    v-model.trim="register_user.password"
+                    v-model.trim="user.password"
                   />
                 </b-form-group>
 
@@ -51,14 +51,16 @@
                     id="password-verify-input"
                     autocomplete="new-password"
                     placeholder="Repeat password"
-                    v-model.trim="register_user.passwordverify"
-                    @keyup.enter="register"
+                    v-model.trim="user.passwordverify"
+                    @keyup.enter="register(user)"
                   />
                 </b-form-group>
 
-                <p v-if="register_user.error" class="error">Bad registration information</p>
-
-                <b-btn variant="primary" block @click="register()">
+                <b-btn
+                  block
+                  variant="primary"
+                  @click="register(user)"
+                >
                   Create Account
                 </b-btn>
               </b-form>
@@ -72,7 +74,8 @@
 
 <script>
 import Loading from '@/components/Loading'
-import { mapGetters, mapActions } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters, mapActions } = createNamespacedHelpers('auth')
 
 export default {
   name: 'Register',
@@ -82,12 +85,16 @@ export default {
   components: {
     Loading
   },
-  computed: mapGetters({
-    fetching: 'auth/logging_in',
-    register_user: 'auth/register_user'
-  }),
-  methods: mapActions({
-    register: 'auth/register'
-  })
+  data () {
+    return {
+      user: {
+        email: '',
+        password: '',
+        passwordverify: ''
+      }
+    }
+  },
+  methods: mapActions(['register']),
+  computed: mapGetters(['loading'])
 }
 </script>

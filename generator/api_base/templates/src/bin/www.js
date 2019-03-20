@@ -10,9 +10,6 @@ mongoose.set('useCreateIndex', true)
 
 // // // //
 
-// TODO - is this needed?
-mongoose.Promise = global.Promise
-
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_DB_URI)
 
@@ -25,12 +22,13 @@ db.on('error', console.error)
 // Open Mongoose connection
 db.once('open', () => {
 
-    // TODO - use Morgan for logging
-    console.info('Connected to MongoDB...')
+  // TODO - use Morgan for logging
+  console.info('Connected to MongoDB...')
 
-    // Starts Express App
-    app.listen(process.env.PORT, () => {
-        // TODO - use Morgan for logging
-        console.info(`Express is running on port ${process.env.PORT}`)
-    })
+  // Starts Express App
+  app.listen(process.env.PORT, () => {
+    // TODO - use Morgan for logging
+    console.info(`Express is running on port ${process.env.PORT}`)
+  })
+
 })

@@ -5,9 +5,9 @@
       <th><%= attr.label %></th>
       <%_ }) _%>
       <%_ related_schema.relations.forEach((r) => { _%>
-      <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(r.type)) { _%>
+      <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(r.type)) { _%>
       <th><%= r.alias.label %></th>
-      <%_ } else if (['BELONGS_TO', 'HAS_ONE'].includes(r.type)) { _%>
+      <%_ } else if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(r.type)) { _%>
       <th><%= r.alias.label_plural %></th>
       <%_ } _%>
       <%_ }) _%>
@@ -30,10 +30,10 @@
         <%_ } _%>
         <%_ }) _%>
         <%_ related_schema.relations.forEach((r) => { _%>
-        <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(r.type)) { _%>
+        <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(r.type)) { _%>
         <td v-if="model.<%= r.alias.identifier %>_id">{{model.<%= r.alias.identifier %>.<%= r.related_lead_attribute %>}}</td>
         <td v-else>N/A</td>
-        <%_ } else if (['HAS_MANY'].includes(r.type)) { _%>
+        <%_ } else if ([RELATION_TYPE_HAS_MANY].includes(r.type)) { _%>
         <td v-if="model.<%= r.alias.identifier %>_ids.length">{{model.<%= r.alias.identifier %>_ids.length }} <%= r.alias.label_plural %></td>
         <td v-else>N/A</td>
         <%_ } _%>

@@ -1,16 +1,17 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import Meta from 'vue-meta'
 import App from '@/App'
 import router from '@/routers'
 import store from '@/store'
+import Toasted from 'vue-toasted'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-// TODO - figure out what's happening with the mediator pattern, how to best handle routing
-import configureModerator from '@/store/mediator'
-configureModerator(store, router)
+
+// register Vue toasted plugin
+Vue.use(Toasted)
+// you can also pass options, check options reference below
+// Vue.use(Toasted, Options)
 
 // vue-meta
 // supports `meta` object returned with `module.defaults`

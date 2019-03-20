@@ -14,12 +14,19 @@
     <b-row>
       <b-col sm="12" class="text-right">
 
-        <b-btn class="mr-2" variant="light" @click="$router.go(-1)">
+        <b-btn
+          class="mr-2"
+          variant="light"
+          @click="$router.go(-1)"
+        >
           <i class="fa fa-fw fa-times"></i>
           Cancel
         </b-btn>
 
-        <b-btn variant="primary" @click="formSubmit()">
+        <b-btn
+          variant="primary"
+          @click="createModel()"
+        >
           <i class="fa fa-fw fa-plus"></i>
           Create <%= schema.label %>
         </b-btn>
@@ -48,13 +55,11 @@ export default {
     this.resetForm()
   },
   computed: mapGetters({
-    model: '<%= schema.identifier %>/form/model',
-    currentUser: 'auth/current_user',
-    isAdmin: 'auth/isAdmin'
+    model: '<%= schema.identifier %>/form/model'
   }),
   methods: {
     ...mapActions({
-      formSubmit: '<%= schema.identifier %>/form/createModel'
+      createModel: '<%= schema.identifier %>/form/createModel'
     }),
     ...mapMutations({
       resetForm: '<%= schema.identifier %>/form/reset'

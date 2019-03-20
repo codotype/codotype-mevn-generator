@@ -1,3 +1,4 @@
+// Mailgun.js configuration
 const mailgun = require('mailgun-js')({
   apiKey: process.env.MAILGUN_API_KEY,
   domain: process.env.MAILGUN_DOMAIN
@@ -7,27 +8,20 @@ const mailgun = require('mailgun-js')({
 
 // dispatch
 // Dispatches an email via MailGun
-function dispatch ({ sender, recipient, subject, text, html }) {
+function dispatch ({ sender, recipient, subject, text }) {
+
   // Build email
   const dispatch = {
     from: sender,
     to: recipient,
-    subject: subject
+    subject: subject,
+    text: text
   };
-
-  // Formats email output
-  if (text) {
-    dispatch.text = text
-  } else if (html) {
-    dispatch.html = html
-  } else {
-    return // Just don't send the email I guess?
-  }
 
   // Send mailgun dispatch
   mailgun.messages()
   .send(dispatch, function (error, body) {
-    // console.log(dispatch);
+    // TODO - update logging here
     console.log(`Dispatched email to ${recipient} via MailGun`);
   });
 }

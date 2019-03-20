@@ -13,14 +13,18 @@ const {
 // Signs a new JWT
 // Used in /api/auth/auth.controller.js
 module.exports.sign = (user) => {
+
   // Assembles JWT payload
   const jwt_payload = {
-    id: user.id,
-    username: user.username,
+    id: user._id.toString(),
+    email: user.email,
+    admin: user.admin,
+    role: user.role,
     iat: Date.now() // "Issued At"
   };
 
   // JWT Options
+  // TODO - assign 'alg' to JWT options?
   const jwt_options = {
     expiresIn: JWT_EXPIRES,
     issuer: JWT_ISSUER,
