@@ -19,9 +19,9 @@
       <%_ } _%>
       <%_ }) _%>
       <%_ schema.relations.forEach((rel) => { _%>
-      <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+      <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
       <th><%= rel.alias.label %></th>
-      <%_ } else if (rel.type === 'HAS_MANY') { _%>
+      <%_ } else if (rel.type === RELATION_TYPE_HAS_MANY) { _%>
       <th><%= rel.alias.label_plural %></th>
       <%_ } _%>
       <%_ }) _%>
@@ -41,7 +41,7 @@
         <%_ } _%>
         <%_ }) _%>
         <%_ schema.relations.forEach((rel) => { _%>
-        <%_ if (['BELONGS_TO', 'HAS_MANY', 'HAS_ONE'].includes(rel.type)) { _%>
+        <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_MANY, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
         <td></td>
         <%_ } _%>
         <%_ }) _%>
@@ -70,14 +70,14 @@
         <%_ } _%>
       <%_ }) _%>
       <%_ schema.relations.forEach((rel) => { _%>
-      <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+      <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
         <td v-if="m.<%= rel.alias.identifier %>_id">
           <router-link :to="'/<%= rel.schema.identifier_plural %>/' + m.<%= rel.alias.identifier + '_id' %>">
             {{m.<%= rel.alias.identifier %>.<%= rel.related_lead_attribute %>}}
           </router-link>
         </td>
         <td v-else></td>
-      <%_ } else if (rel.type === 'HAS_MANY') { _%>
+      <%_ } else if (rel.type === RELATION_TYPE_HAS_MANY) { _%>
         <td v-if="m.<%=rel.alias.identifier %>_ids">
           {{ m.<%=rel.alias.identifier %>_ids.length }} <%=rel.alias.label_plural %>
         </td>

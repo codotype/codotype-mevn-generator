@@ -23,6 +23,12 @@
           </b-col>
         </b-row>
 
+        <b-row class="my-2">
+          <b-col lg="12" class="text-center">
+            <p class="lead text-primary"><router-link to="/auth/register">Please register a new account to get started.</router-link></p>
+          </b-col>
+        </b-row>
+
         <b-row class="my-4">
           <b-col lg="12" class="text-center">
             <a class="btn btn-lg btn-outline-dark mx-2" href="https://codotype.org" target="_blank">

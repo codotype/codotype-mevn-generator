@@ -8,12 +8,12 @@
     <b-card no-body>
       <b-tabs lazy card>
         <%_ schema.relations.forEach((rel) => { _%>
-        <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+        <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
         <b-tab title="<%= rel.alias.label %>" >
           <Related<%= rel.alias.class_name %>Detail :id="id" />
         </b-tab>
 
-        <%_ } else if (['REF_BELONGS_TO', 'HAS_MANY'].includes(rel.type)) { _%>
+        <%_ } else if (['REF_BELONGS_TO', RELATION_TYPE_HAS_MANY].includes(rel.type)) { _%>
         <b-tab title="<%= rel.alias.label_plural %>" >
           <Related<%= rel.alias.class_name_plural %>List :id="id" />
         </b-tab>
@@ -34,9 +34,9 @@ import { mapGetters, mapActions } from 'vuex'
 import LoadingFull from '@/components/LoadingFull'
 import <%= schema.class_name %>Detail from '@/modules/<%= schema.identifier %>/components/<%= schema.class_name %>Detail'
 <%_ schema.relations.forEach((rel) => { _%>
-<%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+<%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
 import Related<%= rel.alias.class_name %>Detail from '@/modules/<%= schema.identifier %>/components/Related<%= rel.alias.class_name %>Detail'
-<%_ } else if (['HAS_MANY', 'REF_BELONGS_TO'].includes(rel.type)) { _%>
+<%_ } else if ([RELATION_TYPE_HAS_MANY, 'REF_BELONGS_TO'].includes(rel.type)) { _%>
 import Related<%= rel.alias.class_name_plural %>List from '@/modules/<%= schema.identifier %>/components/Related<%= rel.alias.class_name_plural %>List'
 <%_ } _%>
 <%_ }) _%>
@@ -54,9 +54,9 @@ export default {
   },
   components: {
     <%_ schema.relations.forEach((rel) => { _%>
-    <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+    <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
     Related<%= rel.alias.class_name %>Detail,
-    <%_ } else if (['REF_BELONGS_TO', 'HAS_MANY'].includes(rel.type)) { _%>
+    <%_ } else if (['REF_BELONGS_TO', RELATION_TYPE_HAS_MANY].includes(rel.type)) { _%>
     Related<%= rel.alias.class_name_plural %>List,
     <%_ } _%>
     <%_ }) _%>

@@ -80,7 +80,7 @@
             "value": "far fa-comment"
           },
           "help": "Whether or not generate APIDoc-compatible comment headers in your Express.js controllers",
-          "default_value": true,
+          "default_value": false,
           "more_info_url": "http://apidocjs.com"
         }
       ]
