@@ -75,7 +75,7 @@ module.exports.create = async (req, res, next) => {
     }
 
     // check email duplication
-    User.findOneByEmail(email)
+    User.findOne({ email })
     .then(create)
     .then(respond)
     .catch(onError)

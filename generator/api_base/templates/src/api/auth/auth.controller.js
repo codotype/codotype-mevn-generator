@@ -22,7 +22,7 @@ exports.register = (req, res) => {
 
     // Creates a new User
     const newUser = new User({ <%= inlineDeconstruction %>, password })
-    // TODO - RE-INTEGRATE USER ROLE, REPLACE ADMIN BOOLEAN
+    // TODO - RE-INTEGRATE USER ROLE, REPLACE ADMIN BOOLEAN?
     // newUser.role = ''
     return newUser.save()
   }
@@ -42,7 +42,7 @@ exports.register = (req, res) => {
   }
 
   // check email duplication
-  User.findOneByEmail(email)
+  User.findOne({ email })
   .then(create)
   .then(respond)
   .catch(onError)
@@ -86,25 +86,19 @@ exports.login = (req, res) => {
       token: jwt.sign(user)
     };
 
-    // TODO - abstract HEADER
-    // TODO - can this be simplified?
-    const CONTENT_TYPE_JSON = { 'Content-Type': 'application/json' };
-
     // 200 OK - send user data & token to client
-    res.writeHead(200, CONTENT_TYPE_JSON);
-    res.end(JSON.stringify(response_payload));
-    return;
+    return res.status(200).json(response_payload);
   }
 
   // Error handling
   const onError = (error) => {
+    console.log(error)
     res.status(401).json({
       message: error.message
     })
   }
 
-  // Find the user
-  // TODO - replace `findOneByEmail` with Mongoose 5.x query syntax
+  // Find the user and respond
   User.findOneByEmail(email)
   .then(respond)
   .catch(onError)
@@ -167,7 +161,7 @@ exports.reset_password = async (req, res) => {
   if (!user) return res.status(401).json({ type: 'INVALID_PASSWORD_RESET_TOKEN' })
 
   // Ensures the validity of the reset token
-  if (user.validResetToken(password_reset_token)) {
+  if (user.validateResetToken(password_reset_token)) {
 
     // Assigns user.password
     user.password = password
