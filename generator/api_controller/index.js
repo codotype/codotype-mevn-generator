@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'NodeExpressResources',
+  name: 'NodeExpressController',
   async forEachSchema({ blueprint, configuration, schema }) {
 
     // Pulls `generate_api_doc` from configuration.options
@@ -7,7 +7,6 @@ module.exports = {
     const { generate_api_doc } = configuration.documentation
 
     // Pulls schema api_actions
-    // TODO - IMPLEMENT IN META.JSON
     let schemaApiActions = []
     if (configuration.api_actions[schema.identifier]) {
       schemaApiActions = configuration.api_actions[schema.identifier]
@@ -25,21 +24,6 @@ module.exports = {
     let inlineDeconstruction = Object.keys(defaultModel).join(', ')
     let objectKeys = Object.keys(defaultModel)
 
-    // src/api/resource/resource.model.js
-    if (schema.identifier === 'user') {
-      await this.copyTemplate(
-        this.templatePath('user.resource.model.js'),
-        this.destinationPath(resourceDest + '/' + schema.identifier + '.model.js'),
-        { schema, inlineDeconstruction }
-      );
-    } else {
-      await this.copyTemplate(
-        this.templatePath('resource.model.js'),
-        this.destinationPath(resourceDest + '/' + schema.identifier + '.model.js'),
-        { schema }
-      );
-    }
-
     // src/api/resource/resource.controller.js
     await this.copyTemplate(
       this.templatePath('resource.controller.js'),
@@ -49,7 +33,7 @@ module.exports = {
 
     // src/api/resource/index.js
     await this.copyTemplate(
-      this.templatePath('index.js'),
+      this.templatePath('resource.router.js'),
       this.destinationPath(resourceDest + '/index.js'),
       { schema, schemaApiActions }
     );
