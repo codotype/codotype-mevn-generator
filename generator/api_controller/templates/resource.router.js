@@ -59,11 +59,11 @@ router.delete('/:id', requireAdmin, controller.delete);
 
 <%_ /* Iterate over each schema */ _%>
 <%_ schema.relations.forEach((each) => { _%>
-<%_ if (['BELONGS_TO', 'HAS_ONE'].includes(each.type)) { _%>
+<%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(each.type)) { _%>
 // GET /<%= schema.identifier_plural %>/:id/<%= each.alias.identifier %>
 router.get('/:id/<%= each.alias.identifier %>', controller.show<%= each.alias.class_name %>);
 
-<%_ } else if (each.type === 'HAS_MANY') { _%>
+<%_ } else if (each.type === RELATION_TYPE_HAS_MANY) { _%>
 // GET /<%= schema.identifier_plural %>/:id/<%= each.alias.identifier_plural %>
 router.get('/:id/<%= each.alias.identifier_plural %>', controller.show<%= each.alias.class_name_plural %>);
 

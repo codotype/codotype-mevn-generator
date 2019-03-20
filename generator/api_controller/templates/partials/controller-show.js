@@ -13,7 +13,7 @@
 module.exports.show = async (req, res, next) => {
   const model = await <%= schema.class_name %>.findById(req.params.id)
   <%_ schema.relations.forEach((rel) => { _%>
-  <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+  <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
   .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
   <%_ } _%>
   <%_ }) _%>

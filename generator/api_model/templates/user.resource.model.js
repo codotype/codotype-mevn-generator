@@ -112,12 +112,12 @@ const userAttributes = {
   <%_ }) _%>
 
   <%_ schema.relations.forEach((rel) => { _%>
-  <%_ if (rel.type === 'BELONGS_TO') { _%>
+  <%_ if (rel.type === RELATION_TYPE_BELONGS_TO) { _%>
   <%= rel.alias.identifier %>: {
     type: Schema.Types.ObjectId,
     ref: '<%= rel.schema.class_name %>'
   },
-  <%_ } else if (rel.type === 'HAS_MANY') { _%>
+  <%_ } else if (rel.type === RELATION_TYPE_HAS_MANY) { _%>
   <%= rel.alias.identifier %>_ids: [{
     type: Schema.Types.ObjectId,
     ref: '<%= rel.schema.class_name %>'
@@ -223,19 +223,19 @@ UserModel.method('assignAdmin', function () {
 })
 
 <%_ schema.relations.forEach((rel) => { _%>
-<%_ if (rel.type === 'BELONGS_TO') { _%>
+<%_ if (rel.type === RELATION_TYPE_BELONGS_TO) { _%>
 
 <%= schema.class_name %>Model.methods.get<%= rel.alias.class_name %> = function () {
   return mongoose.model('<%= rel.schema.class_name %>').findById(this.<%= rel.alias.identifier + '_id' %>);
 }
 
-<%_ } else if (rel.type === 'HAS_MANY') { _%>
+<%_ } else if (rel.type === RELATION_TYPE_HAS_MANY) { _%>
 
 <%= schema.class_name %>Model.methods.get<%= rel.alias.class_name_plural %> = function () {
   return mongoose.model('<%= rel.schema.class_name %>').find({ <%= schema.identifier %>_id: this._id });
 }
 
-<%_ } else if (rel.type === 'HAS_ONE') { _%>
+<%_ } else if (rel.type === RELATION_TYPE_HAS_ONE) { _%>
 
 <%= schema.class_name %>Model.methods.get<%= rel.alias.class_name %> = function () {
   return mongoose.model('<%= rel.schema.class_name %>').findById(this.<%= rel.identifier + '_id' %> });

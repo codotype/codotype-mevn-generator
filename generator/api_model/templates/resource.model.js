@@ -42,12 +42,12 @@ const <%= schema.class_name %>Model = new mongoose.Schema({
   <%_ } _%>
   <%_ }) _%>
   <%_ schema.relations.forEach((rel) => { _%>
-  <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+  <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
   <%= rel.alias.identifier + '_id' %>: {
     type: mongoose.Schema.Types.ObjectId,
     ref: '<%= rel.schema.class_name %>'
   },
-  <%_ } else if (rel.type === 'HAS_MANY') { _%>
+  <%_ } else if (rel.type === RELATION_TYPE_HAS_MANY) { _%>
   <%= rel.alias.identifier + '_ids' %>: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: '<%= rel.schema.class_name %>'
@@ -69,7 +69,7 @@ const <%= schema.class_name %>Model = new mongoose.Schema({
 
 <%_ /* MONGOOSE VIRTUALS */ _%>
 <%_ schema.relations.forEach((rel) => { _%>
-<%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+<%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
 // Specifying a virtual with a `ref` property is how you enable virtual population
 <%= schema.class_name %>Model.virtual('<%= rel.alias.identifier %>', {
   ref: '<%= rel.schema.class_name %>',
@@ -92,14 +92,14 @@ const <%= schema.class_name %>Model = new mongoose.Schema({
 
 <%_ /* MONGOOSE METHODS */ _%>
 <%_ schema.relations.forEach((rel) => { _%>
-<%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+<%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
 // Same as above just as a method
 <%= schema.class_name %>Model.methods.get<%= rel.alias.class_name %> = function () {
   return mongoose.model('<%= rel.schema.class_name %>').findById(this.<%= rel.alias.identifier + '_id' %>);
 }
 
 <%_ /* TODO - HAS_MANY doesn't work like this */ _%>
-<%_ } else if (rel.type === 'HAS_MANY') { _%>
+<%_ } else if (rel.type === RELATION_TYPE_HAS_MANY) { _%>
 <%= schema.class_name %>Model.methods.get<%= rel.alias.class_name_plural %> = function () {
   return mongoose.model('<%= rel.schema.class_name %>').find({ _id: this.<%= rel.alias.identifier + '_ids' %> });
 }
@@ -107,7 +107,7 @@ const <%= schema.class_name %>Model = new mongoose.Schema({
 <%_ }) _%>
 
 <%_ /* MONGOOSE TOJSON SETS */ _%>
-<%_ if (schema.relations.map(r => r.type).includes('BELONGS_TO')) { _%>
+<%_ if (schema.relations.map(r => r.type).includes(RELATION_TYPE_BELONGS_TO)) { _%>
 <%= schema.class_name %>Model.set('toJSON', { getters: true, virtuals: true });
 <%_ } _%>
 

@@ -33,7 +33,7 @@ module.exports.<%= action.function_name %> = async (req, res, next) => {
   const items = await <%= schema.class_name %>
   .find({})
   <%_ schema.relations.forEach((rel) => { _%>
-  <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+  <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
   .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
   <%_ } _%>
   <%_ }) _%>
@@ -55,7 +55,7 @@ module.exports.<%= action.function_name %> = async (req, res, next) => {
   const payload = {  } // TODO - add attributes here that you would like to change
   const model = await  <%= schema.class_name %>.findByIdAndUpdate(req.params.id, { $set: payload }, { new: true })
   <%_ schema.relations.forEach((rel) => { _%>
-  <%_ if (['BELONGS_TO', 'HAS_ONE'].includes(rel.type)) { _%>
+  <%_ if ([RELATION_TYPE_BELONGS_TO, RELATION_TYPE_HAS_ONE].includes(rel.type)) { _%>
   .populate({ path: '<%= rel.alias.identifier %>', select: '<%= rel.related_lead_attribute %>' })
   <%_ } else if (rel.type === 'REF_BELONGS_TO') { _%>
   // .populate({ path: '<%= rel.alias.identifier_plural %>', select: '<%= rel.related_lead_attribute %>' })
